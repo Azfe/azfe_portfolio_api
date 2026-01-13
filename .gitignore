@@ -241,3 +241,5 @@ $RECYCLE.BIN/
 
 # secrets
 config.env
+
+.vscode
