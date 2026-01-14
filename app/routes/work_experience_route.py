@@ -11,17 +11,17 @@ router = APIRouter(
 )
 
 # Helper para convertir ObjectId a string
-def experience_helper(experience) -> dict:
+def experience_helper(exp: dict) -> dict:
     return {
-        "id": str(experience["_id"]),
-        "company": experience["company"],
-        "position": experience["position"],
-        "start_date": experience["start_date"],
-        "end_date": experience.get("end_date"),
-        "description": experience["description"],
-        "technologies": experience.get("technologies", []),
-        "order": experience.get("order", 0),
-        "created_at": experience.get("created_at")
+        "id": str(exp.get("_id")),
+        "company": exp.get("company"), 
+        "job_position": exp.get("job_position"), 
+        "start_date": exp.get("start_date"), 
+        "end_date": exp.get("end_date"), 
+        "description": exp.get("description"), 
+        "technologies": exp.get("technologies", []), 
+        "order": exp.get("order", 0), 
+        "created_at": exp.get("created_at").isoformat() if exp.get("created_at") else None
     }
 
 @router.get("/", response_model=List[ExperienceResponse], summary="Listar todas las experiencias")
@@ -71,8 +71,16 @@ async def create_experience(experience: ExperienceCreate):
     """
     db = get_database()
     
+    # Validar que no exista otra experiencia con el mismo order 
+    existing = await db.experience.find_one({"order": experience.order}) 
+    if existing: 
+        raise HTTPException( 
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail=f"Ya existe una experiencia con order={experience.order}" 
+        )
+    
     # Preparar documento para insertar
-    experience_dict = experience.model_dump()
+    experience_dict = experience.model_dump(by_alias=True)
     experience_dict["created_at"] = datetime.now(timezone.utc)
     
     # Insertar en MongoDB
