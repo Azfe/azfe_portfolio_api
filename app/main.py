@@ -1,27 +1,42 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.config import settings
+from app.database.database import connect_to_mongo, close_mongo_connection
+from app.routes.work_experience import router as work_experience_router
 
-app = FastAPI()
+# Crear aplicación FastAPI
+app = FastAPI(
+    title=settings.api_title,
+    version=settings.api_version,
+    description="API para gestionar portfolio y CV"
+)
 
-# Datos de ejemplo: reemplázalos por tus experiencias reales
-experiences = [
-    {
-        "company": "Arttalo Tech | for SEAT & CUPRA",
-        "role": "Desarrollador Backend",
-        "location": "Martorell",
-        "years": "2021-2025",
-        "description": "• Traducción de diseños a código.\n• Optimización de la Experiencia de Usuario (UX).\n• Desarrollo de interfaces responsivas y accesibles.\n• Optimización de rendimiento frontend.\n• Implementación de microinteracciones y animaciones.\n• Colaboración con equipos multidisciplinarios."
-    },
-    {
-        "company": "Empresa B",
-        "role": "Ingeniero de Software",
-        "location": "Martorell",
-        "years": "2019-2021",
-        "description": """• Desarrollo de APIs con Python.
-• Integración con servicios externos.
-• Optimización de rendimiento."""
+# Configurar CORS (para permitir requests desde el frontend)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En producción, especifica los dominios permitidos
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Eventos de inicio y cierre
+@app.on_event("startup")
+async def startup_db_client():
+    await connect_to_mongo()
+
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    await close_mongo_connection()
+
+# Ruta raíz
+@app.get("/", tags=["Root"])
+async def root():
+    return {
+        "message": "Portfolio API",
+        "version": settings.api_version,
+        "docs": "/docs"
     }
-]
 
-@app.get("/cv/experience")
-def get_experience():
-    return experiences
+# Incluir rutas
+app.include_router(work_experience_router, prefix="/api/v1")
