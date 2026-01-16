@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from app.models.work_experience import ExperienceCreate, ExperienceResponse
+from app.schemas.work_experience_schema import ExperienceCreate, ExperienceResponse
 from app.database.database import get_database
 from bson import ObjectId
 from typing import List

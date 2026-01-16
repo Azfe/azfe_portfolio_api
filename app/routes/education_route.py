@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from app.models.education import EducationCreate, EducationResponse
+from app.schemas.education_schema import EducationCreate, EducationResponse
 from app.database.database import get_database
 from bson import ObjectId
 from typing import List
