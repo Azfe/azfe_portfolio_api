@@ -47,17 +47,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-🔄 Actualizar dependencias (opcional):
+#### 🔄 Actualizar dependencias (opcional)
 
 ```bash
 # Reinstalar todas las dependencias
 pip uninstall -y -r requirements.txt
 pip install -r requirements.txt
 
-
 # Actualizar un paquete específico
-
-```bash
 pip install --upgrade nombre-del-paquete
 ```
 
@@ -70,7 +67,7 @@ MONGO_URI=your_mongodb_connection_uri
 JWT_SECRET_KEY=your_secret_key
 ```
 
-*También puedes exportar estas variables directamente en tu sistema operativo.*
+> **Nota:** *También puedes exportar estas variables directamente en tu sistema operativo.*
 
 ### 5. Configurar la base de datos
 
@@ -93,23 +90,30 @@ fastapi dev main.py
 
 La API estará disponible en `http://localhost:8000`
 
-## 📖 Documentación
+## 📖 Documentación de la API
 
-Accede a la documentación interactiva de la API:
+Después de iniciar la aplicación, la documentación está disponible en:
 
 - Swagger UI: `http://localhost:8000/docs`
 - Redoc: `http://localhost:8000/redoc`
+- Comprobación de estado: `http://localhost:8000/ping`
 
-*También puedes usar herramientas como Postman o Insomnia para probar los endpoints.*
+> **Nota:** *También puedes usar herramientas como Postman o Insomnia para probar los endpoints.*
 
 ## 🤝 Contribuciones
 
 ¡Las contribuciones son bienvenidas! Si deseas mejorar algo, abre un pull request o crea un issue.
 
+1. Hacer fork del proyecto
+2. Crear una rama de características (`git checkout -b feature/amazing-feature`)
+3. Confirmar los cambios (`git commit -m 'Add amazing feature`)
+4. Push hacia la rama (`git push origin feature/amazing-feature`)
+5. Abrir una solicitud de extracción
+
 ## 📜 Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
-## 📬 Contacto
+## 🧑‍💻 Autor
 
-Para contactarme, escribe a [alexzapata1984@gmail.com](mailto:alexzapata1984@gmail.com)
+Azfe - [alexzapata1984@gmail.com](mailto:alexzapata1984@gmail.com)

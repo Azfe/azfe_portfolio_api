@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from app.models.work_experience import EducationCreate, EducationResponse
+from app.schemas.education_schema import EducationCreate, EducationResponse
 from app.database.database import get_database
 from bson import ObjectId
 from typing import List
@@ -14,12 +14,12 @@ router = APIRouter(
 def education_helper(education) -> dict:
     return {
         "id": str(education["_id"]),
-        "company": education["company"],
-        "position": education["position"],
+        "educational_institution": education["educational_institution"],
+        "degree": education["degree"],
         "start_date": education["start_date"],
         "end_date": education.get("end_date"),
         "description": education["description"],
-        "technologies": education.get("technologies", []),
+        "technical_skills": education.get("technical_skills", []),
         "order": education.get("order", 0),
         "created_at": education.get("created_at")
     }
@@ -27,12 +27,12 @@ def education_helper(education) -> dict:
 @router.get("/", response_model=List[EducationResponse], summary="Listar toda la formación académica")
 async def get_education():
     """
-    Obtiene todas las experiencias laborales ordenadas por 'order'.
+    Obtiene todas las formaciones académicas ordenadas por 'order'.
     """
     db = get_database()
     educations = []
     
-    # Buscar todas las experiencias, ordenadas por 'order'
+    # Buscar todas las formaciones académicas, ordenadas por 'order'
     cursor = db.education.find().sort("order", 1)
     
     async for education in cursor:
@@ -41,7 +41,7 @@ async def get_education():
     return educations
 
 @router.get("/{education_id}", response_model=EducationResponse, summary="Obtener una formación académica por ID")
-async def get_experience(education_id: str):
+async def get_education(education_id: str):
     """
     Obtiene una formación académica específica por su ID.
     """
@@ -59,7 +59,7 @@ async def get_experience(education_id: str):
     if not education:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Experiencia con ID {education_id} no encontrada"
+            detail=f"Formación académica con ID {education_id} no encontrada"
         )
     
     return education_helper(education)
@@ -72,11 +72,11 @@ async def create_education(education: EducationCreate):
     db = get_database()
     
     # Preparar documento para insertar
-    experience_dict = education.model_dump()
-    experience_dict["created_at"] = datetime.now(timezone.utc)
+    education_dict = education.model_dump()
+    education_dict["created_at"] = datetime.now(timezone.utc)
     
     # Insertar en MongoDB
-    result = await db.education.insert_one(experience_dict)
+    result = await db.education.insert_one(education_dict)
     
     # Obtener el documento insertado
     new_education = await db.education.find_one({"_id": result.inserted_id})

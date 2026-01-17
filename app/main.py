@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.config import settings
+from app.core.config import settings
 from app.database.database import connect_to_mongo, close_mongo_connection
 from app.routes.work_experience_route import router as work_experience_router
+from app.routes.education_route import router as education_router
 
 # Crear aplicación FastAPI
 app = FastAPI(
@@ -14,7 +15,7 @@ app = FastAPI(
 # Configurar CORS (para permitir requests desde el frontend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción, especifica los dominios permitidos
+    allow_origins=["*"],  # En producción, especificar los dominios permitidos
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,3 +41,4 @@ async def root():
 
 # Incluir rutas
 app.include_router(work_experience_router, prefix="/api/v1")
+app.include_router(education_router, prefix="/api/v1")
