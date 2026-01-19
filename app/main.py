@@ -1,44 +1,80 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
-from app.database.database import connect_to_mongo, close_mongo_connection
-from app.routes.work_experience_route import router as work_experience_router
-from app.routes.education_route import router as education_router
+from contextlib import asynccontextmanager
+import logging
+
+from app.config.settings import settings
+from app.infrastructure.database.mongo_client import MongoDBClient
+from app.api.middleware import setup_middleware
+from app.api.v1.router import api_v1_router
+
+# Configurar logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Gestión del ciclo de vida de la aplicación.
+    Se ejecuta al inicio y al cierre del servidor.
+    """
+    # Startup
+    logger.info(f"🚀 Iniciando {settings.PROJECT_NAME} v{settings.VERSION}")
+    logger.info(f"📍 Entorno: {settings.ENVIRONMENT}")
+    
+    # Conectar a MongoDB
+    await MongoDBClient.connect()
+    
+    yield  # Aquí la aplicación está corriendo
+    
+    # Shutdown
+    logger.info("🛑 Deteniendo aplicación...")
+    await MongoDBClient.disconnect()
+    logger.info("✓ Aplicación detenida")
+
 
 # Crear aplicación FastAPI
 app = FastAPI(
-    title=settings.api_title,
-    version=settings.api_version,
-    description="API para gestionar portfolio y CV"
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    description="API REST para portfolio personal - Clean Architecture",
+    lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
-# Configurar CORS (para permitir requests desde el frontend)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # En producción, especificar los dominios permitidos
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+# Configurar middlewares
+setup_middleware(app)
+
+# Incluir routers
+app.include_router(
+    api_v1_router,
+    prefix=settings.API_V1_PREFIX
 )
 
-# Eventos de inicio y cierre
-@app.on_event("startup")
-async def startup_db_client():
-    await connect_to_mongo()
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    await close_mongo_connection()
-
-# Ruta raíz
-@app.get("/", tags=["Root"])
+@app.get("/")
 async def root():
+    """Endpoint raíz"""
     return {
-        "message": "Portfolio API",
-        "version": settings.api_version,
-        "docs": "/docs"
+        "message": f"Bienvenido a {settings.PROJECT_NAME}",
+        "version": settings.VERSION,
+        "docs": "/docs",
+        "health": f"{settings.API_V1_PREFIX}/health"
     }
 
-# Incluir rutas
-app.include_router(work_experience_router, prefix="/api/v1")
-app.include_router(education_router, prefix="/api/v1")
+
+if __name__ == "__main__":
+    import uvicorn
+    
+    uvicorn.run(
+        "app.main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG,
+        log_level="info"
+    )
