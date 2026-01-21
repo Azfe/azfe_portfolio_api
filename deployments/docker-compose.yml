@@ -1,5 +1,5 @@
 # deployments/docker-compose.yml
-version: '3.8'
+# version: '3.9'
 
 services:
   # Servicio de FastAPI Backend
@@ -51,6 +51,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Servicio para ejecutar tests (opcional)
+  test:
+    build:
+      context: ..
+      dockerfile: docker/development/Dockerfile.dev
+    container_name: azfe_portfolio_tests
+    volumes:
+      - ../app:/app/app
+      - ../tests:/app/tests
+    environment:
+      - ENVIRONMENT=test
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=portfolio_test_db
+    depends_on:
+      - mongodb
+    networks:
+      - portfolio_network
+    command: pytest
+    profiles:
+      - test
 
 # Volúmenes nombrados
 volumes:
