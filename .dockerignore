@@ -1,8 +1,5 @@
-# Ignorar todos los .env por defecto
-.env
-.env.*
-# PERMITIR solo el de desarrollo
-!.env.development
+# .dockerignore
+# Evitar copiar archivos innecesarios al contenedor
 
 # Python
 __pycache__/
@@ -22,6 +19,21 @@ ENV/
 # IDEs
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentación
+docs/_build/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
 
 # Git
 .git/
@@ -31,3 +43,8 @@ ENV/
 Dockerfile
 docker-compose*.yml
 .dockerignore
+
+# Archivos temporales
+*.log
+*.tmp
+.DS_Store

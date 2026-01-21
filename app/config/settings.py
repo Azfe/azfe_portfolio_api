@@ -1,25 +1,30 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 from typing import List
 from functools import lru_cache
 
 
 class Settings(BaseSettings):
     """
-    Configuración de la aplicación usando Pydantic Settings.
-    Las variables se cargan automáticamente desde .env
+    Configuración centralizada de la aplicación.
+    Las variables se cargan automáticamente desde archivos .env
     """
     
     # Environment
-    ENVIRONMENT: str = "development"
+    ENVIRONMENT: str = Field(default="development", description="Environment: development, test, production")
     
     # Server
-    HOST: str = "0.0.0.0"
-    PORT: int = 8000
-    DEBUG: bool = True
+    HOST: str = Field(default="0.0.0.0", alias="API_HOST")
+    PORT: int = Field(default=8000, alias="API_PORT")
     
-    # MongoDB - IMPORTANTE: usar nombre del servicio en Docker
-    MONGODB_URL: str = "mongodb://mongodb:27017"  # 'mongodb' es el nombre del servicio
-    MONGODB_DB_NAME: str = "portfolio_db"
+    @property
+    def DEBUG(self) -> bool:
+        """Debug mode enabled for development and test environments"""
+        return self.ENVIRONMENT in ["development", "test"]
+    
+    # MongoDB
+    MONGODB_URL: str = Field(default="mongodb://mongodb:27017")
+    MONGODB_DB_NAME: str = Field(default="portfolio_db", alias="DATABASE_NAME")
     
     # CORS
     CORS_ORIGINS: str = "http://localhost:4321,http://localhost:3000"
@@ -41,18 +46,20 @@ class Settings(BaseSettings):
 
     # API
     API_V1_PREFIX: str = "/api/v1"
-    PROJECT_NAME: str = "AZFE Portfolio API"
-    VERSION: str = "1.0.0"
+    PROJECT_NAME: str = Field(default="AZFE Portfolio API", alias="api_title")
+    VERSION: str = Field(default="1.0.0", alias="api_version")
     
     # Security
     SECRET_KEY: str = "your-secret-key-here-change-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
    
-          
-    class Config:
-        env_file = ".env.development"  # Archivo por defecto en desarrollo
-        case_sensitive = True
+    model_config = SettingsConfigDict(
+        env_file=".env.development",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+        extra="ignore"  # Ignora variables extra sin fallar
+    )
 
 
 @lru_cache()
