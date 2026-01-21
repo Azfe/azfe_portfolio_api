@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 from typing import List
 from app.api.schemas.profile_schema import ProfileResponse
-from app.api.schemas.contact_info_schema import ContactInfoResponse
+from app.api.schemas.contact_info_schema import ContactInformationResponse
 from app.api.schemas.social_networks_schema import SocialNetworkResponse
 from app.api.schemas.projects_schema import ProjectResponse
-from app.api.schemas.work_experience_schema import ExperienceResponse
+from app.api.schemas.work_experience_schema import WorkExperienceResponse
 from app.api.schemas.skill_schema import SkillResponse
 from app.api.schemas.tools_schema import ToolResponse
 from app.api.schemas.education_schema import EducationResponse
@@ -19,11 +19,11 @@ class CVCompleteResponse(BaseModel):
     """
     # Información personal
     profile: ProfileResponse
-    contact_info: ContactInfoResponse
+    contact_info: ContactInformationResponse
     social_networks: List[SocialNetworkResponse] = []
     
     # Experiencia profesional
-    work_experiences: List[ExperienceResponse] = []
+    work_experiences: List[WorkExperienceResponse] = []
     projects: List[ProjectResponse] = []
     
     # Habilidades
