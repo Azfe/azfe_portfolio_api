@@ -12,15 +12,14 @@ from .profile_schema import (
     ProfileUpdate
 )
 from .contact_info_schema import (
-    ContactInfoResponse,
-    ContactInfoCreate,
-    ContactInfoUpdate
+    ContactInformationResponse,
+    ContactInformationCreate,
+    ContactInformationUpdate
 )
 from .social_networks_schema import (
     SocialNetworkResponse,
     SocialNetworkCreate,
-    SocialNetworkUpdate,
-    SocialNetworkType
+    SocialNetworkUpdate    
 )
 from .projects_schema import (
     ProjectResponse,
@@ -28,9 +27,9 @@ from .projects_schema import (
     ProjectUpdate
 )
 from .work_experience_schema import (
-    ExperienceResponse,
-    ExperienceCreate,
-    ExperienceUpdate
+    WorkExperienceResponse,
+    WorkExperienceCreate,
+    WorkExperienceUpdate
 )
 from .skill_schema import (
     SkillResponse,
@@ -44,7 +43,7 @@ from .tools_schema import (
     ToolCreate,
     ToolUpdate,
     ToolCategory,
-    ToolLevel
+    #ToolLevel
 )
 from .education_schema import (
     EducationResponse,
@@ -65,7 +64,7 @@ from .contact_messages_schema import (
     ContactMessageResponse,
     ContactMessageCreate,
     ContactMessageUpdate,
-    MessageStatus
+    #MessageStatus
 )
 from .cv_schema import CVCompleteResponse
 
@@ -80,9 +79,9 @@ __all__ = [
     "ProfileCreate",
     "ProfileUpdate",
     # Contact Info
-    "ContactInfoResponse",
-    "ContactInfoCreate",
-    "ContactInfoUpdate",
+    "ContactInformationResponse",
+    "ContactInformationCreate",
+    "ContactInformationUpdate",
     # Social Networks
     "SocialNetworkResponse",
     "SocialNetworkCreate",
@@ -93,9 +92,9 @@ __all__ = [
     "ProjectCreate",
     "ProjectUpdate",
     # Work Experience
-    "ExperienceResponse",
-    "ExperienceCreate",
-    "ExperienceUpdate",
+    "WorkExperienceResponse",
+    "WorkExperienceCreate",
+    "WorkExperienceUpdate",
     # Skills
     "SkillResponse",
     "SkillCreate",

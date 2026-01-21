@@ -17,16 +17,28 @@ class Settings(BaseSettings):
     PORT: int = 8000
     DEBUG: bool = True
     
-    # MongoDB
-    MONGODB_URL: str = "mongodb://localhost:27017"
+    # MongoDB - IMPORTANTE: usar nombre del servicio en Docker
+    MONGODB_URL: str = "mongodb://mongodb:27017"  # 'mongodb' es el nombre del servicio
     MONGODB_DB_NAME: str = "portfolio_db"
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:4321", "http://localhost:3000"]
+    CORS_ORIGINS: str = "http://localhost:4321,http://localhost:3000"
     CORS_CREDENTIALS: bool = True
-    CORS_METHODS: List[str] = ["*"]
-    CORS_HEADERS: List[str] = ["*"]
-    
+    CORS_METHODS: str = "*"
+    CORS_HEADERS: str = "*"
+
+    @property
+    def cors_origins_list(self) -> List[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+
+    @property
+    def cors_methods_list(self) -> List[str]:
+        return [method.strip() for method in self.CORS_METHODS.split(",")]
+
+    @property
+    def cors_headers_list(self) -> List[str]:
+        return [header.strip() for header in self.CORS_HEADERS.split(",")]
+
     # API
     API_V1_PREFIX: str = "/api/v1"
     PROJECT_NAME: str = "AZFE Portfolio API"
@@ -36,9 +48,10 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "your-secret-key-here-change-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    
+   
+          
     class Config:
-        env_file = ".env"
+        env_file = ".env.development"  # Archivo por defecto en desarrollo
         case_sensitive = True
 
 

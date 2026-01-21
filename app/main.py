@@ -61,7 +61,7 @@ app.include_router(
 async def root():
     """Endpoint raíz"""
     return {
-        "message": f"Bienvenido a {settings.PROJECT_NAME}",
+        "message": f"¡Bienvenido a {settings.PROJECT_NAME}!",
         "version": settings.VERSION,
         "docs": "/docs",
         "health": f"{settings.API_V1_PREFIX}/health"
