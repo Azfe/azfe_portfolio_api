@@ -128,7 +128,7 @@ JWT_SECRET_KEY=your_secret_key
 
 ### 5. Configurar la base de datos
 
-Asegúrate de tener MongoDB instalado y crea una base de datos llamada jimcostdev_api con las siguientes colecciones:
+Asegúrate de tener MongoDB instalado y crea una base de datos llamada portfolio_api con las siguientes colecciones:
 
 - `contact`
 - `education`
