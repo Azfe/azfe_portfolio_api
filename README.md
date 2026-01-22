@@ -16,7 +16,64 @@ Este repositorio forma parte de un ecosistema de 3 aplicaciones:
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-## 📦 Instalación
+## 🚀 Inicio Rápido con Docker (Recomendado)
+
+### Requisitos Previos
+
+- Docker Desktop instalado
+- Make (opcional, facilita comandos)
+
+### Levantar el entorno
+
+```bash
+# 1. Clonar el repositorio
+git clone 
+cd azfe_portfolio_backend
+
+# 2. Copiar variables de entorno
+cp .env.example .env.development
+
+# 3. Levantar servicios con Make
+make build
+make up
+
+# O sin Make:
+cd deployments
+docker compose build
+docker compose up -d
+```
+
+### Verificar que funciona
+
+- **API**: [http://localhost:8000](http://localhost:8000)
+- **Documentación**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Health Check**: [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
+
+### Comandos útiles
+
+```bash
+# Ver logs en tiempo real
+make logs
+
+# Ejecutar tests
+make test
+
+# Abrir shell en el contenedor
+make shell
+
+# Reiniciar servicios
+make restart
+
+# Detener servicios
+make down
+
+# Limpiar todo
+make clean
+```
+
+## 📦 Instalación local (Sin Docker)
+
+Si prefieres no usar Docker:
 
 ### 1. Clonar el repositorio
 
@@ -88,7 +145,17 @@ cd app
 fastapi dev main.py
 ```
 
-La API estará disponible en `http://localhost:8000`
+## 🧪 Testing
+
+```bash
+# Con Docker
+make test
+
+# Sin Docker
+pytest
+
+# Con coverage
+pytest --cov=app --cov-report=html
 
 ## 📖 Documentación de la API
 

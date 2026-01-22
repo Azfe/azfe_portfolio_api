@@ -1,49 +1,91 @@
 from pydantic import BaseModel, Field, field_validator
-from typing import Optional
-from datetime import datetime
+from typing import Optional, List
+from datetime import date
+from app.api.schemas.common_schema import TimestampMixin
 
-class ExperienceBase(BaseModel):
-    """Esquema base de experiencia laboral"""
-    company: str = Field(..., description="Nombre de la empresa")
-    job_position: str = Field(..., description="Cargo o posición")
-    start_date: str = Field(..., description="Fecha de inicio (YYYY-MM)")
-    end_date: Optional[str] = Field(None, description="Fecha de fin (YYYY-MM) o None si es actual")
-    description: str = Field(..., description="Descripción del trabajo")
-    technologies: list[str] = Field(default=[], description="Tecnologías utilizadas")
-    order: int = Field(default=0, description="Orden de visualización")
-    
-    @field_validator("start_date", "end_date") 
-    def validate_dates(cls, v): 
-        if v is None: 
-            return v 
-        try: 
-            datetime.strptime(v, "%Y-%m") 
-        except ValueError: 
-            raise ValueError("Formato inválido, usa YYYY-MM") 
+
+class WorkExperienceBase(BaseModel):
+    """
+    Experiencia laboral dentro del perfil profesional del usuario.
+    Incluye información sobre el cargo, empresa, fechas y responsabilidades.
+    """
+    role: str = Field(..., min_length=1, description="Cargo desempeñado (no puede estar vacío)")
+    company: str = Field(..., min_length=1, description="Empresa donde se trabajó (no puede estar vacía)")
+    location: Optional[str] = Field(None, description="Ubicación o modalidad (remoto, ciudad, híbrido)")
+    start_date: date = Field(..., description="Fecha de inicio (obligatoria)")
+    end_date: Optional[date] = Field(None, description="Fecha de fin (opcional, None = actualmente trabajando)")
+    description: Optional[str] = Field(None, description="Resumen de tareas, responsabilidades o logros")
+    technologies: List[str] = Field(default_factory=list, description="Lista de tecnologías usadas")
+    order_index: int = Field(..., ge=0, description="Orden de aparición en el CV (debe ser único dentro del perfil)")
+
+    @field_validator('end_date')
+    @classmethod
+    def validate_end_date(cls, v: Optional[date], info) -> Optional[date]:
+        """
+        Valida que endDate sea posterior a startDate si existe.
+        
+        Invariante: Si endDate existe, debe ser posterior a startDate.
+        """
+        if v is not None and 'start_date' in info.data:
+            start_date = info.data['start_date']
+            if v <= start_date:
+                raise ValueError('end_date debe ser posterior a start_date')
         return v
 
-class ExperienceCreate(ExperienceBase):
-    """Esquema para crear experiencia (lo que recibe el POST)"""
-    pass    
-    class Config:
-        populate_by_name = True
-        json_schema_extra = {
-            "example": {
-                "company": "Mi Empresa S.L.",
-                "job_position": "Software Engineer",
-                "start_date": "2023-01",
-                "end_date": "2024-12",
-                "description": "Desarrollo de aplicaciones web con Python y FastAPI",
-                "technologies": ["Python", "FastAPI", "MongoDB", "React"],
-                "order": 1,
-                "created_at": "2024-01-15T10:30:00"
-            }
-        }
 
-class ExperienceResponse(ExperienceBase):
-    """Esquema de respuesta (lo que devuelve el API)"""
+class WorkExperienceCreate(WorkExperienceBase):
+    """
+    Schema para crear experiencia laboral.
+    
+    Invariantes:
+    - role no puede estar vacío
+    - company no puede estar vacía
+    - startDate es obligatoria
+    - Si endDate existe, debe ser posterior a startDate
+    - orderIndex debe ser único dentro del perfil
+    """
+    pass
+
+
+class WorkExperienceUpdate(BaseModel):
+    """
+    Schema para actualizar experiencia laboral.
+    
+    Todos los campos son opcionales, pero role y company
+    no pueden quedar vacíos si se actualizan.
+    """
+    role: Optional[str] = Field(None, min_length=1)
+    company: Optional[str] = Field(None, min_length=1)
+    location: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    description: Optional[str] = None
+    technologies: Optional[List[str]] = None
+    order_index: Optional[int] = Field(None, ge=0)
+
+    @field_validator('end_date')
+    @classmethod
+    def validate_end_date(cls, v: Optional[date], info) -> Optional[date]:
+        """Valida que endDate sea posterior a startDate si ambos están presentes."""
+        if v is not None and 'start_date' in info.data and info.data['start_date'] is not None:
+            if v <= info.data['start_date']:
+                raise ValueError('end_date debe ser posterior a start_date')
+        return v
+
+
+class WorkExperienceResponse(WorkExperienceBase, TimestampMixin):
+    """
+    Schema de respuesta de experiencia laboral.
+    
+    Relaciones:
+    - Pertenece a un único Profile
+    - Un Profile tiene muchas WorkExperience
+    - technologies se relaciona conceptualmente con Skills
+    
+    Invariantes:
+    - orderIndex debe ser único dentro del mismo perfil
+    """
     id: str
-    created_at: datetime
     
     class Config:
-        populate_by_name = True
+        from_attributes = True

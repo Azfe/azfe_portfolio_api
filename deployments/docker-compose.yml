@@ -1,0 +1,84 @@
+# deployments/docker-compose.yml
+# version: '3.9'
+
+services:
+  # Servicio de FastAPI Backend
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/development/Dockerfile.dev
+    container_name: azfe_portfolio_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Volumen para hot-reload (código en tiempo real)
+      - ../app:/app/app
+      # Volumen para tests (opcional)
+      - ../tests:/app/tests
+    environment:
+      # Variables de entorno para desarrollo
+      - ENVIRONMENT=development
+      - DEBUG=True
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=portfolio_db
+      - CORS_ORIGINS=http://localhost:4321,http://localhost:3000
+    depends_on:
+      - mongodb
+    networks:
+      - portfolio_network
+    # Reiniciar automáticamente en caso de error
+    restart: unless-stopped
+
+  # Servicio de MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: azfe_portfolio_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      # Volumen persistente para datos de MongoDB
+      - mongodb_data:/data/db
+      # Script de inicialización
+      - ../docker/development/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      - MONGO_INITDB_DATABASE=portfolio_db
+    networks:
+      - portfolio_network
+    restart: unless-stopped
+    # Health check para MongoDB
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Servicio para ejecutar tests (opcional)
+  test:
+    build:
+      context: ..
+      dockerfile: docker/development/Dockerfile.dev
+    container_name: azfe_portfolio_tests
+    volumes:
+      - ../app:/app/app
+      - ../tests:/app/tests
+    environment:
+      - ENVIRONMENT=test
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=portfolio_test_db
+    depends_on:
+      - mongodb
+    networks:
+      - portfolio_network
+    command: pytest
+    profiles:
+      - test
+
+# Volúmenes nombrados
+volumes:
+  mongodb_data:
+    driver: local
+
+# Red interna para comunicación entre servicios
+networks:
+  portfolio_network:
+    driver: bridge
