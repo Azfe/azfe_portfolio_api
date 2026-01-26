@@ -164,6 +164,7 @@ Después de iniciar la aplicación, la documentación está disponible en:
 - Swagger UI: `http://localhost:8000/docs`
 - Redoc: `http://localhost:8000/redoc`
 - Comprobación de estado: `http://localhost:8000/ping`
+```
 
 > **Nota:** *También puedes usar herramientas como Postman o Insomnia para probar los endpoints.*
 
