@@ -164,18 +164,15 @@ Después de iniciar la aplicación, la documentación está disponible en:
 - Swagger UI: `http://localhost:8000/docs`
 - Redoc: `http://localhost:8000/redoc`
 - Comprobación de estado: `http://localhost:8000/ping`
+```
 
 > **Nota:** *También puedes usar herramientas como Postman o Insomnia para probar los endpoints.*
 
 ## 🤝 Contribuciones
 
-¡Las contribuciones son bienvenidas! Si deseas mejorar algo, abre un pull request o crea un issue.
+### ¡Las contribuciones son bienvenidas! 
 
-1. Hacer fork del proyecto
-2. Crear una rama de características (`git checkout -b feature/amazing-feature`)
-3. Confirmar los cambios (`git commit -m 'Add amazing feature`)
-4. Push hacia la rama (`git push origin feature/amazing-feature`)
-5. Abrir una solicitud de extracción
+Revisa el documento de [Contribuciones](CONTRIBUTING.md) si deseas mejorar algo.
 
 ## 📜 Licencia
 
