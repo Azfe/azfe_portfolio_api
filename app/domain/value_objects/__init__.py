@@ -5,18 +5,32 @@ Value Objects are immutable objects that are defined by their attributes
 rather than a unique identity. They encapsulate domain concepts and ensure
 consistency through validation.
 
-Value Objects to be implemented in issue #3.2.2:
+Implemented Value Objects:
 - DateRange: Represents a period with start and end dates
-- ContactInfo: Encapsulates contact information validation
-- SkillLevel: Enumeration for skill proficiency levels
-- Email, Phone: Validated primitive wrappers
+- Email: Validated email address (RFC 5322 simplified)
+- Phone: Validated phone number (E.164 format)
+- SkillLevel: Type-safe skill proficiency enumeration
+- ContactInfo: Composite of Email and optional Phone
 
 Value Objects follow these principles:
-1. Immutability: Once created, cannot be changed
+1. Immutability: Once created, cannot be changed (frozen dataclasses)
 2. Equality by value: Two VOs are equal if all attributes match
 3. Self-validation: Validate on construction
 4. Side-effect free: All operations return new instances
+5. No identity: Unlike entities, VOs have no ID
 """
 
-# Placeholder - will be implemented in issue #3.2.2
-__all__ = []
+from .contact_info import ContactInfo
+from .date_range import DateRange
+from .email import Email
+from .phone import Phone
+from .skill_level import SkillLevel, SkillLevelEnum
+
+__all__ = [
+    "DateRange",
+    "Email",
+    "Phone",
+    "SkillLevel",
+    "SkillLevelEnum",
+    "ContactInfo",
+]
