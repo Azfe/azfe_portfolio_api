@@ -1,16 +1,17 @@
 """
-Skill Entity.
+Tool Entity.
 
-Represents a technical or professional skill in the portfolio.
+Represents a tool, technology, or software used in the portfolio.
 
 Business Rules Applied:
-- RB-S01: name is required (1-50 chars)
-- RB-S02: name must be unique per profile
-- RB-S03: category is required (1-50 chars)
-- RB-S04: level is optional (basic, intermediate, advanced, expert)
-- RB-S05: orderIndex is required and must be unique per profile
+- RB-T01: name is required (1-50 chars)
+- RB-T02: name must be unique per profile
+- RB-T03: category is required (1-50 chars, e.g., "Framework", "Database")
+- RB-T04: iconUrl is optional, must be valid URL if provided
+- RB-T05: orderIndex is required for display ordering
 """
 
+import re
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -22,19 +23,16 @@ from ..exceptions import (
     InvalidLengthError,
     InvalidNameError,
     InvalidOrderIndexError,
-    InvalidSkillLevelError,
+    InvalidURLError,
 )
-
-# Valid skill levels
-VALID_SKILL_LEVELS = {"basic", "intermediate", "advanced", "expert"}
 
 
 @dataclass
-class Skill:
+class Tool:
     """
-    Skill entity representing a professional competency.
+    Tool entity representing a technology, framework, or software tool.
 
-    Skills are categorized and can have proficiency levels.
+    This entity maintains uniqueness by name and validates icon URLs.
     """
 
     id: str
@@ -42,20 +40,29 @@ class Skill:
     name: str
     category: str
     order_index: int
-    level: Optional[str] = None
+    icon_url: Optional[str] = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
     # Constants
     MAX_NAME_LENGTH = 50
     MAX_CATEGORY_LENGTH = 50
+    URL_PATTERN = re.compile(
+        r"^https?://"
+        r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"
+        r"localhost|"
+        r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        r"(?::\d+)?"
+        r"(?:/?|[/?]\S+)$",
+        re.IGNORECASE,
+    )
 
     def __post_init__(self):
         """Validate entity invariants after initialization."""
         self._validate_profile_id()
         self._validate_name()
         self._validate_category()
-        self._validate_level()
+        self._validate_icon_url()
         self._validate_order_index()
 
     @staticmethod
@@ -64,43 +71,43 @@ class Skill:
         name: str,
         category: str,
         order_index: int,
-        level: Optional[str] = None,
-    ) -> "Skill":
+        icon_url: Optional[str] = None,
+    ) -> "Tool":
         """
-        Factory method to create a new Skill.
+        Factory method to create a new Tool.
 
         Args:
             profile_id: Reference to the Profile
-            name: Skill name (e.g., "Python", "Leadership")
-            category: Skill category (e.g., "Programming", "Soft Skills")
+            name: Tool name (e.g., "Docker", "PostgreSQL")
+            category: Tool category (e.g., "Container", "Database")
             order_index: Position in the ordered list
-            level: Proficiency level (basic, intermediate, advanced, expert)
+            icon_url: URL to tool icon/logo (optional)
 
         Returns:
-            A new Skill instance with generated UUID
+            A new Tool instance with generated UUID
         """
-        return Skill(
+        return Tool(
             id=str(uuid.uuid4()),
             profile_id=profile_id,
             name=name,
             category=category,
             order_index=order_index,
-            level=level,
+            icon_url=icon_url,
         )
 
     def update_info(
         self,
         name: Optional[str] = None,
         category: Optional[str] = None,
-        level: Optional[str] = None,
+        icon_url: Optional[str] = None,
     ) -> None:
         """
-        Update skill information.
+        Update tool information.
 
         Args:
             name: New name (optional)
             category: New category (optional)
-            level: New level (optional)
+            icon_url: New icon URL (optional)
         """
         if name is not None:
             self.name = name
@@ -110,9 +117,9 @@ class Skill:
             self.category = category
             self._validate_category()
 
-        if level is not None:
-            self.level = level
-            self._validate_level()
+        if icon_url is not None:
+            self.icon_url = icon_url
+            self._validate_icon_url()
 
         self._mark_as_updated()
 
@@ -127,9 +134,9 @@ class Skill:
         self._validate_order_index()
         self._mark_as_updated()
 
-    def remove_level(self) -> None:
-        """Remove the proficiency level."""
-        self.level = None
+    def remove_icon(self) -> None:
+        """Remove the icon URL."""
+        self.icon_url = None
         self._mark_as_updated()
 
     def _validate_profile_id(self) -> None:
@@ -140,7 +147,7 @@ class Skill:
     def _validate_name(self) -> None:
         """Validate name field according to business rules."""
         if not self.name or not self.name.strip():
-            raise InvalidNameError("Skill name cannot be empty")
+            raise InvalidNameError("Tool name cannot be empty")
 
         if len(self.name) > self.MAX_NAME_LENGTH:
             raise InvalidLengthError("name", max_length=self.MAX_NAME_LENGTH)
@@ -153,16 +160,13 @@ class Skill:
         if len(self.category) > self.MAX_CATEGORY_LENGTH:
             raise InvalidLengthError("category", max_length=self.MAX_CATEGORY_LENGTH)
 
-    def _validate_level(self) -> None:
-        """Validate level field if provided."""
-        if self.level is not None:
-            if self.level.strip() == "":
-                self.level = None
-            elif self.level.lower() not in VALID_SKILL_LEVELS:
-                raise InvalidSkillLevelError(self.level)
-            else:
-                # Normalize to lowercase
-                self.level = self.level.lower()
+    def _validate_icon_url(self) -> None:
+        """Validate icon URL format if provided."""
+        if self.icon_url is not None:
+            if self.icon_url.strip() == "":
+                self.icon_url = None
+            elif not self.URL_PATTERN.match(self.icon_url):
+                raise InvalidURLError(self.icon_url)
 
     def _validate_order_index(self) -> None:
         """Validate order index."""
@@ -175,4 +179,4 @@ class Skill:
 
     def __repr__(self) -> str:
         """String representation for debugging."""
-        return f"Skill(id={self.id}, name={self.name}, category={self.category}, level={self.level})"
+        return f"Tool(id={self.id}, name={self.name}, category={self.category})"
