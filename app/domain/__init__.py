@@ -6,7 +6,7 @@ It is completely independent of infrastructure, frameworks, and external librari
 
 The domain layer includes:
 - Entities: Rich business objects with identity
-- Value Objects: Immutable objects without identity (coming in issue #3.2.2)
+- Value Objects: Immutable objects without identity
 - Exceptions: Domain-specific error types
 - Business Rules: Encoded in entity behavior
 
@@ -26,6 +26,16 @@ from .entities import (
     ContactMessage,
     SocialNetwork,
     Tool,
+)
+
+# Export value objects
+from .value_objects import (
+    DateRange,
+    Email,
+    Phone,
+    SkillLevel,
+    SkillLevelEnum,
+    ContactInfo,
 )
 
 # Export exceptions
@@ -65,6 +75,13 @@ __all__ = [
     "ContactMessage",
     "SocialNetwork",
     "Tool",
+    # Value Objects
+    "DateRange",
+    "Email",
+    "Phone",
+    "SkillLevel",
+    "SkillLevelEnum",
+    "ContactInfo",
     # Exceptions
     "DomainError",
     "InvalidEmailError",
