@@ -15,10 +15,81 @@ The domain layer is the **heart of the business logic** and is completely **inde
 ```text
 domain/
 ├── entities/           # Rich domain entities with behavior
-├── value_objects/      # Immutable value objects (see issue #3.2.2)
+├── value_objects/      # Immutable value objects (issue #3.2.2 ✅)
 ├── exceptions/         # Domain-specific exceptions
 └── README.md          # This file
 ```
+
+## Value Objects
+
+Value Objects are **immutable** objects defined entirely by their attributes. They have no identity and two VOs are equal if all attributes match.
+
+### Available Value Objects
+
+1. **DateRange** (`date_range.py`)
+   - Represents a time period with start and optional end dates
+   - Features: ongoing/completed checks, duration calculation, overlap detection
+   - Used in: WorkExperience, Education, Project, Certification
+
+2. **Email** (`email.py`)
+   - Validated email address (RFC 5322 simplified)
+   - Features: format validation, domain extraction, case-insensitive comparison
+   - Used in: ContactInformation, ContactMessage
+
+3. **Phone** (`phone.py`)
+   - Validated phone number (E.164 international format)
+   - Features: format validation, country code extraction, international formatting
+   - Used in: ContactInformation
+
+4. **SkillLevel** (`skill_level.py`)
+   - Type-safe skill proficiency enumeration
+   - Levels: basic, intermediate, advanced, expert
+   - Features: ordering, comparison, display names
+   - Used in: Skill entity
+
+5. **ContactInfo** (`contact_info.py`)
+   - Composite VO with Email and optional Phone
+   - Features: validation of both components, helper methods
+   - Used in: Profile, ContactInformation
+
+### Value Object Principles
+
+- ✅ **Immutability**: Frozen dataclasses, cannot be modified
+- ✅ **Self-Validation**: Validate on construction
+- ✅ **Equality by Value**: Two VOs are equal if attributes match
+- ✅ **No Identity**: Unlike entities, VOs have no ID
+- ✅ **Side-Effect Free**: Operations return new instances
+
+### Usage Example
+
+```python
+from app.domain.value_objects import Email, Phone, ContactInfo, DateRange
+from datetime import datetime
+
+# Email
+email = Email.create("john@example.com")
+print(email.get_domain())  # "example.com"
+
+# Phone
+phone = Phone.create("+34612345678")
+print(phone.format_international())  # "+34 612 345 678"
+
+# ContactInfo (composite)
+contact = ContactInfo.create(
+    email="john@example.com",
+    phone="+34612345678"
+)
+
+# DateRange
+ongoing = DateRange.ongoing(start_date=datetime(2020, 1, 1))
+completed = DateRange.completed(
+    start_date=datetime(2020, 1, 1),
+    end_date=datetime(2023, 12, 31)
+)
+print(completed.duration_days())  # 1460
+```
+
+For comprehensive documentation, see `value_objects/README.md`.
 
 ## Entities
 
@@ -108,7 +179,6 @@ def __post_init__(self):
 ```
 
 ### 3. Business Rules Enforcement
-
 Domain logic is embedded in entity methods:
 
 ```python
@@ -233,10 +303,11 @@ This ensures:
 
 ## Next Steps
 
-After implementing entities (issue #3.2.1):
-1. **Issue #3.2.2**: Implement Value Objects (DateRange, ContactInfo, etc.)
-2. **Issue #3.3.x**: Implement Repository interfaces and implementations
-3. **Issue #3.4.x**: Implement Use Cases in the Application layer
+After implementing entities and value objects:
+1. ✅ **Issue #3.2.1**: Entities implemented
+2. ✅ **Issue #3.2.2**: Value Objects implemented
+3. **Issue #3.3.x**: Implement Repository interfaces and implementations
+4. **Issue #3.4.x**: Implement Use Cases in the Application layer
 
 ## Notes
 
