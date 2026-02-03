@@ -5,7 +5,7 @@ Updates the existing profile with new data.
 """
 
 from app.shared.interfaces import ICommandUseCase, IProfileRepository
-from app.shared.exceptions import NotFoundException
+from app.shared.shared_exceptions import NotFoundException
 from app.application.dto import UpdateProfileRequest, ProfileResponse
 
 

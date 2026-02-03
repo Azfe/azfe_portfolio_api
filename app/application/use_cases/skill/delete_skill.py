@@ -5,7 +5,7 @@ Deletes an existing skill.
 """
 
 from app.shared.interfaces import ICommandUseCase, IUniqueNameRepository
-from app.shared.exceptions import NotFoundException
+from app.shared.shared_exceptions import NotFoundException
 from app.application.dto import DeleteSkillRequest, SuccessResponse
 from typing import TYPE_CHECKING
 
