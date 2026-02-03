@@ -65,7 +65,7 @@ print("✓ Shared module imports successful")
 
 # Test 4: Import exceptions
 print("\nTesting exception imports...")
-from app.shared.exceptions import (
+from app.shared.shared_exceptions import (
     ApplicationException,
     DuplicateException,
     NotFoundException,

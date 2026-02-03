@@ -5,7 +5,7 @@ Creates the single profile in the system.
 """
 
 from app.shared.interfaces import ICommandUseCase, IProfileRepository
-from app.shared.exceptions import DuplicateException
+from app.shared.shared_exceptions import DuplicateException
 from app.application.dto import CreateProfileRequest, ProfileResponse
 from app.domain.entities import Profile
 

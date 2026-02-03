@@ -5,7 +5,7 @@ Adds a new work experience to the profile.
 """
 
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
-from app.shared.exceptions import BusinessRuleViolationException
+from app.shared.shared_exceptions import BusinessRuleViolationException
 from app.application.dto import AddExperienceRequest, WorkExperienceResponse
 from app.domain.entities import WorkExperience
 from typing import TYPE_CHECKING

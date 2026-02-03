@@ -5,7 +5,7 @@ Updates an existing education entry.
 """
 
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
-from app.shared.exceptions import NotFoundException
+from app.shared.shared_exceptions import NotFoundException
 from app.application.dto import EditEducationRequest, EducationResponse
 from typing import TYPE_CHECKING
 

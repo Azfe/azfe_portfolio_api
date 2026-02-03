@@ -5,7 +5,7 @@ Adds a new education entry to the profile.
 """
 
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
-from app.shared.exceptions import BusinessRuleViolationException
+from app.shared.shared_exceptions import BusinessRuleViolationException
 from app.application.dto import AddEducationRequest, EducationResponse
 from app.domain.entities import Education
 from typing import TYPE_CHECKING

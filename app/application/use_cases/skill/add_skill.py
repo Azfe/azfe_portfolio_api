@@ -5,7 +5,7 @@ Adds a new skill to the profile.
 """
 
 from app.shared.interfaces import ICommandUseCase, IUniqueNameRepository
-from app.shared.exceptions import DuplicateException
+from app.shared.shared_exceptions import DuplicateException
 from app.application.dto import AddSkillRequest, SkillResponse
 from app.domain.entities import Skill
 from typing import TYPE_CHECKING

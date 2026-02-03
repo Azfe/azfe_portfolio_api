@@ -5,7 +5,7 @@ Retrieves the single profile that exists in the system.
 """
 
 from app.shared.interfaces import IQueryUseCase, IProfileRepository
-from app.shared.exceptions import NotFoundException
+from app.shared.shared_exceptions import NotFoundException
 from app.application.dto import GetProfileRequest, ProfileResponse
 
 

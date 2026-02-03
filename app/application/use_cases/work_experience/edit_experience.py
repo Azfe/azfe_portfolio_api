@@ -5,7 +5,7 @@ Updates an existing work experience.
 """
 
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
-from app.shared.exceptions import NotFoundException
+from app.shared.shared_exceptions import NotFoundException
 from app.application.dto import EditExperienceRequest, WorkExperienceResponse
 from typing import TYPE_CHECKING
 

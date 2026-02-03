@@ -5,7 +5,7 @@ Updates an existing skill.
 """
 
 from app.shared.interfaces import ICommandUseCase, IUniqueNameRepository
-from app.shared.exceptions import DuplicateException, NotFoundException
+from app.shared.shared_exceptions import DuplicateException, NotFoundException
 from app.application.dto import EditSkillRequest, SkillResponse
 from typing import TYPE_CHECKING
 
