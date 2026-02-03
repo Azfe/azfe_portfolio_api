@@ -10,7 +10,7 @@ from app.shared.interfaces import (
     IOrderedRepository,
     IUniqueNameRepository
 )
-from app.shared.exceptions import NotFoundException
+from app.shared.shared_exceptions import NotFoundException
 from app.application.dto import GetCompleteCVRequest, CompleteCVResponse
 from typing import TYPE_CHECKING
 
