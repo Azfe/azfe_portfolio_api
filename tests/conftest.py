@@ -5,6 +5,7 @@ Este archivo se ejecuta antes de todos los tests.
 """
 import pytest
 from typing import Generator
+from datetime import datetime, timedelta
 from motor.motor_asyncio import AsyncIOMotorClient
 from httpx import AsyncClient
 
@@ -84,6 +85,58 @@ async def _clean_database(db):
 
 # ==================== FIXTURES DE DATOS DE PRUEBA ====================
 
+# Datetime fixtures
+@pytest.fixture
+def today() -> datetime:
+    """Returns today's date."""
+    return datetime.now()
+
+
+@pytest.fixture
+def yesterday(today) -> datetime:
+    """Returns yesterday's date."""
+    return today - timedelta(days=1)
+
+
+@pytest.fixture
+def tomorrow(today) -> datetime:
+    """Returns tomorrow's date."""
+    return today + timedelta(days=1)
+
+
+# ID fixtures
+@pytest.fixture
+def profile_id() -> str:
+    """Returns a sample profile ID."""
+    return "profile-123"
+
+
+# Validation fixtures
+@pytest.fixture
+def valid_email() -> str:
+    """Returns a valid email."""
+    return "test@example.com"
+
+
+@pytest.fixture
+def invalid_email() -> str:
+    """Returns an invalid email."""
+    return "not-an-email"
+
+
+@pytest.fixture
+def valid_url() -> str:
+    """Returns a valid URL."""
+    return "https://example.com"
+
+
+@pytest.fixture
+def invalid_url() -> str:
+    """Returns an invalid URL."""
+    return "not-a-url"
+
+
+# Sample entity data fixtures
 @pytest.fixture
 def sample_profile_data():
     """Datos de ejemplo para Profile"""
