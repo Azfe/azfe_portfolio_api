@@ -56,4 +56,4 @@ jobs:
         run: pytest tests/e2e -vv
 
       - name: Build Docker image
-        run: docker build -t portfolio-backend .
+        run: docker build -t portfolio-backend -f docker/development/Dockerfile.dev .
