@@ -3,8 +3,9 @@ Tests for SkillLevel Value Object.
 """
 
 import pytest
-from app.domain.value_objects.skill_level import SkillLevel
+
 from app.domain.exceptions import InvalidSkillLevelError
+from app.domain.value_objects.skill_level import SkillLevel
 
 
 @pytest.mark.value_object

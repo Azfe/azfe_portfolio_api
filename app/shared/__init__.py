@@ -22,22 +22,19 @@ Structure:
 """
 
 # Import interfaces for easy access
-from .interfaces import (
-    # Repository interfaces
-    IRepository,
-    IProfileRepository,
-    IOrderedRepository,
-    IContactMessageRepository,
-    IUniqueNameRepository,
-    ISocialNetworkRepository,
-    # Use case interfaces
-    IUseCase,
-    IQueryUseCase,
+from .interfaces import (  # Repository interfaces; Use case interfaces; Mapper interfaces
     ICommandUseCase,
-    IValidator,
-    # Mapper interfaces
-    IMapper,
+    IContactMessageRepository,
     IDTOMapper,
+    IMapper,
+    IOrderedRepository,
+    IProfileRepository,
+    IQueryUseCase,
+    IRepository,
+    ISocialNetworkRepository,
+    IUniqueNameRepository,
+    IUseCase,
+    IValidator,
     IValueObjectMapper,
 )
 

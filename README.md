@@ -16,6 +16,10 @@ Este repositorio forma parte de un ecosistema de 3 aplicaciones:
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
+![Code Quality](https://github.com/Azfe/portfolio_backend/workflows/Code%20Quality%20&%20Linting/badge.svg)
+![Tests](https://github.com/Azfe/portfolio_backend/workflows/Tests/badge.svg)
+[![codecov](https://codecov.io/gh/Azfe/portfolio_backend/branch/main/graph/badge.svg)](https://codecov.io/gh/Azfe/portfolio_backend)
+
 ## 🚀 Inicio Rápido con Docker (Recomendado)
 
 ### Requisitos Previos

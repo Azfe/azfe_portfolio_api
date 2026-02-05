@@ -11,7 +11,6 @@ Value Object Principles:
 """
 
 from dataclasses import dataclass
-from typing import Optional
 
 from .email import Email
 from .phone import Phone
@@ -21,17 +20,17 @@ from .phone import Phone
 class ContactInfo:
     """
     ContactInfo Value Object representing contact details.
-    
+
     Attributes:
         email: Email address (required)
         phone: Phone number (optional)
-    
+
     Business Rules:
         - Email is required
         - Phone is optional
         - Both must be valid if provided
         - Immutable after creation
-    
+
     Examples:
         >>> info = ContactInfo.create(
         ...     email="john@example.com",
@@ -42,44 +41,38 @@ class ContactInfo:
     """
 
     email: Email
-    phone: Optional[Phone] = None
+    phone: Phone | None = None
 
     @staticmethod
-    def create(
-        email: str,
-        phone: Optional[str] = None
-    ) -> "ContactInfo":
+    def create(email: str, phone: str | None = None) -> "ContactInfo":
         """
         Factory method to create ContactInfo.
-        
+
         Args:
             email: Email address string
             phone: Phone number string (optional)
-            
+
         Returns:
             A new ContactInfo instance
-            
+
         Raises:
             InvalidEmailError: If email format is invalid
             InvalidPhoneError: If phone format is invalid
         """
         email_vo = Email.create(email)
         phone_vo = Phone.create(phone) if phone else None
-        
+
         return ContactInfo(email=email_vo, phone=phone_vo)
 
     @staticmethod
-    def from_value_objects(
-        email: Email,
-        phone: Optional[Phone] = None
-    ) -> "ContactInfo":
+    def from_value_objects(email: Email, phone: Phone | None = None) -> "ContactInfo":
         """
         Create ContactInfo from existing Email and Phone VOs.
-        
+
         Args:
             email: Email value object
             phone: Phone value object (optional)
-            
+
         Returns:
             A new ContactInfo instance
         """
@@ -89,10 +82,10 @@ class ContactInfo:
     def email_only(email: str) -> "ContactInfo":
         """
         Create ContactInfo with only email.
-        
+
         Args:
             email: Email address string
-            
+
         Returns:
             A new ContactInfo instance with no phone
         """
@@ -106,17 +99,17 @@ class ContactInfo:
         """Get the email address as string."""
         return self.email.value
 
-    def get_phone_value(self) -> Optional[str]:
+    def get_phone_value(self) -> str | None:
         """Get the phone number as string (None if not provided)."""
         return self.phone.value if self.phone else None
 
     def with_phone(self, phone: str) -> "ContactInfo":
         """
         Create a new ContactInfo with a different phone.
-        
+
         Args:
             phone: New phone number string
-            
+
         Returns:
             A new ContactInfo instance
         """
@@ -126,7 +119,7 @@ class ContactInfo:
     def without_phone(self) -> "ContactInfo":
         """
         Create a new ContactInfo without phone.
-        
+
         Returns:
             A new ContactInfo instance with no phone
         """
@@ -135,10 +128,10 @@ class ContactInfo:
     def with_email(self, email: str) -> "ContactInfo":
         """
         Create a new ContactInfo with a different email.
-        
+
         Args:
             email: New email address string
-            
+
         Returns:
             A new ContactInfo instance
         """

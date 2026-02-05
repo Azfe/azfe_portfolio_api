@@ -5,26 +5,28 @@ Data Transfer Objects for CV-related use cases.
 """
 
 from dataclasses import dataclass
-from typing import List
-from .profile_dto import ProfileResponse
-from .work_experience_dto import WorkExperienceResponse
-from .skill_dto import SkillResponse
+
 from .education_dto import EducationResponse
+from .profile_dto import ProfileResponse
+from .skill_dto import SkillResponse
+from .work_experience_dto import WorkExperienceResponse
 
 
 @dataclass
 class GetCompleteCVRequest:
     """Request to get complete CV (no parameters needed)."""
+
     pass
 
 
 @dataclass
 class CompleteCVResponse:
     """Response containing complete CV data."""
+
     profile: ProfileResponse
-    experiences: List[WorkExperienceResponse]
-    skills: List[SkillResponse]
-    education: List[EducationResponse]
+    experiences: list[WorkExperienceResponse]
+    skills: list[SkillResponse]
+    education: list[EducationResponse]
 
     @classmethod
     def create(
@@ -46,6 +48,7 @@ class CompleteCVResponse:
 @dataclass
 class GenerateCVPDFRequest:
     """Request to generate CV PDF."""
+
     format: str = "standard"  # standard, compact, detailed
     include_photo: bool = True
 
@@ -53,6 +56,7 @@ class GenerateCVPDFRequest:
 @dataclass
 class GenerateCVPDFResponse:
     """Response containing PDF generation result."""
+
     success: bool
     file_path: str
     message: str = "PDF generated successfully"

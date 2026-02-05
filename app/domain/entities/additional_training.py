@@ -13,19 +13,18 @@ Business Rules Applied:
 - RB-AT07: orderIndex is required and must be unique per profile
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Optional
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
 from ..exceptions import (
     EmptyFieldError,
     InvalidLengthError,
-    InvalidURLError,
-    InvalidTitleError,
-    InvalidProviderError,
     InvalidOrderIndexError,
+    InvalidProviderError,
+    InvalidTitleError,
+    InvalidURLError,
 )
 
 
@@ -33,7 +32,7 @@ from ..exceptions import (
 class AdditionalTraining:
     """
     AdditionalTraining entity representing courses, workshops, or other training.
-    
+
     This entity represents non-formal education and professional development.
     """
 
@@ -43,9 +42,9 @@ class AdditionalTraining:
     provider: str
     completion_date: datetime
     order_index: int
-    duration: Optional[str] = None
-    certificate_url: Optional[str] = None
-    description: Optional[str] = None
+    duration: str | None = None
+    certificate_url: str | None = None
+    description: str | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -55,12 +54,13 @@ class AdditionalTraining:
     MAX_DURATION_LENGTH = 50
     MAX_DESCRIPTION_LENGTH = 500
     URL_PATTERN = re.compile(
-        r'^https?://'
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'
-        r'localhost|'
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-        r'(?::\d+)?'
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE
+        r"^https?://"
+        r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"
+        r"localhost|"
+        r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        r"(?::\d+)?"
+        r"(?:/?|[/?]\S+)$",
+        re.IGNORECASE,
     )
 
     def __post_init__(self):
@@ -80,13 +80,13 @@ class AdditionalTraining:
         provider: str,
         completion_date: datetime,
         order_index: int,
-        duration: Optional[str] = None,
-        certificate_url: Optional[str] = None,
-        description: Optional[str] = None,
+        duration: str | None = None,
+        certificate_url: str | None = None,
+        description: str | None = None,
     ) -> "AdditionalTraining":
         """
         Factory method to create a new AdditionalTraining.
-        
+
         Args:
             profile_id: Reference to the Profile
             title: Training/course title
@@ -96,7 +96,7 @@ class AdditionalTraining:
             duration: Training duration (e.g., "40 hours")
             certificate_url: URL to certificate
             description: Optional description
-            
+
         Returns:
             A new AdditionalTraining instance with generated UUID
         """
@@ -114,16 +114,16 @@ class AdditionalTraining:
 
     def update_info(
         self,
-        title: Optional[str] = None,
-        provider: Optional[str] = None,
-        completion_date: Optional[datetime] = None,
-        duration: Optional[str] = None,
-        certificate_url: Optional[str] = None,
-        description: Optional[str] = None,
+        title: str | None = None,
+        provider: str | None = None,
+        completion_date: datetime | None = None,
+        duration: str | None = None,
+        certificate_url: str | None = None,
+        description: str | None = None,
     ) -> None:
         """
         Update training information.
-        
+
         Args:
             title: New title (optional)
             provider: New provider (optional)
@@ -135,32 +135,32 @@ class AdditionalTraining:
         if title is not None:
             self.title = title
             self._validate_title()
-        
+
         if provider is not None:
             self.provider = provider
             self._validate_provider()
-        
+
         if completion_date is not None:
             self.completion_date = completion_date
-        
+
         if duration is not None:
             self.duration = duration
             self._validate_duration()
-        
+
         if certificate_url is not None:
             self.certificate_url = certificate_url
             self._validate_certificate_url()
-        
+
         if description is not None:
             self.description = description
             self._validate_description()
-        
+
         self._mark_as_updated()
 
     def update_order(self, new_order_index: int) -> None:
         """
         Update the order index.
-        
+
         Args:
             new_order_index: New position in the list
         """
@@ -177,7 +177,7 @@ class AdditionalTraining:
         """Validate title field according to business rules."""
         if not self.title or not self.title.strip():
             raise InvalidTitleError("Title cannot be empty")
-        
+
         if len(self.title) > self.MAX_TITLE_LENGTH:
             raise InvalidLengthError("title", max_length=self.MAX_TITLE_LENGTH)
 
@@ -185,7 +185,7 @@ class AdditionalTraining:
         """Validate provider field according to business rules."""
         if not self.provider or not self.provider.strip():
             raise InvalidProviderError("Provider cannot be empty")
-        
+
         if len(self.provider) > self.MAX_PROVIDER_LENGTH:
             raise InvalidLengthError("provider", max_length=self.MAX_PROVIDER_LENGTH)
 
@@ -195,7 +195,9 @@ class AdditionalTraining:
             if self.duration.strip() == "":
                 self.duration = None
             elif len(self.duration) > self.MAX_DURATION_LENGTH:
-                raise InvalidLengthError("duration", max_length=self.MAX_DURATION_LENGTH)
+                raise InvalidLengthError(
+                    "duration", max_length=self.MAX_DURATION_LENGTH
+                )
 
     def _validate_certificate_url(self) -> None:
         """Validate certificate URL format."""
@@ -211,7 +213,9 @@ class AdditionalTraining:
             if self.description.strip() == "":
                 self.description = None
             elif len(self.description) > self.MAX_DESCRIPTION_LENGTH:
-                raise InvalidLengthError("description", max_length=self.MAX_DESCRIPTION_LENGTH)
+                raise InvalidLengthError(
+                    "description", max_length=self.MAX_DESCRIPTION_LENGTH
+                )
 
     def _validate_order_index(self) -> None:
         """Validate order index."""

@@ -2,10 +2,12 @@
 Tests for DateRange Value Object.
 """
 
-import pytest
 from datetime import datetime
-from app.domain.value_objects.date_range import DateRange
+
+import pytest
+
 from app.domain.exceptions import InvalidDateRangeError
+from app.domain.value_objects.date_range import DateRange
 
 
 @pytest.mark.value_object
@@ -15,14 +17,14 @@ class TestDateRangeCreation:
     def test_create_completed_range(self, yesterday, today):
         """Should create completed range."""
         dr = DateRange.completed(yesterday, today)
-        
+
         assert dr.start_date == yesterday
         assert dr.end_date == today
 
     def test_create_ongoing_range(self, yesterday):
         """Should create ongoing range."""
         dr = DateRange.ongoing(yesterday)
-        
+
         assert dr.start_date == yesterday
         assert dr.end_date is None
 
@@ -44,13 +46,13 @@ class TestDateRangeQueries:
     def test_is_ongoing_true(self, yesterday):
         """Should return True for ongoing."""
         dr = DateRange.ongoing(yesterday)
-        
+
         assert dr.is_ongoing() is True
 
     def test_is_ongoing_false(self, yesterday, today):
         """Should return False for completed."""
         dr = DateRange.completed(yesterday, today)
-        
+
         assert dr.is_ongoing() is False
 
     def test_duration_days(self):
@@ -58,7 +60,7 @@ class TestDateRangeQueries:
         start = datetime(2023, 1, 1)
         end = datetime(2023, 1, 11)
         dr = DateRange.completed(start, end)
-        
+
         assert dr.duration_days() == 10
 
 
@@ -69,6 +71,6 @@ class TestDateRangeImmutability:
     def test_immutable(self, yesterday, today):
         """Should not allow modification."""
         dr = DateRange.completed(yesterday, today)
-        
+
         with pytest.raises(AttributeError):
             dr.start_date = datetime.now()
