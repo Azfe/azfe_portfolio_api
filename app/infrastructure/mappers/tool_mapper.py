@@ -1,24 +1,24 @@
 from typing import Any
 
-from app.domain.entities import Skill
+from app.domain.entities import Tool
 from app.shared.interfaces.mapper import IMapper
 
 
-class SkillMapper(IMapper[Skill, dict[str, Any]]):
+class ToolMapper(IMapper[Tool, dict[str, Any]]):
 
-    def to_domain(self, persistence_model: dict[str, Any]) -> Skill:
-        return Skill(
+    def to_domain(self, persistence_model: dict[str, Any]) -> Tool:
+        return Tool(
             id=str(persistence_model["_id"]),
             profile_id=persistence_model["profile_id"],
             name=persistence_model["name"],
             category=persistence_model["category"],
             order_index=persistence_model["order_index"],
-            level=persistence_model.get("level"),
+            icon_url=persistence_model.get("icon_url"),
             created_at=persistence_model["created_at"],
             updated_at=persistence_model["updated_at"],
         )
 
-    def to_persistence(self, domain_entity: Skill) -> dict[str, Any]:
+    def to_persistence(self, domain_entity: Tool) -> dict[str, Any]:
         doc: dict[str, Any] = {
             "_id": domain_entity.id,
             "profile_id": domain_entity.profile_id,
@@ -28,6 +28,6 @@ class SkillMapper(IMapper[Skill, dict[str, Any]]):
             "created_at": domain_entity.created_at,
             "updated_at": domain_entity.updated_at,
         }
-        if domain_entity.level is not None:
-            doc["level"] = domain_entity.level
+        if domain_entity.icon_url is not None:
+            doc["icon_url"] = domain_entity.icon_url
         return doc
