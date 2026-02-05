@@ -19,10 +19,18 @@ from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 # Import entities only for type checking to avoid circular imports
 if TYPE_CHECKING:
-    from app.domain.entities import (
+    from app.domain.entities import (  # noqa: F401
+        AdditionalTraining,
+        Certification,
+        ContactInformation,
         ContactMessage,
+        Education,
         Profile,
+        Project,
+        Skill,
         SocialNetwork,
+        Tool,
+        WorkExperience,
     )
 
 # Generic type representing any domain entity
