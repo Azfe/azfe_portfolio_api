@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, Field
 
 from app.api.schemas.common_schema import TimestampMixin

@@ -130,7 +130,9 @@ async def get_contact_message(message_id: str):
     summary="Enviar mensaje de contacto (PÚBLICO)",
     description="Crea un nuevo mensaje desde el formulario de contacto público",
 )
-async def create_contact_message(_message_data: ContactMessageCreate, _request: Request):
+async def create_contact_message(
+    _message_data: ContactMessageCreate, _request: Request
+):
     """
     Crea un nuevo mensaje de contacto desde el formulario público del portfolio.
 

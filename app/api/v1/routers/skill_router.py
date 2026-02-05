@@ -473,7 +473,11 @@ async def get_skills_stats():
 
     TODO: Implementar con GetSkillsStatsUseCase
     """
-    stats: dict[str, Any] = {"total": len(MOCK_SKILLS), "by_level": {}, "by_category": {}}
+    stats: dict[str, Any] = {
+        "total": len(MOCK_SKILLS),
+        "by_level": {},
+        "by_category": {},
+    }
 
     # Contar por nivel
     for skill in MOCK_SKILLS:

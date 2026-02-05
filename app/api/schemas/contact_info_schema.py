@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
 from app.api.schemas.common_schema import TimestampMixin
@@ -14,12 +13,8 @@ class ContactInformationBase(BaseModel):
         ..., description="Correo de contacto (no puede estar vacío)"
     )
     phone: str | None = Field(None, description="Número de teléfono (opcional)")
-    location: str | None = Field(
-        None, description="Ubicación general (ciudad, país)"
-    )
-    website: HttpUrl | None = Field(
-        None, description="Sitio web personal (opcional)"
-    )
+    location: str | None = Field(None, description="Ubicación general (ciudad, país)")
+    website: HttpUrl | None = Field(None, description="Sitio web personal (opcional)")
 
 
 class ContactInformationCreate(ContactInformationBase):

@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel
 
 from app.api.schemas.additional_training_schema import AdditionalTrainingResponse

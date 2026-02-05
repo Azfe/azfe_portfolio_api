@@ -65,9 +65,7 @@ class ContactInfo:
         return ContactInfo(email=email_vo, phone=phone_vo)
 
     @staticmethod
-    def from_value_objects(
-        email: Email, phone: Phone | None = None
-    ) -> "ContactInfo":
+    def from_value_objects(email: Email, phone: Phone | None = None) -> "ContactInfo":
         """
         Create ContactInfo from existing Email and Phone VOs.
 

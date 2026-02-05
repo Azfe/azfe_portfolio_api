@@ -26,5 +26,7 @@ async def close_mongo_connection():
 def get_database():
     """Obtener instancia de la base de datos"""
     if db.client is None:
-        raise RuntimeError("MongoDB client not initialized. Call connect_to_mongo() first.")
+        raise RuntimeError(
+            "MongoDB client not initialized. Call connect_to_mongo() first."
+        )
     return db.client[settings.MONGODB_DB_NAME]
