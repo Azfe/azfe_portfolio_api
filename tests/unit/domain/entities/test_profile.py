@@ -3,6 +3,7 @@ Tests for Profile Entity.
 """
 
 import pytest
+
 from app.domain.entities.profile import Profile
 from app.domain.exceptions import EmptyFieldError, InvalidLengthError, InvalidURLError
 
@@ -13,11 +14,8 @@ class TestProfileCreation:
 
     def test_create_with_required_fields(self):
         """Should create profile with required fields."""
-        profile = Profile.create(
-            name="John Doe",
-            headline="Software Engineer"
-        )
-        
+        profile = Profile.create(name="John Doe", headline="Software Engineer")
+
         assert profile.name == "John Doe"
         assert profile.headline == "Software Engineer"
         assert profile.id is not None
@@ -29,9 +27,9 @@ class TestProfileCreation:
             headline="Engineer",
             bio="Developer",
             location="Barcelona",
-            avatar_url=valid_url
+            avatar_url=valid_url,
         )
-        
+
         assert profile.bio == "Developer"
         assert profile.location == "Barcelona"
 
@@ -74,16 +72,16 @@ class TestProfileUpdate:
     def test_update_basic_info(self):
         """Should update profile info."""
         profile = Profile.create(name="John", headline="Engineer")
-        
+
         profile.update_basic_info(name="Jane", headline="Senior Engineer")
-        
+
         assert profile.name == "Jane"
         assert profile.headline == "Senior Engineer"
 
     def test_update_avatar(self, valid_url):
         """Should update avatar."""
         profile = Profile.create(name="John", headline="Engineer")
-        
+
         profile.update_avatar(valid_url)
-        
+
         assert profile.avatar_url == valid_url

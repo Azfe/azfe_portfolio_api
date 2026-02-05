@@ -4,11 +4,12 @@ Add Skill Use Case.
 Adds a new skill to the profile.
 """
 
-from app.shared.interfaces import ICommandUseCase, IUniqueNameRepository
-from app.shared.shared_exceptions import DuplicateException
+from typing import TYPE_CHECKING
+
 from app.application.dto import AddSkillRequest, SkillResponse
 from app.domain.entities import Skill
-from typing import TYPE_CHECKING
+from app.shared.interfaces import ICommandUseCase, IUniqueNameRepository
+from app.shared.shared_exceptions import DuplicateException
 
 if TYPE_CHECKING:
     from app.domain.entities import Skill as SkillType
@@ -17,21 +18,21 @@ if TYPE_CHECKING:
 class AddSkillUseCase(ICommandUseCase[AddSkillRequest, SkillResponse]):
     """
     Use case for adding a skill.
-    
+
     Business Rules:
     - Name must be unique per profile
     - orderIndex must be unique per profile
     - Category is required
     - Level is optional
-    
+
     Dependencies:
     - IUniqueNameRepository[Skill]: For skill data access
     """
 
-    def __init__(self, skill_repository: IUniqueNameRepository['SkillType']):
+    def __init__(self, skill_repository: IUniqueNameRepository["SkillType"]):
         """
         Initialize use case with dependencies.
-        
+
         Args:
             skill_repository: Skill repository interface
         """
@@ -40,13 +41,13 @@ class AddSkillUseCase(ICommandUseCase[AddSkillRequest, SkillResponse]):
     async def execute(self, request: AddSkillRequest) -> SkillResponse:
         """
         Execute the use case.
-        
+
         Args:
             request: Add skill request with skill data
-            
+
         Returns:
             SkillResponse with created skill data
-            
+
         Raises:
             DuplicateException: If skill name already exists
             DomainError: If validation fails
@@ -54,7 +55,7 @@ class AddSkillUseCase(ICommandUseCase[AddSkillRequest, SkillResponse]):
         # Check name uniqueness
         if await self.skill_repo.exists_by_name(request.profile_id, request.name):
             raise DuplicateException("Skill", "name", request.name)
-        
+
         # Create domain entity (validates automatically)
         skill = Skill.create(
             profile_id=request.profile_id,
@@ -63,9 +64,9 @@ class AddSkillUseCase(ICommandUseCase[AddSkillRequest, SkillResponse]):
             order_index=request.order_index,
             level=request.level,
         )
-        
+
         # Persist the skill
         created_skill = await self.skill_repo.add(skill)
-        
+
         # Convert to DTO and return
         return SkillResponse.from_entity(created_skill)

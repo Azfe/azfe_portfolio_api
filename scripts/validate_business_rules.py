@@ -6,9 +6,8 @@ Validates that all business rules are properly implemented in the domain layer.
 """
 
 import sys
-import os
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # =========================================================
 # ADD PROJECT ROOT TO PYTHONPATH
@@ -20,20 +19,26 @@ sys.path.insert(0, str(PROJECT_ROOT))
 # =========================================================
 # IMPORT DOMAIN MODULES
 # =========================================================
-from app.domain.entities import (
-    Profile, WorkExperience, Skill, Education, Project,
-    Certification, AdditionalTraining, ContactInformation,
-    ContactMessage, SocialNetwork, Tool
+from app.domain.entities import (  # noqa: E402
+    ContactMessage,
+    Education,
+    Profile,
+    Skill,
+    WorkExperience,
 )
-from app.domain.value_objects import (
-    DateRange, Email, Phone, SkillLevel, ContactInfo
+from app.domain.exceptions import (  # noqa: E402
+    EmptyFieldError,
+    InvalidDateRangeError,
+    InvalidEmailError,
+    InvalidInstitutionError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidPhoneError,
+    InvalidRoleError,
+    InvalidSkillLevelError,
+    InvalidURLError,
 )
-from app.domain.exceptions import (
-    EmptyFieldError, InvalidLengthError, InvalidEmailError,
-    InvalidPhoneError, InvalidURLError, InvalidDateRangeError,
-    InvalidSkillLevelError, DuplicateValueError,
-    InvalidRoleError, InvalidNameError, InvalidInstitutionError
-)
+from app.domain.value_objects import DateRange, Email, Phone, SkillLevel  # noqa: E402
 
 # =========================================================
 # TESTS

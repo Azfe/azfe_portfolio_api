@@ -12,13 +12,13 @@ Tests cover:
 
 import pytest
 
-from app.domain.value_objects.phone import Phone
 from app.domain.exceptions import EmptyFieldError, InvalidPhoneError
-
+from app.domain.value_objects.phone import Phone
 
 # ==========================================
 # VALID PHONE CREATION TESTS
 # ==========================================
+
 
 class TestPhoneCreation:
     """Tests for valid Phone creation and normalization."""
@@ -77,6 +77,7 @@ class TestPhoneCreation:
 # INVALID PHONE VALIDATION TESTS
 # ==========================================
 
+
 class TestPhoneValidation:
     """Tests for Phone validation errors."""
 
@@ -134,6 +135,7 @@ class TestPhoneValidation:
 # FACTORY METHODS TESTS
 # ==========================================
 
+
 class TestPhoneFactoryMethods:
     """Tests for Phone factory methods."""
 
@@ -177,6 +179,7 @@ class TestPhoneFactoryMethods:
 # ==========================================
 # PHONE METHODS TESTS
 # ==========================================
+
 
 class TestPhoneMethods:
     """Tests for Phone methods."""
@@ -249,6 +252,7 @@ class TestPhoneMethods:
 # ==========================================
 # VALUE OBJECT PROPERTIES TESTS
 # ==========================================
+
 
 class TestPhoneValueObjectProperties:
     """Tests for Phone Value Object properties (equality, immutability, hash)."""
@@ -325,6 +329,7 @@ class TestPhoneValueObjectProperties:
 # NORMALIZATION TESTS
 # ==========================================
 
+
 class TestPhoneNormalization:
     """Tests for phone number normalization."""
 
@@ -373,6 +378,7 @@ class TestPhoneNormalization:
 # ==========================================
 # EDGE CASES TESTS
 # ==========================================
+
 
 class TestPhoneEdgeCases:
     """Tests for edge cases and boundary conditions."""

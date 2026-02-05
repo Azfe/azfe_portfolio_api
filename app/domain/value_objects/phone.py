@@ -42,14 +42,12 @@ class Phone:
 
     # Pattern to extract digits from formatted numbers
     DIGIT_PATTERN = re.compile(r"[\d+]+")
-    
-    
+
     def __post_init__(self):
         original = self.value
         normalized = self._normalize(original)
         object.__setattr__(self, "value", normalized)
         self._validate(original)
-
 
     @staticmethod
     def create(value: str) -> "Phone":
@@ -178,7 +176,7 @@ class Phone:
             return normalized
 
         return normalized
-    
+
     def _validate(self, original: str) -> None:
         # Caso 1: el usuario realmente envió vacío
         if original is None or original.strip() == "":
@@ -195,7 +193,6 @@ class Phone:
         # Caso 4: no cumple E.164
         if not self.E164_PATTERN.match(self.value):
             raise InvalidPhoneError(f"Invalid phone number: {original}")
-
 
     def __str__(self) -> str:
         """String representation for display (formatted)."""

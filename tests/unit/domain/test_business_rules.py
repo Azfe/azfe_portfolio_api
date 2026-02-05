@@ -14,37 +14,39 @@ Business Rules Covered:
 - Immutability constraints
 """
 
-import pytest
 from datetime import datetime, timedelta
 
-from app.domain.entities.profile import Profile
-from app.domain.entities.work_experience import WorkExperience
-from app.domain.entities.skill import Skill
-from app.domain.entities.education import Education
+import pytest
+
 from app.domain.entities.contact_message import ContactMessage
+from app.domain.entities.education import Education
+from app.domain.entities.profile import Profile
+from app.domain.entities.skill import Skill
+from app.domain.entities.work_experience import WorkExperience
+from app.domain.exceptions import (
+    EmptyFieldError,
+    InvalidCategoryError,
+    InvalidCompanyError,
+    InvalidDateRangeError,
+    InvalidEmailError,
+    InvalidInstitutionError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+    InvalidPhoneError,
+    InvalidRoleError,
+    InvalidSkillLevelError,
+    InvalidURLError,
+)
+from app.domain.value_objects.date_range import DateRange
 from app.domain.value_objects.email import Email
 from app.domain.value_objects.phone import Phone
 from app.domain.value_objects.skill_level import SkillLevel
-from app.domain.value_objects.date_range import DateRange
-from app.domain.exceptions import (
-    EmptyFieldError,
-    InvalidLengthError,
-    InvalidEmailError,
-    InvalidPhoneError,
-    InvalidURLError,
-    InvalidDateRangeError,
-    InvalidSkillLevelError,
-    InvalidRoleError,
-    InvalidNameError,
-    InvalidInstitutionError,
-    InvalidCompanyError,
-    InvalidCategoryError,
-)
-
 
 # ==========================================
 # PROFILE BUSINESS RULES TESTS
 # ==========================================
+
 
 class TestProfileBusinessRules:
     """Tests for Profile entity business rules."""
@@ -74,21 +76,13 @@ class TestProfileBusinessRules:
         long_bio = "x" * 1001
 
         with pytest.raises(InvalidLengthError):
-            Profile.create(
-                name="John Doe",
-                headline="Test Headline",
-                bio=long_bio
-            )
+            Profile.create(name="John Doe", headline="Test Headline", bio=long_bio)
 
     def test_rb_p03_bio_max_length_accepted(self):
         """RB-P03: Profile bio at exactly max length is accepted."""
         max_bio = "x" * 1000
 
-        profile = Profile.create(
-            name="John Doe",
-            headline="Test Headline",
-            bio=max_bio
-        )
+        profile = Profile.create(name="John Doe", headline="Test Headline", bio=max_bio)
 
         assert len(profile.bio) == 1000
 
@@ -96,9 +90,7 @@ class TestProfileBusinessRules:
         """RB-P05: Avatar URL must be valid format."""
         with pytest.raises(InvalidURLError):
             Profile.create(
-                name="John Doe",
-                headline="Test Headline",
-                avatar_url="not-a-url"
+                name="John Doe", headline="Test Headline", avatar_url="not-a-url"
             )
 
     def test_rb_p05_avatar_url_valid_accepted(self):
@@ -106,7 +98,7 @@ class TestProfileBusinessRules:
         profile = Profile.create(
             name="John Doe",
             headline="Test Headline",
-            avatar_url="https://example.com/avatar.jpg"
+            avatar_url="https://example.com/avatar.jpg",
         )
 
         assert profile.avatar_url == "https://example.com/avatar.jpg"
@@ -115,6 +107,7 @@ class TestProfileBusinessRules:
 # ==========================================
 # WORK EXPERIENCE BUSINESS RULES TESTS
 # ==========================================
+
 
 class TestWorkExperienceBusinessRules:
     """Tests for WorkExperience entity business rules."""
@@ -127,7 +120,7 @@ class TestWorkExperienceBusinessRules:
                 role="",
                 company="Test Company",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_w01_role_not_whitespace_only(self, profile_id, today):
@@ -138,7 +131,7 @@ class TestWorkExperienceBusinessRules:
                 role="   ",
                 company="Test Company",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_w02_company_is_required(self, profile_id, today):
@@ -149,10 +142,12 @@ class TestWorkExperienceBusinessRules:
                 role="Software Engineer",
                 company="",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
-    def test_rb_w05_end_date_must_be_after_start_date(self, profile_id, yesterday, today):
+    def test_rb_w05_end_date_must_be_after_start_date(
+        self, profile_id, yesterday, today
+    ):
         """RB-W05: End date must be after start date."""
         with pytest.raises(InvalidDateRangeError):
             WorkExperience.create(
@@ -161,7 +156,7 @@ class TestWorkExperienceBusinessRules:
                 company="Test Company",
                 start_date=today,
                 end_date=yesterday,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_w05_end_date_cannot_equal_start_date(self, profile_id, today):
@@ -173,7 +168,7 @@ class TestWorkExperienceBusinessRules:
                 company="Test Company",
                 start_date=today,
                 end_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_w05_valid_date_range_accepted(self, profile_id, yesterday, tomorrow):
@@ -184,7 +179,7 @@ class TestWorkExperienceBusinessRules:
             company="Test Company",
             start_date=yesterday,
             end_date=tomorrow,
-            order_index=0
+            order_index=0,
         )
 
         assert experience.start_date == yesterday
@@ -195,6 +190,7 @@ class TestWorkExperienceBusinessRules:
 # SKILL BUSINESS RULES TESTS
 # ==========================================
 
+
 class TestSkillBusinessRules:
     """Tests for Skill entity business rules."""
 
@@ -202,30 +198,21 @@ class TestSkillBusinessRules:
         """RB-S01: Skill name is required."""
         with pytest.raises((EmptyFieldError, InvalidNameError)):
             Skill.create(
-                profile_id=profile_id,
-                name="",
-                category="backend",
-                order_index=0
+                profile_id=profile_id, name="", category="backend", order_index=0
             )
 
     def test_rb_s01_name_not_whitespace_only(self, profile_id):
         """RB-S01: Skill name cannot be whitespace only."""
         with pytest.raises((EmptyFieldError, InvalidNameError)):
             Skill.create(
-                profile_id=profile_id,
-                name="   ",
-                category="backend",
-                order_index=0
+                profile_id=profile_id, name="   ", category="backend", order_index=0
             )
 
     def test_rb_s02_category_is_required(self, profile_id):
         """RB-S02: Skill category is required."""
         with pytest.raises((EmptyFieldError, InvalidCategoryError)):
             Skill.create(
-                profile_id=profile_id,
-                name="Python",
-                category="",
-                order_index=0
+                profile_id=profile_id, name="Python", category="", order_index=0
             )
 
     def test_rb_s04_level_must_be_valid(self, profile_id):
@@ -236,7 +223,7 @@ class TestSkillBusinessRules:
                 name="Python",
                 category="backend",
                 level="invalid_level",
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_s04_valid_levels_accepted(self, profile_id):
@@ -249,7 +236,7 @@ class TestSkillBusinessRules:
                 name=f"Python-{level}",
                 category="backend",
                 level=level,
-                order_index=0
+                order_index=0,
             )
             # Skill stores level as string directly
             assert skill.level == level
@@ -258,6 +245,7 @@ class TestSkillBusinessRules:
 # ==========================================
 # EDUCATION BUSINESS RULES TESTS
 # ==========================================
+
 
 class TestEducationBusinessRules:
     """Tests for Education entity business rules."""
@@ -271,7 +259,7 @@ class TestEducationBusinessRules:
                 degree="Bachelor of Science",
                 field="Computer Science",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_e01_institution_not_whitespace_only(self, profile_id, today):
@@ -283,7 +271,7 @@ class TestEducationBusinessRules:
                 degree="Bachelor of Science",
                 field="Computer Science",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_e02_degree_is_required(self, profile_id, today):
@@ -295,7 +283,7 @@ class TestEducationBusinessRules:
                 degree="",
                 field="Computer Science",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_e03_field_is_required(self, profile_id, today):
@@ -307,10 +295,12 @@ class TestEducationBusinessRules:
                 degree="Bachelor of Science",
                 field="",
                 start_date=today,
-                order_index=0
+                order_index=0,
             )
 
-    def test_rb_e05_end_date_must_be_after_start_date(self, profile_id, yesterday, today):
+    def test_rb_e05_end_date_must_be_after_start_date(
+        self, profile_id, yesterday, today
+    ):
         """RB-E05: End date must be after start date."""
         with pytest.raises(InvalidDateRangeError):
             Education.create(
@@ -320,7 +310,7 @@ class TestEducationBusinessRules:
                 field="Computer Science",
                 start_date=today,
                 end_date=yesterday,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_e05_end_date_cannot_equal_start_date(self, profile_id, today):
@@ -333,7 +323,7 @@ class TestEducationBusinessRules:
                 field="Computer Science",
                 start_date=today,
                 end_date=today,
-                order_index=0
+                order_index=0,
             )
 
     def test_rb_e05_valid_date_range_accepted(self, profile_id, yesterday, tomorrow):
@@ -345,7 +335,7 @@ class TestEducationBusinessRules:
             field="Computer Science",
             start_date=yesterday,
             end_date=tomorrow,
-            order_index=0
+            order_index=0,
         )
 
         assert education.start_date == yesterday
@@ -356,6 +346,7 @@ class TestEducationBusinessRules:
 # CONTACT MESSAGE BUSINESS RULES TESTS
 # ==========================================
 
+
 class TestContactMessageBusinessRules:
     """Tests for ContactMessage entity business rules."""
 
@@ -365,7 +356,7 @@ class TestContactMessageBusinessRules:
             ContactMessage.create(
                 name="",
                 email=valid_email,
-                message="This is a test message with enough characters"
+                message="This is a test message with enough characters",
             )
 
     def test_rb_cm01_name_not_whitespace_only(self, valid_email):
@@ -374,7 +365,7 @@ class TestContactMessageBusinessRules:
             ContactMessage.create(
                 name="   ",
                 email=valid_email,
-                message="This is a test message with enough characters"
+                message="This is a test message with enough characters",
             )
 
     def test_rb_cm02_email_is_required(self):
@@ -383,7 +374,7 @@ class TestContactMessageBusinessRules:
             ContactMessage.create(
                 name="John Doe",
                 email="",
-                message="This is a test message with enough characters"
+                message="This is a test message with enough characters",
             )
 
     def test_rb_cm02_email_must_be_valid_format(self):
@@ -392,7 +383,7 @@ class TestContactMessageBusinessRules:
             ContactMessage.create(
                 name="John Doe",
                 email="invalid-email",
-                message="This is a test message with enough characters"
+                message="This is a test message with enough characters",
             )
 
     def test_rb_cm02_valid_email_accepted(self):
@@ -400,7 +391,7 @@ class TestContactMessageBusinessRules:
         message = ContactMessage.create(
             name="John Doe",
             email="test@example.com",
-            message="This is a test message with enough characters"
+            message="This is a test message with enough characters",
         )
 
         assert message.email == "test@example.com"
@@ -408,20 +399,12 @@ class TestContactMessageBusinessRules:
     def test_rb_cm03_message_is_required(self, valid_email):
         """RB-CM03: Contact message content is required."""
         with pytest.raises(EmptyFieldError):
-            ContactMessage.create(
-                name="John Doe",
-                email=valid_email,
-                message=""
-            )
+            ContactMessage.create(name="John Doe", email=valid_email, message="")
 
     def test_rb_cm03_message_min_length_enforced(self, valid_email):
         """RB-CM03: Contact message has minimum length of 10 characters."""
         with pytest.raises(InvalidLengthError):
-            ContactMessage.create(
-                name="John Doe",
-                email=valid_email,
-                message="Short"
-            )
+            ContactMessage.create(name="John Doe", email=valid_email, message="Short")
 
     def test_rb_cm03_message_max_length_enforced(self, valid_email):
         """RB-CM03: Contact message has maximum length of 2000 characters."""
@@ -429,9 +412,7 @@ class TestContactMessageBusinessRules:
 
         with pytest.raises(InvalidLengthError):
             ContactMessage.create(
-                name="John Doe",
-                email=valid_email,
-                message=long_message
+                name="John Doe", email=valid_email, message=long_message
             )
 
     def test_rb_cm03_valid_message_length_accepted(self, valid_email):
@@ -439,7 +420,7 @@ class TestContactMessageBusinessRules:
         message = ContactMessage.create(
             name="John Doe",
             email=valid_email,
-            message="This is a valid message with enough characters to pass validation"
+            message="This is a valid message with enough characters to pass validation",
         )
 
         assert len(message.message) >= 10
@@ -449,6 +430,7 @@ class TestContactMessageBusinessRules:
 # ==========================================
 # VALUE OBJECT BUSINESS RULES TESTS
 # ==========================================
+
 
 class TestValueObjectBusinessRules:
     """Tests for Value Object business rules."""
@@ -544,6 +526,7 @@ class TestValueObjectBusinessRules:
 # IMMUTABILITY CONSTRAINTS TESTS
 # ==========================================
 
+
 class TestImmutabilityConstraints:
     """Tests for immutability constraints on value objects."""
 
@@ -589,49 +572,44 @@ class TestImmutabilityConstraints:
 # CROSS-CUTTING CONCERNS TESTS
 # ==========================================
 
+
 class TestCrossCuttingBusinessRules:
     """Tests for cross-cutting business rules."""
 
     def test_order_index_cannot_be_negative_skill(self, profile_id):
         """Order index must be non-negative for Skill."""
-        with pytest.raises(Exception):  # Could be InvalidOrderIndexError
+        with pytest.raises(InvalidOrderIndexError):
             Skill.create(
-                profile_id=profile_id,
-                name="Python",
-                category="backend",
-                order_index=-1
+                profile_id=profile_id, name="Python", category="backend", order_index=-1
             )
 
     def test_order_index_cannot_be_negative_education(self, profile_id, today):
         """Order index must be non-negative for Education."""
-        with pytest.raises(Exception):  # Could be InvalidOrderIndexError
+        with pytest.raises(InvalidOrderIndexError):
             Education.create(
                 profile_id=profile_id,
                 institution="Universidad Complutense",
                 degree="Bachelor of Science",
                 field="Computer Science",
                 start_date=today,
-                order_index=-1
+                order_index=-1,
             )
 
     def test_order_index_cannot_be_negative_work_experience(self, profile_id, today):
         """Order index must be non-negative for WorkExperience."""
-        with pytest.raises(Exception):  # Could be InvalidOrderIndexError
+        with pytest.raises(InvalidOrderIndexError):
             WorkExperience.create(
                 profile_id=profile_id,
                 role="Software Engineer",
                 company="Test Company",
                 start_date=today,
-                order_index=-1
+                order_index=-1,
             )
 
     def test_order_index_zero_is_valid(self, profile_id):
         """Order index of 0 should be valid (first position)."""
         skill = Skill.create(
-            profile_id=profile_id,
-            name="Python",
-            category="backend",
-            order_index=0
+            profile_id=profile_id, name="Python", category="backend", order_index=0
         )
 
         assert skill.order_index == 0
@@ -640,6 +618,7 @@ class TestCrossCuttingBusinessRules:
 # ==========================================
 # INTEGRATION TESTS
 # ==========================================
+
 
 class TestBusinessRulesIntegration:
     """Integration tests for business rules working together."""
@@ -651,7 +630,7 @@ class TestBusinessRulesIntegration:
             headline="Senior Software Engineer",
             bio="Experienced developer",
             location="Madrid, Spain",
-            avatar_url="https://example.com/avatar.jpg"
+            avatar_url="https://example.com/avatar.jpg",
         )
 
         assert profile.name == "John Doe"
@@ -672,7 +651,7 @@ class TestBusinessRulesIntegration:
             company="Tech Corp",
             start_date=yesterday,
             end_date=tomorrow,
-            order_index=0
+            order_index=0,
         )
 
         assert experience.role == "Software Engineer"
@@ -695,7 +674,7 @@ class TestBusinessRulesIntegration:
             field="Computer Science",
             start_date=yesterday,
             end_date=tomorrow,
-            order_index=0
+            order_index=0,
         )
 
         assert education.institution == "Universidad Complutense"
@@ -710,7 +689,7 @@ class TestBusinessRulesIntegration:
         message = ContactMessage.create(
             name="John Doe",
             email="john@example.com",
-            message="This is a valid message with enough characters to pass all validation"
+            message="This is a valid message with enough characters to pass all validation",
         )
 
         assert message.status == "pending"

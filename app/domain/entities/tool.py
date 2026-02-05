@@ -15,7 +15,6 @@ import re
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 
 from ..exceptions import (
     EmptyFieldError,
@@ -40,7 +39,7 @@ class Tool:
     name: str
     category: str
     order_index: int
-    icon_url: Optional[str] = None
+    icon_url: str | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -71,7 +70,7 @@ class Tool:
         name: str,
         category: str,
         order_index: int,
-        icon_url: Optional[str] = None,
+        icon_url: str | None = None,
     ) -> "Tool":
         """
         Factory method to create a new Tool.
@@ -97,9 +96,9 @@ class Tool:
 
     def update_info(
         self,
-        name: Optional[str] = None,
-        category: Optional[str] = None,
-        icon_url: Optional[str] = None,
+        name: str | None = None,
+        category: str | None = None,
+        icon_url: str | None = None,
     ) -> None:
         """
         Update tool information.

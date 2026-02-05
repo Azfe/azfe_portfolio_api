@@ -12,11 +12,10 @@ Business Rules Applied:
 - RB-CI06: Only one ContactInformation per Profile
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Optional
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
 from ..exceptions import (
     EmptyFieldError,
@@ -30,7 +29,7 @@ from ..exceptions import (
 class ContactInformation:
     """
     ContactInformation entity representing official contact details.
-    
+
     This is a value-rich entity that maintains format validation for all contact methods.
     Only one ContactInformation instance should exist per Profile.
     """
@@ -38,27 +37,26 @@ class ContactInformation:
     id: str
     profile_id: str
     email: str
-    phone: Optional[str] = None
-    linkedin: Optional[str] = None
-    github: Optional[str] = None
-    website: Optional[str] = None
+    phone: str | None = None
+    linkedin: str | None = None
+    github: str | None = None
+    website: str | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
     # Validation patterns
-    EMAIL_PATTERN = re.compile(
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    )
+    EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
     PHONE_PATTERN = re.compile(
-        r'^\+?[1-9]\d{1,14}$'  # E.164 format (international phone numbers)
+        r"^\+?[1-9]\d{1,14}$"  # E.164 format (international phone numbers)
     )
     URL_PATTERN = re.compile(
-        r'^https?://'
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'
-        r'localhost|'
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-        r'(?::\d+)?'
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE
+        r"^https?://"
+        r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"
+        r"localhost|"
+        r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        r"(?::\d+)?"
+        r"(?:/?|[/?]\S+)$",
+        re.IGNORECASE,
     )
 
     def __post_init__(self):
@@ -74,14 +72,14 @@ class ContactInformation:
     def create(
         profile_id: str,
         email: str,
-        phone: Optional[str] = None,
-        linkedin: Optional[str] = None,
-        github: Optional[str] = None,
-        website: Optional[str] = None,
+        phone: str | None = None,
+        linkedin: str | None = None,
+        github: str | None = None,
+        website: str | None = None,
     ) -> "ContactInformation":
         """
         Factory method to create new ContactInformation.
-        
+
         Args:
             profile_id: Reference to the Profile
             email: Primary email address
@@ -89,7 +87,7 @@ class ContactInformation:
             linkedin: LinkedIn profile URL (optional)
             github: GitHub profile URL (optional)
             website: Personal website URL (optional)
-            
+
         Returns:
             A new ContactInformation instance with generated UUID
         """
@@ -106,7 +104,7 @@ class ContactInformation:
     def update_email(self, email: str) -> None:
         """
         Update email address.
-        
+
         Args:
             email: New email address
         """
@@ -114,10 +112,10 @@ class ContactInformation:
         self._validate_email()
         self._mark_as_updated()
 
-    def update_phone(self, phone: Optional[str]) -> None:
+    def update_phone(self, phone: str | None) -> None:
         """
         Update phone number.
-        
+
         Args:
             phone: New phone number or None to remove
         """
@@ -127,13 +125,13 @@ class ContactInformation:
 
     def update_social_links(
         self,
-        linkedin: Optional[str] = None,
-        github: Optional[str] = None,
-        website: Optional[str] = None,
+        linkedin: str | None = None,
+        github: str | None = None,
+        website: str | None = None,
     ) -> None:
         """
         Update social and web links.
-        
+
         Args:
             linkedin: LinkedIn URL (optional)
             github: GitHub URL (optional)
@@ -142,15 +140,15 @@ class ContactInformation:
         if linkedin is not None:
             self.linkedin = linkedin
             self._validate_linkedin()
-        
+
         if github is not None:
             self.github = github
             self._validate_github()
-        
+
         if website is not None:
             self.website = website
             self._validate_website()
-        
+
         self._mark_as_updated()
 
     def _validate_profile_id(self) -> None:
@@ -162,7 +160,7 @@ class ContactInformation:
         """Validate email format."""
         if not self.email or not self.email.strip():
             raise EmptyFieldError("email")
-        
+
         if not self.EMAIL_PATTERN.match(self.email):
             raise InvalidEmailError(self.email)
 
@@ -173,7 +171,12 @@ class ContactInformation:
                 self.phone = None
             else:
                 # Remove common separators for validation
-                phone_digits = self.phone.replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+                phone_digits = (
+                    self.phone.replace(" ", "")
+                    .replace("-", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                )
                 if not self.PHONE_PATTERN.match(phone_digits):
                     raise InvalidPhoneError(self.phone)
 

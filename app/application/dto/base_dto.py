@@ -5,14 +5,14 @@ Data Transfer Objects for transferring data between layers.
 These are simple data containers without business logic.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 
 
 @dataclass
 class SuccessResponse:
     """Generic success response."""
+
     success: bool = True
     message: str = "Operation completed successfully"
 
@@ -20,21 +20,19 @@ class SuccessResponse:
 @dataclass
 class ErrorResponse:
     """Generic error response."""
-    success: bool = False
-    message: str
-    errors: list[str] = None
 
-    def __post_init__(self):
-        if self.errors is None:
-            self.errors = []
+    message: str
+    success: bool = False
+    errors: list[str] = field(default_factory=list)
 
 
 @dataclass
 class PaginationRequest:
     """Pagination parameters for list queries."""
+
     skip: int = 0
     limit: int = 100
-    sort_by: Optional[str] = None
+    sort_by: str | None = None
     ascending: bool = True
 
     def __post_init__(self):
@@ -49,5 +47,6 @@ class PaginationRequest:
 @dataclass
 class DateRangeDTO:
     """DTO for date ranges."""
+
     start_date: datetime
-    end_date: Optional[datetime] = None
+    end_date: datetime | None = None

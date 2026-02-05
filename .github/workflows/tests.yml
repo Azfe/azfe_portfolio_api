@@ -1,0 +1,138 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+        test-suite: ['unit', 'integration', 'e2e']
+
+    services:
+      mongodb:
+        image: mongo:8.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Wait for MongoDB
+        run: |
+          until mongosh --eval "db.adminCommand('ping')" > /dev/null 2>&1; do
+            echo "Waiting for MongoDB..."
+            sleep 2
+          done
+          echo "MongoDB is ready!"
+
+      - name: Run ${{ matrix.test-suite }} tests
+        env:
+          MONGODB_URL: ${{ secrets.MONGODB_URL || 'mongodb://localhost:27017' }}
+          MONGODB_DB_NAME: portfolio_test_db
+          ENVIRONMENT: test
+          SECRET_KEY: ${{ secrets.SECRET_KEY || 'test-secret-key-for-ci' }}
+        run: |
+          pytest tests/${{ matrix.test-suite }}/ \
+            -v \
+            --tb=short \
+            --cov=app \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --cov-report=html \
+            --junit-xml=junit-${{ matrix.test-suite }}-py${{ matrix.python-version }}.xml
+
+      - name: Upload coverage to Codecov
+        if: matrix.test-suite == 'unit' && matrix.python-version == '3.13'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: ${{ matrix.test-suite }}
+          name: codecov-py${{ matrix.python-version }}
+          fail_ci_if_error: false
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.test-suite }}-py${{ matrix.python-version }}
+          path: |
+            junit-*.xml
+            htmlcov/
+          retention-days: 30
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "### Test Results 🧪" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Test Suite:** ${{ matrix.test-suite }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Python:** ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f junit-${{ matrix.test-suite }}-py${{ matrix.python-version }}.xml ]; then
+            echo "✅ Tests completed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Tests failed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  test-all-passed:
+    name: All Tests Passed
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+
+    steps:
+      - name: Check test results
+        run: |
+          if [[ "${{ needs.test.result }}" == "success" ]]; then
+            echo "✅ All tests passed!"
+            exit 0
+          else
+            echo "❌ Some tests failed"
+            exit 1
+          fi
+
+      - name: Final Summary
+        if: always()
+        run: |
+          echo "### 🎯 Final Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.test.result }}" == "success" ]]; then
+            echo "✅ All test suites passed across all Python versions" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Some test suites failed. Check the logs above." >> $GITHUB_STEP_SUMMARY
+          fi

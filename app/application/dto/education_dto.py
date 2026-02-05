@@ -6,43 +6,46 @@ Data Transfer Objects for Education use cases.
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional, List
 
 
 @dataclass
 class AddEducationRequest:
     """Request to add education."""
+
     profile_id: str
     institution: str
     degree: str
     field: str
     start_date: datetime
     order_index: int
-    description: Optional[str] = None
-    end_date: Optional[datetime] = None
+    description: str | None = None
+    end_date: datetime | None = None
 
 
 @dataclass
 class EditEducationRequest:
     """Request to edit education."""
+
     education_id: str
-    institution: Optional[str] = None
-    degree: Optional[str] = None
-    field: Optional[str] = None
-    description: Optional[str] = None
-    start_date: Optional[datetime] = None
-    end_date: Optional[datetime] = None
+    institution: str | None = None
+    degree: str | None = None
+    field: str | None = None
+    description: str | None = None
+    start_date: datetime | None = None
+    end_date: datetime | None = None
 
 
 @dataclass
 class DeleteEducationRequest:
     """Request to delete education."""
+
     education_id: str
 
 
 @dataclass
 class ListEducationRequest:
     """Request to list education entries."""
+
     profile_id: str
     ascending: bool = False  # Default: newest first
 
@@ -50,14 +53,15 @@ class ListEducationRequest:
 @dataclass
 class EducationResponse:
     """Response containing education data."""
+
     id: str
     profile_id: str
     institution: str
     degree: str
     field: str
     start_date: datetime
-    end_date: Optional[datetime]
-    description: Optional[str]
+    end_date: datetime | None
+    description: str | None
     order_index: int
     created_at: datetime
     updated_at: datetime
@@ -85,7 +89,8 @@ class EducationResponse:
 @dataclass
 class EducationListResponse:
     """Response containing list of education entries."""
-    education: List[EducationResponse]
+
+    education: list[EducationResponse]
     total: int
 
     @classmethod

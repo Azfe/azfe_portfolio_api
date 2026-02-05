@@ -3,8 +3,9 @@ Tests for Email Value Object.
 """
 
 import pytest
+
+from app.domain.exceptions import EmptyFieldError, InvalidEmailError
 from app.domain.value_objects.email import Email
-from app.domain.exceptions import InvalidEmailError, EmptyFieldError
 
 
 @pytest.mark.value_object
@@ -14,13 +15,13 @@ class TestEmailCreation:
     def test_create_valid_email(self, valid_email):
         """Should create email with valid format."""
         email = Email.create(valid_email)
-        
+
         assert email.value == valid_email.lower()
 
     def test_email_normalized_to_lowercase(self):
         """Should normalize to lowercase."""
         email = Email.create("TEST@EXAMPLE.COM")
-        
+
         assert email.value == "test@example.com"
 
 
@@ -57,24 +58,24 @@ class TestEmailEquality:
         """Should be equal for same value."""
         email1 = Email.create("test@example.com")
         email2 = Email.create("test@example.com")
-        
+
         assert email1 == email2
 
     def test_case_insensitive_equality(self):
         """Should be equal regardless of case."""
         email1 = Email.create("TEST@example.com")
         email2 = Email.create("test@EXAMPLE.com")
-        
+
         assert email1 == email2
 
 
-@pytest.mark.value_object  
+@pytest.mark.value_object
 class TestEmailImmutability:
     """Test Email immutability."""
 
     def test_email_is_immutable(self):
         """Should not allow modification."""
         email = Email.create("test@example.com")
-        
+
         with pytest.raises(AttributeError):
             email.value = "new@example.com"

@@ -16,13 +16,8 @@ import re
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidLengthError,
-    InvalidURLError,
-)
+from ..exceptions import EmptyFieldError, InvalidLengthError, InvalidURLError
 
 
 @dataclass
@@ -37,9 +32,9 @@ class Profile:
     id: str
     name: str
     headline: str
-    bio: Optional[str] = None
-    location: Optional[str] = None
-    avatar_url: Optional[str] = None
+    bio: str | None = None
+    location: str | None = None
+    avatar_url: str | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -70,9 +65,9 @@ class Profile:
     def create(
         name: str,
         headline: str,
-        bio: Optional[str] = None,
-        location: Optional[str] = None,
-        avatar_url: Optional[str] = None,
+        bio: str | None = None,
+        location: str | None = None,
+        avatar_url: str | None = None,
     ) -> "Profile":
         """
         Factory method to create a new Profile.
@@ -98,10 +93,10 @@ class Profile:
 
     def update_basic_info(
         self,
-        name: Optional[str] = None,
-        headline: Optional[str] = None,
-        bio: Optional[str] = None,
-        location: Optional[str] = None,
+        name: str | None = None,
+        headline: str | None = None,
+        bio: str | None = None,
+        location: str | None = None,
     ) -> None:
         """
         Update basic profile information.
@@ -130,7 +125,7 @@ class Profile:
 
         self._mark_as_updated()
 
-    def update_avatar(self, avatar_url: Optional[str]) -> None:
+    def update_avatar(self, avatar_url: str | None) -> None:
         """
         Update profile avatar URL.
 
