@@ -1,18 +1,19 @@
+from datetime import date, datetime
+
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
-from datetime import datetime, date
 
-from app.api.schemas.cv_schema import CVCompleteResponse
-from app.api.schemas.profile_schema import ProfileResponse
-from app.api.schemas.contact_info_schema import ContactInformationResponse
-from app.api.schemas.social_networks_schema import SocialNetworkResponse
-from app.api.schemas.projects_schema import ProjectResponse
-from app.api.schemas.work_experience_schema import WorkExperienceResponse
-from app.api.schemas.skill_schema import SkillResponse
-from app.api.schemas.tools_schema import ToolResponse
-from app.api.schemas.education_schema import EducationResponse
 from app.api.schemas.additional_training_schema import AdditionalTrainingResponse
 from app.api.schemas.certification_schema import CertificationResponse
+from app.api.schemas.contact_info_schema import ContactInformationResponse
+from app.api.schemas.cv_schema import CVCompleteResponse
+from app.api.schemas.education_schema import EducationResponse
+from app.api.schemas.profile_schema import ProfileResponse
+from app.api.schemas.projects_schema import ProjectResponse
+from app.api.schemas.skill_schema import SkillResponse
+from app.api.schemas.social_networks_schema import SocialNetworkResponse
+from app.api.schemas.tools_schema import ToolResponse
+from app.api.schemas.work_experience_schema import WorkExperienceResponse
 
 router = APIRouter(prefix="/cv", tags=["CV"])
 
@@ -27,7 +28,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
         profile_image="https://example.com/images/profile.jpg",
         banner_image="https://example.com/images/banner.jpg",
         created_at=datetime.now(),
-        updated_at=datetime.now()
+        updated_at=datetime.now(),
     ),
     contact_info=ContactInformationResponse(
         id="contact_001",
@@ -36,7 +37,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
         location="Valencia, España",
         website="https://juanperez.dev",
         created_at=datetime.now(),
-        updated_at=datetime.now()
+        updated_at=datetime.now(),
     ),
     social_networks=[
         SocialNetworkResponse(
@@ -46,7 +47,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             icon="fab fa-github",
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         SocialNetworkResponse(
             id="social_002",
@@ -55,8 +56,8 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             icon="fab fa-linkedin",
             order_index=1,
             created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+            updated_at=datetime.now(),
+        ),
     ],
     work_experiences=[
         WorkExperienceResponse(
@@ -70,7 +71,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             technologies=["Python", "FastAPI", "React", "MongoDB", "Docker"],
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         WorkExperienceResponse(
             id="exp_002",
@@ -83,8 +84,8 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             technologies=["Node.js", "Vue.js", "PostgreSQL", "AWS"],
             order_index=1,
             created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+            updated_at=datetime.now(),
+        ),
     ],
     projects=[
         ProjectResponse(
@@ -97,20 +98,27 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             images=["https://example.com/images/portfolio.jpg"],
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         ProjectResponse(
             id="proj_002",
             title="E-commerce API REST",
             description="API REST completa para e-commerce con sistema de autenticación JWT, gestión de productos, carrito de compras y procesamiento de pagos con Stripe.",
-            technologies=["Python", "FastAPI", "PostgreSQL", "Stripe", "Redis", "Docker"],
+            technologies=[
+                "Python",
+                "FastAPI",
+                "PostgreSQL",
+                "Stripe",
+                "Redis",
+                "Docker",
+            ],
             repository_url="https://github.com/juanperez/ecommerce-api",
             live_demo_url=None,
             images=[],
             order_index=1,
             created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+            updated_at=datetime.now(),
+        ),
     ],
     skills=[
         SkillResponse(
@@ -120,7 +128,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             category="backend",
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         SkillResponse(
             id="skill_002",
@@ -129,7 +137,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             category="backend",
             order_index=1,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         SkillResponse(
             id="skill_003",
@@ -138,7 +146,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             category="frontend",
             order_index=2,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         SkillResponse(
             id="skill_004",
@@ -147,7 +155,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             category="database",
             order_index=3,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         SkillResponse(
             id="skill_005",
@@ -156,8 +164,8 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             category="database",
             order_index=4,
             created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+            updated_at=datetime.now(),
+        ),
     ],
     tools=[
         ToolResponse(
@@ -167,7 +175,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             knowledge_level="expert",
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         ToolResponse(
             id="tool_002",
@@ -176,7 +184,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             knowledge_level="advanced",
             order_index=1,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         ToolResponse(
             id="tool_003",
@@ -185,7 +193,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             knowledge_level="expert",
             order_index=2,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         ToolResponse(
             id="tool_004",
@@ -194,8 +202,8 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             knowledge_level="advanced",
             order_index=3,
             created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+            updated_at=datetime.now(),
+        ),
     ],
     education=[
         EducationResponse(
@@ -207,7 +215,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             description="Especialización en Ingeniería del Software y Arquitecturas de Software. Nota media: 8.5/10",
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         )
     ],
     additional_training=[
@@ -222,7 +230,7 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             technologies=["Python", "FastAPI", "Design Patterns", "SOLID", "DDD"],
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         ),
         AdditionalTrainingResponse(
             id="train_002",
@@ -235,8 +243,8 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             technologies=["React", "TypeScript", "Performance"],
             order_index=1,
             created_at=datetime.now(),
-            updated_at=datetime.now()
-        )
+            updated_at=datetime.now(),
+        ),
     ],
     certifications=[
         CertificationResponse(
@@ -249,9 +257,9 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
             credential_url="https://www.credly.com/badges/aws-saa-123456789",
             order_index=0,
             created_at=datetime.now(),
-            updated_at=datetime.now()
+            updated_at=datetime.now(),
         )
-    ]
+    ],
 )
 
 
@@ -259,35 +267,35 @@ MOCK_CV_COMPLETE = CVCompleteResponse(
     "",
     response_model=CVCompleteResponse,
     summary="Obtener CV completo",
-    description="Obtiene TODA la información del CV para mostrar en el portfolio"
+    description="Obtiene TODA la información del CV para mostrar en el portfolio",
 )
 async def get_complete_cv():
     """
     Retorna el CV completo con TODAS las secciones del portfolio.
-    
+
     Este endpoint combina información de todas las entidades relacionadas con Profile:
-    
+
     **Información Personal:**
     - Profile (único en el sistema)
     - ContactInformation (1-a-1 con Profile)
     - SocialNetworks (muchos)
-    
+
     **Experiencia Profesional:**
     - WorkExperiences (muchos)
     - Projects (muchos)
-    
+
     **Habilidades:**
     - Skills / TechnicalSkills (muchos)
     - Tools (muchos)
-    
+
     **Formación:**
     - Education (muchos)
     - AdditionalTraining (muchos)
     - Certifications (muchos)
-    
+
     Returns:
         CVCompleteResponse: Objeto con toda la información del portfolio
-    
+
     TODO: Implementar con GetCompleteCVUseCase
     """
     return MOCK_CV_COMPLETE
@@ -297,21 +305,21 @@ async def get_complete_cv():
     "/download",
     summary="Descargar CV en PDF",
     description="Genera y descarga el CV en formato PDF profesional",
-    response_class=FileResponse
+    response_class=FileResponse,
 )
 async def download_cv_pdf():
     """
     Genera un PDF del CV completo y lo retorna para descarga.
-    
+
     Returns:
         FileResponse: Archivo PDF descargable
-    
+
     Raises:
         HTTPException 501: Mientras no esté implementado
-    
+
     TODO: Implementar con GenerateCVPDFUseCase
     """
     raise HTTPException(
         status_code=501,
-        detail="Funcionalidad de descarga PDF aún no implementada. Próximamente disponible."
+        detail="Funcionalidad de descarga PDF aún no implementada. Próximamente disponible.",
     )

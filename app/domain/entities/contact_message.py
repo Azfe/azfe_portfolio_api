@@ -12,19 +12,17 @@ Business Rules Applied:
 - RB-CM06: Messages are append-only (no updates after creation)
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Optional
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
 from ..exceptions import (
     EmptyFieldError,
-    InvalidLengthError,
     InvalidEmailError,
+    InvalidLengthError,
     InvalidNameError,
 )
-
 
 # Valid message statuses
 VALID_MESSAGE_STATUSES = {"pending", "read", "replied"}
@@ -34,7 +32,7 @@ VALID_MESSAGE_STATUSES = {"pending", "read", "replied"}
 class ContactMessage:
     """
     ContactMessage entity representing an inquiry from a visitor.
-    
+
     This is an append-only entity - messages should not be modified after creation.
     """
 
@@ -44,16 +42,14 @@ class ContactMessage:
     message: str
     created_at: datetime = field(default_factory=datetime.utcnow)
     status: str = "pending"
-    read_at: Optional[datetime] = None
-    replied_at: Optional[datetime] = None
+    read_at: datetime | None = None
+    replied_at: datetime | None = None
 
     # Constants
     MAX_NAME_LENGTH = 100
     MIN_MESSAGE_LENGTH = 10
     MAX_MESSAGE_LENGTH = 2000
-    EMAIL_PATTERN = re.compile(
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    )
+    EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 
     def __post_init__(self):
         """Validate entity invariants after initialization."""
@@ -70,12 +66,12 @@ class ContactMessage:
     ) -> "ContactMessage":
         """
         Factory method to create a new ContactMessage.
-        
+
         Args:
             name: Sender's name
             email: Sender's email
             message: Message content
-            
+
         Returns:
             A new ContactMessage instance with generated UUID and pending status
         """
@@ -117,7 +113,7 @@ class ContactMessage:
         """Validate name field according to business rules."""
         if not self.name or not self.name.strip():
             raise InvalidNameError("Name cannot be empty")
-        
+
         if len(self.name) > self.MAX_NAME_LENGTH:
             raise InvalidLengthError("name", max_length=self.MAX_NAME_LENGTH)
 
@@ -125,7 +121,7 @@ class ContactMessage:
         """Validate email format."""
         if not self.email or not self.email.strip():
             raise EmptyFieldError("email")
-        
+
         if not self.EMAIL_PATTERN.match(self.email):
             raise InvalidEmailError(self.email)
 
@@ -133,23 +129,18 @@ class ContactMessage:
         """Validate message field according to business rules."""
         if not self.message or not self.message.strip():
             raise EmptyFieldError("message")
-        
+
         if len(self.message) < self.MIN_MESSAGE_LENGTH:
-            raise InvalidLengthError(
-                "message",
-                min_length=self.MIN_MESSAGE_LENGTH
-            )
-        
+            raise InvalidLengthError("message", min_length=self.MIN_MESSAGE_LENGTH)
+
         if len(self.message) > self.MAX_MESSAGE_LENGTH:
-            raise InvalidLengthError(
-                "message",
-                max_length=self.MAX_MESSAGE_LENGTH
-            )
+            raise InvalidLengthError("message", max_length=self.MAX_MESSAGE_LENGTH)
 
     def _validate_status(self) -> None:
         """Validate status field."""
         if self.status not in VALID_MESSAGE_STATUSES:
             from ..exceptions import DomainError
+
             raise DomainError(
                 f"Invalid status: '{self.status}'. Must be one of: {', '.join(VALID_MESSAGE_STATUSES)}"
             )

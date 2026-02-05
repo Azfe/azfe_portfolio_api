@@ -17,6 +17,9 @@ Exception Hierarchy:
 """
 
 
+from typing import Any
+
+
 class ApplicationException(Exception):
     """
     Base exception for application layer errors.
@@ -24,7 +27,7 @@ class ApplicationException(Exception):
     All application-level exceptions should inherit from this.
     """
 
-    def __init__(self, message: str, details: dict = None):
+    def __init__(self, message: str, details: dict[str, Any] | None = None):
         self.message = message
         self.details = details or {}
         super().__init__(self.message)
@@ -99,7 +102,7 @@ class BusinessRuleViolationException(ApplicationException):
     Maps to HTTP 400 (Bad Request).
     """
 
-    def __init__(self, rule: str, details: dict = None):
+    def __init__(self, rule: str, details: dict[str, Any] | None = None):
         message = f"Business rule violation: {rule}"
         super().__init__(message, details)
 

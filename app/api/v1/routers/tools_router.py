@@ -1,15 +1,16 @@
-from fastapi import APIRouter, HTTPException, status
-from typing import List
 from datetime import datetime
+from typing import Any
 
-from app.api.schemas.tools_schema import (
-    ToolResponse,
-    ToolCreate,
-    ToolUpdate,
-    ToolCategory,
-    ToolKnowledgeLevel,
-)
+from fastapi import APIRouter, HTTPException, status
+
 from app.api.schemas.common_schema import MessageResponse
+from app.api.schemas.tools_schema import (
+    ToolCategory,
+    ToolCreate,
+    ToolKnowledgeLevel,
+    ToolResponse,
+    ToolUpdate,
+)
 
 router = APIRouter(prefix="/tools", tags=["Tools"])
 
@@ -193,12 +194,13 @@ MOCK_TOOLS = [
 
 @router.get(
     "",
-    response_model=List[ToolResponse],
+    response_model=list[ToolResponse],
     summary="Listar herramientas",
     description="Obtiene todas las herramientas del perfil",
 )
 async def get_tools(
-    category: ToolCategory = None, knowledge_level: ToolKnowledgeLevel = None
+    category: ToolCategory | None = None,
+    knowledge_level: ToolKnowledgeLevel | None = None,
 ):
     """
     Lista todas las herramientas del perfil único del sistema.
@@ -272,7 +274,7 @@ async def get_tool(tool_id: str):
     summary="Crear herramienta",
     description="Crea una nueva herramienta asociada al perfil",
 )
-async def create_tool(tool_data: ToolCreate):
+async def create_tool(_tool_data: ToolCreate):
     """
     Crea una nueva herramienta y la asocia al perfil único del sistema.
 
@@ -318,7 +320,7 @@ async def create_tool(tool_data: ToolCreate):
     summary="Actualizar herramienta",
     description="Actualiza una herramienta existente",
 )
-async def update_tool(tool_id: str, tool_data: ToolUpdate):
+async def update_tool(tool_id: str, _tool_data: ToolUpdate):
     """
     Actualiza una herramienta existente.
 
@@ -391,11 +393,11 @@ async def delete_tool(tool_id: str):
 
 @router.patch(
     "/reorder",
-    response_model=List[ToolResponse],
+    response_model=list[ToolResponse],
     summary="Reordenar herramientas",
     description="Actualiza el orderIndex de múltiples herramientas de una vez",
 )
-async def reorder_tools(tool_orders: List[dict]):
+async def reorder_tools(_tool_orders: list[dict]):
     """
     Reordena múltiples herramientas de una sola vez.
 
@@ -449,7 +451,7 @@ async def get_tools_grouped_by_category():
     TODO: Ordenar tools dentro de cada categoría por order_index
     TODO: Considerar ordenar categorías por prioridad
     """
-    grouped = {}
+    grouped: dict[str, list[ToolResponse]] = {}
     for tool in MOCK_TOOLS:
         if tool.category not in grouped:
             grouped[tool.category] = []
@@ -487,9 +489,9 @@ async def get_tools_grouped_by_knowledge_level():
     TODO: Implementar con GetToolsGroupedByKnowledgeLevelUseCase
     TODO: Ordenar tools dentro de cada nivel por order_index
     """
-    grouped = {}
+    grouped: dict[str, list[ToolResponse]] = {}
     for tool in MOCK_TOOLS:
-        level = tool.knowledge_level or "none"
+        level: str = tool.knowledge_level or "none"
         if level not in grouped:
             grouped[level] = []
         grouped[level].append(tool)
@@ -537,7 +539,7 @@ async def get_tools_stats():
 
     TODO: Implementar con GetToolsStatsUseCase
     """
-    stats = {
+    stats: dict[str, Any] = {
         "total": len(MOCK_TOOLS),
         "by_category": {},
         "by_knowledge_level": {},

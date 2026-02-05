@@ -243,3 +243,7 @@ $RECYCLE.BIN/
 config.env
 
 .vscode
+
+.claude
+
+.benchmarks

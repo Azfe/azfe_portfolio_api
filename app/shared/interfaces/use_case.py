@@ -18,35 +18,35 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 # Generic types for request and response
-TRequest = TypeVar('TRequest')
-TResponse = TypeVar('TResponse')
+TRequest = TypeVar("TRequest")
+TResponse = TypeVar("TResponse")
 
 
 class IUseCase(ABC, Generic[TRequest, TResponse]):
     """
     Generic Use Case Interface.
-    
+
     Defines the contract for all use cases in the application.
     Each use case encapsulates a single business operation.
-    
+
     Type Parameters:
         TRequest: The input type (DTO, command, query)
         TResponse: The output type (DTO, result, data)
-        
+
     Design Patterns:
         - Command Pattern: Encapsulates a request as an object
         - Single Responsibility: Each use case does one thing
         - Interface Segregation: Minimal contract
-        
+
     Usage:
         class GetProfileUseCase(IUseCase[GetProfileRequest, GetProfileResponse]):
             def __init__(self, profile_repo: IProfileRepository):
                 self.profile_repo = profile_repo
-                
+
             async def execute(self, request: GetProfileRequest) -> GetProfileResponse:
                 profile = await self.profile_repo.get_profile()
                 return GetProfileResponse.from_entity(profile)
-                
+
     Notes:
         - Use cases are async to support async repositories
         - Use cases should not contain UI logic or HTTP details
@@ -58,17 +58,17 @@ class IUseCase(ABC, Generic[TRequest, TResponse]):
     async def execute(self, request: TRequest) -> TResponse:
         """
         Execute the use case with the given request.
-        
+
         Args:
             request: The input data/command
-            
+
         Returns:
             The result of the operation
-            
+
         Raises:
             DomainError: For business rule violations
             ValidationError: For invalid input (if not caught at DTO level)
-            
+
         Notes:
             - Should be idempotent when possible
             - Should handle errors gracefully
@@ -81,20 +81,20 @@ class IUseCase(ABC, Generic[TRequest, TResponse]):
 class IQueryUseCase(ABC, Generic[TRequest, TResponse]):
     """
     Query Use Case Interface.
-    
+
     Specialized interface for read-only operations (queries).
     Follows CQRS (Command Query Responsibility Segregation) pattern.
-    
+
     Type Parameters:
         TRequest: The query parameters
         TResponse: The query result
-        
+
     Usage:
         class GetAllSkillsQuery(IQueryUseCase[GetAllSkillsRequest, GetAllSkillsResponse]):
             async def execute(self, request: GetAllSkillsRequest) -> GetAllSkillsResponse:
                 # Read-only operation
                 ...
-                
+
     Notes:
         - Queries should never modify state
         - Can be cached more aggressively
@@ -105,13 +105,13 @@ class IQueryUseCase(ABC, Generic[TRequest, TResponse]):
     async def execute(self, request: TRequest) -> TResponse:
         """
         Execute the query with the given parameters.
-        
+
         Args:
             request: The query parameters
-            
+
         Returns:
             The query result
-            
+
         Notes:
             - Should not modify any state
             - Should be fast and cacheable
@@ -123,20 +123,20 @@ class IQueryUseCase(ABC, Generic[TRequest, TResponse]):
 class ICommandUseCase(ABC, Generic[TRequest, TResponse]):
     """
     Command Use Case Interface.
-    
+
     Specialized interface for write operations (commands).
     Follows CQRS (Command Query Responsibility Segregation) pattern.
-    
+
     Type Parameters:
         TRequest: The command data
         TResponse: The command result (may be void/success status)
-        
+
     Usage:
         class CreateProfileCommand(ICommandUseCase[CreateProfileRequest, CreateProfileResponse]):
             async def execute(self, request: CreateProfileRequest) -> CreateProfileResponse:
                 # Write operation
                 ...
-                
+
     Notes:
         - Commands modify state
         - Should validate business rules
@@ -148,16 +148,16 @@ class ICommandUseCase(ABC, Generic[TRequest, TResponse]):
     async def execute(self, request: TRequest) -> TResponse:
         """
         Execute the command with the given data.
-        
+
         Args:
             request: The command data
-            
+
         Returns:
             The command result
-            
+
         Raises:
             DomainError: For business rule violations
-            
+
         Notes:
             - Should validate all business rules
             - Should be transactional when needed
@@ -169,13 +169,13 @@ class ICommandUseCase(ABC, Generic[TRequest, TResponse]):
 class IValidator(ABC, Generic[TRequest]):
     """
     Validator Interface.
-    
+
     Defines the contract for request validation.
     Can be used by use cases to validate input before processing.
-    
+
     Type Parameters:
         TRequest: The request type to validate
-        
+
     Usage:
         class CreateProfileValidator(IValidator[CreateProfileRequest]):
             def validate(self, request: CreateProfileRequest) -> List[str]:
@@ -189,13 +189,13 @@ class IValidator(ABC, Generic[TRequest]):
     def validate(self, request: TRequest) -> list[str]:
         """
         Validate the request.
-        
+
         Args:
             request: The request to validate
-            
+
         Returns:
             List of error messages (empty if valid)
-            
+
         Notes:
             - Should check all validation rules
             - Should return clear error messages

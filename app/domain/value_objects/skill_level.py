@@ -10,16 +10,17 @@ Value Object Principles:
 - Ordered: Levels can be compared
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
 
 from ..exceptions import InvalidSkillLevelError
 
 
 class SkillLevelEnum(Enum):
     """Enumeration of valid skill proficiency levels."""
-    
+
     BASIC = "basic"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -32,7 +33,7 @@ class SkillLevelEnum(Enum):
         """Allow ordering of skill levels."""
         if not isinstance(other, SkillLevelEnum):
             return NotImplemented
-        
+
         order = {
             SkillLevelEnum.BASIC: 1,
             SkillLevelEnum.INTERMEDIATE: 2,
@@ -50,15 +51,15 @@ class SkillLevelEnum(Enum):
 class SkillLevel:
     """
     SkillLevel Value Object representing skill proficiency.
-    
+
     Attributes:
         level: The skill level enumeration
-    
+
     Business Rules:
         - Must be one of: basic, intermediate, advanced, expert
         - Immutable after creation
         - Can be compared/ordered
-    
+
     Examples:
         >>> basic = SkillLevel.basic()
         >>> advanced = SkillLevel.advanced()
@@ -69,35 +70,35 @@ class SkillLevel:
     level: SkillLevelEnum
 
     @staticmethod
-    def create(value: str) -> "SkillLevel":
+    def create(value: str) -> SkillLevel:
         """
         Factory method to create a SkillLevel from string.
-        
+
         Args:
             value: Skill level string (case-insensitive)
-            
+
         Returns:
             A new SkillLevel instance
-            
+
         Raises:
             InvalidSkillLevelError: If value is not a valid level
         """
         normalized = value.lower().strip()
-        
+
         try:
             enum_level = SkillLevelEnum(normalized)
             return SkillLevel(level=enum_level)
         except ValueError:
-            raise InvalidSkillLevelError(value)
+            raise InvalidSkillLevelError(value) from None
 
     @staticmethod
-    def try_create(value: str) -> Optional["SkillLevel"]:
+    def try_create(value: str) -> SkillLevel | None:
         """
         Try to create a SkillLevel, returning None if invalid.
-        
+
         Args:
             value: Skill level string
-            
+
         Returns:
             SkillLevel instance or None if invalid
         """
@@ -107,30 +108,30 @@ class SkillLevel:
             return None
 
     @staticmethod
-    def basic() -> "SkillLevel":
+    def basic() -> SkillLevel:
         """Create a BASIC skill level."""
         return SkillLevel(level=SkillLevelEnum.BASIC)
 
     @staticmethod
-    def intermediate() -> "SkillLevel":
+    def intermediate() -> SkillLevel:
         """Create an INTERMEDIATE skill level."""
         return SkillLevel(level=SkillLevelEnum.INTERMEDIATE)
 
     @staticmethod
-    def advanced() -> "SkillLevel":
+    def advanced() -> SkillLevel:
         """Create an ADVANCED skill level."""
         return SkillLevel(level=SkillLevelEnum.ADVANCED)
 
     @staticmethod
-    def expert() -> "SkillLevel":
+    def expert() -> SkillLevel:
         """Create an EXPERT skill level."""
         return SkillLevel(level=SkillLevelEnum.EXPERT)
 
     @staticmethod
-    def all_levels() -> list["SkillLevel"]:
+    def all_levels() -> list[SkillLevel]:
         """
         Get all valid skill levels in order.
-        
+
         Returns:
             List of all SkillLevel instances
         """
@@ -157,13 +158,13 @@ class SkillLevel:
         """Check if this is expert level."""
         return self.level == SkillLevelEnum.EXPERT
 
-    def is_at_least(self, other: "SkillLevel") -> bool:
+    def is_at_least(self, other: SkillLevel) -> bool:
         """
         Check if this level is at least as high as another.
-        
+
         Args:
             other: Another SkillLevel to compare
-            
+
         Returns:
             True if this level >= other level
         """
@@ -199,6 +200,8 @@ class SkillLevel:
 
     def __le__(self, other) -> bool:
         """Less than or equal comparison."""
+        if not isinstance(other, SkillLevel):
+            return NotImplemented
         return self == other or self < other
 
     def __gt__(self, other) -> bool:
@@ -209,6 +212,8 @@ class SkillLevel:
 
     def __ge__(self, other) -> bool:
         """Greater than or equal comparison."""
+        if not isinstance(other, SkillLevel):
+            return NotImplemented
         return self == other or self > other
 
     def __hash__(self) -> int:

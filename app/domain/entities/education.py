@@ -14,9 +14,9 @@ Business Rules Applied:
 """
 
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field as dataclass_field
 from datetime import datetime
-from typing import Optional
 
 from ..exceptions import (
     EmptyFieldError,
@@ -42,10 +42,10 @@ class Education:
     field: str
     start_date: datetime
     order_index: int
-    description: Optional[str] = None
-    end_date: Optional[datetime] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    description: str | None = None
+    end_date: datetime | None = None
+    created_at: datetime = dataclass_field(default_factory=datetime.utcnow)
+    updated_at: datetime = dataclass_field(default_factory=datetime.utcnow)
 
     # Constants
     MAX_INSTITUTION_LENGTH = 100
@@ -71,8 +71,8 @@ class Education:
         field: str,
         start_date: datetime,
         order_index: int,
-        description: Optional[str] = None,
-        end_date: Optional[datetime] = None,
+        description: str | None = None,
+        end_date: datetime | None = None,
     ) -> "Education":
         """
         Factory method to create a new Education entry.
@@ -104,12 +104,12 @@ class Education:
 
     def update_info(
         self,
-        institution: Optional[str] = None,
-        degree: Optional[str] = None,
-        field: Optional[str] = None,
-        description: Optional[str] = None,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
+        institution: str | None = None,
+        degree: str | None = None,
+        field: str | None = None,
+        description: str | None = None,
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
     ) -> None:
         """
         Update education information.
