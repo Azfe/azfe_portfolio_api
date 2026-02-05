@@ -1,33 +1,33 @@
 from typing import Any
 
-from app.domain.entities import Skill
+from app.domain.entities import SocialNetwork
 from app.shared.interfaces.mapper import IMapper
 
 
-class SkillMapper(IMapper[Skill, dict[str, Any]]):
+class SocialNetworkMapper(IMapper[SocialNetwork, dict[str, Any]]):
 
-    def to_domain(self, persistence_model: dict[str, Any]) -> Skill:
-        return Skill(
+    def to_domain(self, persistence_model: dict[str, Any]) -> SocialNetwork:
+        return SocialNetwork(
             id=str(persistence_model["_id"]),
             profile_id=persistence_model["profile_id"],
-            name=persistence_model["name"],
-            category=persistence_model["category"],
+            platform=persistence_model["platform"],
+            url=persistence_model["url"],
             order_index=persistence_model["order_index"],
-            level=persistence_model.get("level"),
+            username=persistence_model.get("username"),
             created_at=persistence_model["created_at"],
             updated_at=persistence_model["updated_at"],
         )
 
-    def to_persistence(self, domain_entity: Skill) -> dict[str, Any]:
+    def to_persistence(self, domain_entity: SocialNetwork) -> dict[str, Any]:
         doc: dict[str, Any] = {
             "_id": domain_entity.id,
             "profile_id": domain_entity.profile_id,
-            "name": domain_entity.name,
-            "category": domain_entity.category,
+            "platform": domain_entity.platform,
+            "url": domain_entity.url,
             "order_index": domain_entity.order_index,
             "created_at": domain_entity.created_at,
             "updated_at": domain_entity.updated_at,
         }
-        if domain_entity.level is not None:
-            doc["level"] = domain_entity.level
+        if domain_entity.username is not None:
+            doc["username"] = domain_entity.username
         return doc
