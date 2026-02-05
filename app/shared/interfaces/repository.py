@@ -269,9 +269,7 @@ class IOrderedRepository(IRepository[T], Generic[T]):
     """
 
     @abstractmethod
-    async def get_by_order_index(
-        self, profile_id: str, order_index: int
-    ) -> T | None:
+    async def get_by_order_index(self, profile_id: str, order_index: int) -> T | None:
         """
         Get entity by its order index within a profile.
 

@@ -16,7 +16,6 @@ Exception Hierarchy:
     └── ForbiddenException
 """
 
-
 from typing import Any
 
 

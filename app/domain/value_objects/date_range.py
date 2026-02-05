@@ -39,9 +39,7 @@ class DateRange:
         self._validate()
 
     @staticmethod
-    def create(
-        start_date: datetime, end_date: datetime | None = None
-    ) -> "DateRange":
+    def create(start_date: datetime, end_date: datetime | None = None) -> "DateRange":
         """
         Factory method to create a DateRange.
 
