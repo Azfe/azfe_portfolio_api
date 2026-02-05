@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
-from motor.motor_asyncio import AsyncIOMotorDatabase
-from app.infrastructure.database.mongo_client import get_database
-from app.config.settings import settings
 from datetime import datetime
+
+from fastapi import APIRouter
+
+from app.config.settings import settings
+from app.infrastructure.database.mongo_client import MongoDBClient
 
 router = APIRouter(tags=["Health"])
 
@@ -15,25 +16,20 @@ async def health_check():
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "environment": settings.ENVIRONMENT,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.utcnow().isoformat(),
     }
 
 
 @router.get("/health/db")
-async def health_check_db(db: AsyncIOMotorDatabase = Depends(get_database)):
+async def health_check_db():
     """Health check con verificación de base de datos"""
-    try:
-        # Ping a MongoDB
-        await db.client.admin.command('ping')
-        db_status = "connected"
-    except Exception as e:
-        db_status = f"error: {str(e)}"
-    
+    db_ok = await MongoDBClient.health_check()
+
     return {
-        "status": "ok" if db_status == "connected" else "error",
+        "status": "ok" if db_ok else "error",
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "environment": settings.ENVIRONMENT,
-        "database": db_status,
-        "timestamp": datetime.utcnow().isoformat()
+        "database": "connected" if db_ok else "disconnected",
+        "timestamp": datetime.utcnow().isoformat(),
     }
