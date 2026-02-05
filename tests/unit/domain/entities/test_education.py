@@ -10,9 +10,10 @@ Tests cover:
 - Temporal coherence
 """
 
-import pytest
-from datetime import datetime
 import uuid
+from datetime import datetime
+
+import pytest
 
 from app.domain.entities.education import Education
 from app.domain.exceptions import (
@@ -23,10 +24,10 @@ from app.domain.exceptions import (
     InvalidOrderIndexError,
 )
 
-
 # ==========================================
 # VALID EDUCATION CREATION TESTS
 # ==========================================
+
 
 class TestEducationCreation:
     """Tests for valid Education entity creation."""
@@ -127,6 +128,7 @@ class TestEducationCreation:
 # ==========================================
 # FIELD VALIDATION TESTS
 # ==========================================
+
 
 class TestEducationFieldValidation:
     """Tests for Education field validation."""
@@ -366,10 +368,13 @@ class TestEducationFieldValidation:
 # DATE VALIDATION TESTS
 # ==========================================
 
+
 class TestEducationDateValidation:
     """Tests for Education date validation."""
 
-    def test_end_date_before_start_date_raises_error(self, profile_id, today, yesterday):
+    def test_end_date_before_start_date_raises_error(
+        self, profile_id, today, yesterday
+    ):
         """Should raise InvalidDateRangeError when end_date is before start_date."""
         with pytest.raises(InvalidDateRangeError):
             Education.create(
@@ -427,6 +432,7 @@ class TestEducationDateValidation:
 # ==========================================
 # UPDATE OPERATIONS TESTS
 # ==========================================
+
 
 class TestEducationUpdateOperations:
     """Tests for Education update operations."""
@@ -587,6 +593,7 @@ class TestEducationUpdateOperations:
 
         # Small delay to ensure timestamp changes
         import time
+
         time.sleep(0.01)
 
         education.update_info(description="Updated description")
@@ -637,6 +644,7 @@ class TestEducationUpdateOperations:
 
         # Small delay to ensure timestamp changes
         import time
+
         time.sleep(0.01)
 
         education.update_order(1)
@@ -647,6 +655,7 @@ class TestEducationUpdateOperations:
 # ==========================================
 # QUERY METHODS TESTS
 # ==========================================
+
 
 class TestEducationQueryMethods:
     """Tests for Education query methods."""
@@ -664,7 +673,9 @@ class TestEducationQueryMethods:
 
         assert education.is_ongoing() is True
 
-    def test_is_ongoing_returns_false_when_has_end_date(self, profile_id, yesterday, tomorrow):
+    def test_is_ongoing_returns_false_when_has_end_date(
+        self, profile_id, yesterday, tomorrow
+    ):
         """Should return False for is_ongoing when end_date exists."""
         education = Education.create(
             profile_id=profile_id,
@@ -682,6 +693,7 @@ class TestEducationQueryMethods:
 # ==========================================
 # ENTITY REPRESENTATION TESTS
 # ==========================================
+
 
 class TestEducationRepresentation:
     """Tests for Education entity representation."""
@@ -708,6 +720,7 @@ class TestEducationRepresentation:
 # ==========================================
 # EDGE CASES TESTS
 # ==========================================
+
 
 class TestEducationEdgeCases:
     """Tests for Education edge cases."""

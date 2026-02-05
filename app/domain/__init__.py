@@ -15,51 +15,51 @@ For detailed documentation, see README.md in this directory.
 
 # Export entities for easy importing
 from .entities import (
-    Profile,
-    WorkExperience,
-    Skill,
-    Education,
-    Project,
-    Certification,
     AdditionalTraining,
+    Certification,
     ContactInformation,
     ContactMessage,
+    Education,
+    Profile,
+    Project,
+    Skill,
     SocialNetwork,
     Tool,
-)
-
-# Export value objects
-from .value_objects import (
-    DateRange,
-    Email,
-    Phone,
-    SkillLevel,
-    SkillLevelEnum,
-    ContactInfo,
+    WorkExperience,
 )
 
 # Export exceptions
 from .exceptions import (
     DomainError,
-    InvalidEmailError,
-    InvalidPhoneError,
-    InvalidURLError,
-    InvalidDateRangeError,
-    InvalidOrderIndexError,
-    InvalidSkillLevelError,
-    EmptyFieldError,
-    InvalidLengthError,
     DuplicateValueError,
-    InvalidTitleError,
-    InvalidNameError,
-    InvalidDescriptionError,
-    InvalidRoleError,
+    EmptyFieldError,
+    InvalidCategoryError,
     InvalidCompanyError,
+    InvalidDateRangeError,
+    InvalidDescriptionError,
+    InvalidEmailError,
     InvalidInstitutionError,
     InvalidIssuerError,
-    InvalidProviderError,
-    InvalidCategoryError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+    InvalidPhoneError,
     InvalidPlatformError,
+    InvalidProviderError,
+    InvalidRoleError,
+    InvalidSkillLevelError,
+    InvalidTitleError,
+    InvalidURLError,
+)
+
+# Export value objects
+from .value_objects import (
+    ContactInfo,
+    DateRange,
+    Email,
+    Phone,
+    SkillLevel,
+    SkillLevelEnum,
 )
 
 __all__ = [

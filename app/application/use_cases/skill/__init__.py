@@ -5,8 +5,8 @@ Contains all use cases related to skill management.
 """
 
 from .add_skill import AddSkillUseCase
-from .edit_skill import EditSkillUseCase
 from .delete_skill import DeleteSkillUseCase
+from .edit_skill import EditSkillUseCase
 from .list_skills import ListSkillsUseCase
 
 __all__ = [

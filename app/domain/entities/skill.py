@@ -14,7 +14,6 @@ Business Rules Applied:
 import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
 
 from ..exceptions import (
     EmptyFieldError,
@@ -42,7 +41,7 @@ class Skill:
     name: str
     category: str
     order_index: int
-    level: Optional[str] = None
+    level: str | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -64,7 +63,7 @@ class Skill:
         name: str,
         category: str,
         order_index: int,
-        level: Optional[str] = None,
+        level: str | None = None,
     ) -> "Skill":
         """
         Factory method to create a new Skill.
@@ -90,9 +89,9 @@ class Skill:
 
     def update_info(
         self,
-        name: Optional[str] = None,
-        category: Optional[str] = None,
-        level: Optional[str] = None,
+        name: str | None = None,
+        category: str | None = None,
+        level: str | None = None,
     ) -> None:
         """
         Update skill information.

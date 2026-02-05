@@ -15,20 +15,19 @@ Business Rules Applied:
 - RB-PR09: If no URLs, description must be sufficiently detailed (min 100 chars)
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Optional, List
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
 from ..exceptions import (
     EmptyFieldError,
-    InvalidLengthError,
     InvalidDateRangeError,
-    InvalidURLError,
-    InvalidTitleError,
     InvalidDescriptionError,
+    InvalidLengthError,
     InvalidOrderIndexError,
+    InvalidTitleError,
+    InvalidURLError,
 )
 
 
@@ -36,7 +35,7 @@ from ..exceptions import (
 class Project:
     """
     Project entity representing a professional project.
-    
+
     This entity maintains temporal coherence, URL validation, and ordering.
     """
 
@@ -46,10 +45,10 @@ class Project:
     description: str
     start_date: datetime
     order_index: int
-    end_date: Optional[datetime] = None
-    live_url: Optional[str] = None
-    repo_url: Optional[str] = None
-    technologies: List[str] = field(default_factory=list)
+    end_date: datetime | None = None
+    live_url: str | None = None
+    repo_url: str | None = None
+    technologies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -61,12 +60,13 @@ class Project:
     MAX_TECHNOLOGIES = 20
     MAX_TECHNOLOGY_LENGTH = 50
     URL_PATTERN = re.compile(
-        r'^https?://'
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'
-        r'localhost|'
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-        r'(?::\d+)?'
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE
+        r"^https?://"
+        r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"
+        r"localhost|"
+        r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        r"(?::\d+)?"
+        r"(?:/?|[/?]\S+)$",
+        re.IGNORECASE,
     )
 
     def __post_init__(self):
@@ -87,14 +87,14 @@ class Project:
         description: str,
         start_date: datetime,
         order_index: int,
-        end_date: Optional[datetime] = None,
-        live_url: Optional[str] = None,
-        repo_url: Optional[str] = None,
-        technologies: Optional[List[str]] = None,
+        end_date: datetime | None = None,
+        live_url: str | None = None,
+        repo_url: str | None = None,
+        technologies: list[str] | None = None,
     ) -> "Project":
         """
         Factory method to create a new Project.
-        
+
         Args:
             profile_id: Reference to the Profile
             title: Project title
@@ -105,7 +105,7 @@ class Project:
             live_url: URL to live project
             repo_url: URL to repository
             technologies: List of technologies used
-            
+
         Returns:
             A new Project instance with generated UUID
         """
@@ -124,14 +124,14 @@ class Project:
 
     def update_info(
         self,
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
+        title: str | None = None,
+        description: str | None = None,
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
     ) -> None:
         """
         Update project basic information.
-        
+
         Args:
             title: New title (optional)
             description: New description (optional)
@@ -141,47 +141,47 @@ class Project:
         if title is not None:
             self.title = title
             self._validate_title()
-        
+
         if description is not None:
             self.description = description
             self._validate_description()
-        
+
         if start_date is not None:
             self.start_date = start_date
-        
+
         if end_date is not None:
             self.end_date = end_date
-        
+
         self._validate_dates()
         self._validate_description_sufficiency()
         self._mark_as_updated()
 
     def update_urls(
         self,
-        live_url: Optional[str] = None,
-        repo_url: Optional[str] = None,
+        live_url: str | None = None,
+        repo_url: str | None = None,
     ) -> None:
         """
         Update project URLs.
-        
+
         Args:
             live_url: New live URL (optional)
             repo_url: New repository URL (optional)
         """
         if live_url is not None:
             self.live_url = live_url
-        
+
         if repo_url is not None:
             self.repo_url = repo_url
-        
+
         self._validate_urls()
         self._validate_description_sufficiency()
         self._mark_as_updated()
 
-    def update_technologies(self, technologies: List[str]) -> None:
+    def update_technologies(self, technologies: list[str]) -> None:
         """
         Update technologies list.
-        
+
         Args:
             technologies: New list of technologies
         """
@@ -192,26 +192,28 @@ class Project:
     def add_technology(self, technology: str) -> None:
         """
         Add a single technology.
-        
+
         Args:
             technology: Technology name to add
         """
         if len(self.technologies) >= self.MAX_TECHNOLOGIES:
             raise InvalidLengthError("technologies", max_length=self.MAX_TECHNOLOGIES)
-        
+
         if not technology or not technology.strip():
             raise EmptyFieldError("technology")
-        
+
         if len(technology) > self.MAX_TECHNOLOGY_LENGTH:
-            raise InvalidLengthError("technology", max_length=self.MAX_TECHNOLOGY_LENGTH)
-        
+            raise InvalidLengthError(
+                "technology", max_length=self.MAX_TECHNOLOGY_LENGTH
+            )
+
         self.technologies.append(technology)
         self._mark_as_updated()
 
     def update_order(self, new_order_index: int) -> None:
         """
         Update the order index.
-        
+
         Args:
             new_order_index: New position in the list
         """
@@ -236,7 +238,7 @@ class Project:
         """Validate title field according to business rules."""
         if not self.title or not self.title.strip():
             raise InvalidTitleError("Title cannot be empty")
-        
+
         if len(self.title) > self.MAX_TITLE_LENGTH:
             raise InvalidLengthError("title", max_length=self.MAX_TITLE_LENGTH)
 
@@ -244,17 +246,15 @@ class Project:
         """Validate description field according to business rules."""
         if not self.description or not self.description.strip():
             raise InvalidDescriptionError("Description cannot be empty")
-        
+
         if len(self.description) < self.MIN_DESCRIPTION_LENGTH:
             raise InvalidLengthError(
-                "description",
-                min_length=self.MIN_DESCRIPTION_LENGTH
+                "description", min_length=self.MIN_DESCRIPTION_LENGTH
             )
-        
+
         if len(self.description) > self.MAX_DESCRIPTION_LENGTH:
             raise InvalidLengthError(
-                "description",
-                max_length=self.MAX_DESCRIPTION_LENGTH
+                "description", max_length=self.MAX_DESCRIPTION_LENGTH
             )
 
     def _validate_description_sufficiency(self) -> None:
@@ -262,7 +262,10 @@ class Project:
         Validate that description is sufficiently detailed if no URLs provided.
         Business rule: RB-PR09
         """
-        if not self.has_urls() and len(self.description) < self.MIN_DESCRIPTION_WITHOUT_URLS:
+        if (
+            not self.has_urls()
+            and len(self.description) < self.MIN_DESCRIPTION_WITHOUT_URLS
+        ):
             raise InvalidDescriptionError(
                 f"Description must be at least {self.MIN_DESCRIPTION_WITHOUT_URLS} "
                 f"characters when no URLs are provided"
@@ -271,10 +274,7 @@ class Project:
     def _validate_dates(self) -> None:
         """Validate date range coherence."""
         if self.end_date is not None and self.end_date <= self.start_date:
-            raise InvalidDateRangeError(
-                str(self.start_date),
-                str(self.end_date)
-            )
+            raise InvalidDateRangeError(str(self.start_date), str(self.end_date))
 
     def _validate_urls(self) -> None:
         """Validate URL formats."""
@@ -283,7 +283,7 @@ class Project:
                 self.live_url = None
             elif not self.URL_PATTERN.match(self.live_url):
                 raise InvalidURLError(self.live_url)
-        
+
         if self.repo_url is not None:
             if self.repo_url.strip() == "":
                 self.repo_url = None
@@ -294,14 +294,13 @@ class Project:
         """Validate technologies list."""
         if len(self.technologies) > self.MAX_TECHNOLOGIES:
             raise InvalidLengthError("technologies", max_length=self.MAX_TECHNOLOGIES)
-        
+
         for tech in self.technologies:
             if not tech or not tech.strip():
                 raise EmptyFieldError("technology item")
             if len(tech) > self.MAX_TECHNOLOGY_LENGTH:
                 raise InvalidLengthError(
-                    "technology item",
-                    max_length=self.MAX_TECHNOLOGY_LENGTH
+                    "technology item", max_length=self.MAX_TECHNOLOGY_LENGTH
                 )
 
     def _validate_order_index(self) -> None:

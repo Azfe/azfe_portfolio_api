@@ -11,23 +11,24 @@ Tests cover:
 - Append-only nature (no updates after creation)
 """
 
-import pytest
-from datetime import datetime
 import uuid
+from datetime import datetime
 
-from app.domain.entities.contact_message import ContactMessage, VALID_MESSAGE_STATUSES
+import pytest
+
+from app.domain.entities.contact_message import VALID_MESSAGE_STATUSES, ContactMessage
 from app.domain.exceptions import (
+    DomainError,
     EmptyFieldError,
     InvalidEmailError,
     InvalidLengthError,
     InvalidNameError,
-    DomainError,
 )
-
 
 # ==========================================
 # VALID CONTACT MESSAGE CREATION TESTS
 # ==========================================
+
 
 class TestContactMessageCreation:
     """Tests for valid ContactMessage entity creation."""
@@ -43,7 +44,10 @@ class TestContactMessageCreation:
         assert message.id is not None
         assert message.name == "John Doe"
         assert message.email == valid_email
-        assert message.message == "This is a test message with enough characters to be valid."
+        assert (
+            message.message
+            == "This is a test message with enough characters to be valid."
+        )
         assert message.status == "pending"
         assert message.created_at is not None
         assert message.read_at is None
@@ -94,6 +98,7 @@ class TestContactMessageCreation:
 # ==========================================
 # NAME VALIDATION TESTS
 # ==========================================
+
 
 class TestContactMessageNameValidation:
     """Tests for ContactMessage name validation."""
@@ -146,6 +151,7 @@ class TestContactMessageNameValidation:
 # ==========================================
 # EMAIL VALIDATION TESTS
 # ==========================================
+
 
 class TestContactMessageEmailValidation:
     """Tests for ContactMessage email validation."""
@@ -229,6 +235,7 @@ class TestContactMessageEmailValidation:
 # MESSAGE VALIDATION TESTS
 # ==========================================
 
+
 class TestContactMessageMessageValidation:
     """Tests for ContactMessage message content validation."""
 
@@ -309,6 +316,7 @@ class TestContactMessageMessageValidation:
 # STATUS VALIDATION TESTS
 # ==========================================
 
+
 class TestContactMessageStatusValidation:
     """Tests for ContactMessage status validation."""
 
@@ -341,6 +349,7 @@ class TestContactMessageStatusValidation:
 # ==========================================
 # STATUS TRANSITION TESTS
 # ==========================================
+
 
 class TestContactMessageStatusTransitions:
     """Tests for ContactMessage status transitions."""
@@ -377,6 +386,7 @@ class TestContactMessageStatusTransitions:
 
         # Try to mark as read again
         import time
+
         time.sleep(0.01)
         message.mark_as_read()
 
@@ -418,6 +428,7 @@ class TestContactMessageStatusTransitions:
         original_read_at = message.read_at
 
         import time
+
         time.sleep(0.01)
 
         before = datetime.utcnow()
@@ -443,6 +454,7 @@ class TestContactMessageStatusTransitions:
 
         # Try to mark as replied again
         import time
+
         time.sleep(0.01)
         message.mark_as_replied()
 
@@ -454,6 +466,7 @@ class TestContactMessageStatusTransitions:
 # ==========================================
 # QUERY METHODS TESTS
 # ==========================================
+
 
 class TestContactMessageQueryMethods:
     """Tests for ContactMessage query methods."""
@@ -559,6 +572,7 @@ class TestContactMessageQueryMethods:
 # ENTITY REPRESENTATION TESTS
 # ==========================================
 
+
 class TestContactMessageRepresentation:
     """Tests for ContactMessage entity representation."""
 
@@ -581,6 +595,7 @@ class TestContactMessageRepresentation:
 # ==========================================
 # EDGE CASES TESTS
 # ==========================================
+
 
 class TestContactMessageEdgeCases:
     """Tests for ContactMessage edge cases."""

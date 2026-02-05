@@ -4,39 +4,38 @@ Get Complete CV Use Case.
 Aggregates all CV data from multiple sources.
 """
 
-from app.shared.interfaces import (
-    IQueryUseCase,
-    IProfileRepository,
-    IOrderedRepository,
-    IUniqueNameRepository
-)
-from app.shared.shared_exceptions import NotFoundException
-from app.application.dto import GetCompleteCVRequest, CompleteCVResponse
 from typing import TYPE_CHECKING
 
+from app.application.dto import CompleteCVResponse, GetCompleteCVRequest
+from app.shared.interfaces import (
+    IOrderedRepository,
+    IProfileRepository,
+    IQueryUseCase,
+    IUniqueNameRepository,
+)
+from app.shared.shared_exceptions import NotFoundException
+
 if TYPE_CHECKING:
-    from app.domain.entities import (
-        WorkExperience as WorkExperienceType,
-        Skill as SkillType,
-        Education as EducationType,
-    )
+    from app.domain.entities import Education as EducationType
+    from app.domain.entities import Skill as SkillType
+    from app.domain.entities import WorkExperience as WorkExperienceType
 
 
 class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVResponse]):
     """
     Use case for retrieving the complete CV.
-    
+
     Aggregates data from multiple sources:
     - Profile
     - Work Experiences
     - Skills
     - Education
-    
+
     Business Rules:
     - Profile must exist
     - All lists are ordered appropriately
     - Empty lists are returned if no data exists
-    
+
     Dependencies:
     - IProfileRepository: For profile data
     - IOrderedRepository[WorkExperience]: For experiences
@@ -47,13 +46,13 @@ class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVRespons
     def __init__(
         self,
         profile_repository: IProfileRepository,
-        experience_repository: IOrderedRepository['WorkExperienceType'],
-        skill_repository: IUniqueNameRepository['SkillType'],
-        education_repository: IOrderedRepository['EducationType'],
+        experience_repository: IOrderedRepository["WorkExperienceType"],
+        skill_repository: IUniqueNameRepository["SkillType"],
+        education_repository: IOrderedRepository["EducationType"],
     ):
         """
         Initialize use case with dependencies.
-        
+
         Args:
             profile_repository: Profile repository interface
             experience_repository: Experience repository interface
@@ -65,16 +64,16 @@ class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVRespons
         self.skill_repo = skill_repository
         self.education_repo = education_repository
 
-    async def execute(self, request: GetCompleteCVRequest) -> CompleteCVResponse:
+    async def execute(self, _request: GetCompleteCVRequest) -> CompleteCVResponse:
         """
         Execute the use case.
-        
+
         Args:
             request: Get complete CV request (empty)
-            
+
         Returns:
             CompleteCVResponse with all CV data
-            
+
         Raises:
             NotFoundException: If profile doesn't exist
         """
@@ -82,24 +81,22 @@ class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVRespons
         profile = await self.profile_repo.get_profile()
         if not profile:
             raise NotFoundException("Profile", "single")
-        
+
         # Get experiences (ordered by orderIndex, newest first)
         experiences = await self.experience_repo.get_all_ordered(
-            profile_id=profile.id,
-            ascending=False
+            profile_id=profile.id, ascending=False
         )
-        
+
         # Get skills (find all by profile_id)
         skills = await self.skill_repo.find_by(profile_id=profile.id)
         # Sort by order_index
         skills.sort(key=lambda s: s.order_index)
-        
+
         # Get education (ordered by orderIndex, newest first)
         education = await self.education_repo.get_all_ordered(
-            profile_id=profile.id,
-            ascending=False
+            profile_id=profile.id, ascending=False
         )
-        
+
         # Aggregate and return
         return CompleteCVResponse.create(
             profile=profile,

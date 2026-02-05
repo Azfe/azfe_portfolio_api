@@ -1,14 +1,14 @@
-from fastapi import APIRouter, HTTPException, status
-from typing import List
 from datetime import datetime
 
+from fastapi import APIRouter, HTTPException, status
+
+from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.social_networks_schema import (
-    SocialNetworkResponse,
     SocialNetworkCreate,
+    SocialNetworkResponse,
     SocialNetworkUpdate,
     SocialPlatform,
 )
-from app.api.schemas.common_schema import MessageResponse
 
 router = APIRouter(prefix="/social-networks", tags=["Social Networks"])
 
@@ -73,7 +73,7 @@ MOCK_SOCIAL_NETWORKS = [
 
 @router.get(
     "",
-    response_model=List[SocialNetworkResponse],
+    response_model=list[SocialNetworkResponse],
     summary="Listar redes sociales",
     description="Obtiene todas las redes sociales ordenadas por orderIndex",
 )
@@ -134,7 +134,7 @@ async def get_social_network(social_id: str):
     summary="Crear red social",
     description="Crea una nueva red social asociada al perfil",
 )
-async def create_social_network(social_data: SocialNetworkCreate):
+async def create_social_network(_social_data: SocialNetworkCreate):
     """
     Crea una nueva red social y la asocia al perfil único del sistema.
 
@@ -181,7 +181,7 @@ async def create_social_network(social_data: SocialNetworkCreate):
     summary="Actualizar red social",
     description="Actualiza una red social existente",
 )
-async def update_social_network(social_id: str, social_data: SocialNetworkUpdate):
+async def update_social_network(social_id: str, _social_data: SocialNetworkUpdate):
     """
     Actualiza una red social existente.
 
@@ -262,11 +262,11 @@ async def delete_social_network(social_id: str):
 
 @router.patch(
     "/reorder",
-    response_model=List[SocialNetworkResponse],
+    response_model=list[SocialNetworkResponse],
     summary="Reordenar redes sociales",
     description="Actualiza el orderIndex de múltiples redes sociales de una vez",
 )
-async def reorder_social_networks(social_orders: List[dict]):
+async def reorder_social_networks(_social_orders: list[dict]):
     """
     Reordena múltiples redes sociales de una sola vez.
 
@@ -298,7 +298,7 @@ async def reorder_social_networks(social_orders: List[dict]):
 
 @router.get(
     "/by-platform/{platform}",
-    response_model=List[SocialNetworkResponse],
+    response_model=list[SocialNetworkResponse],
     summary="Filtrar por plataforma",
     description="Obtiene redes sociales de una plataforma específica",
 )
@@ -345,7 +345,7 @@ async def get_social_networks_grouped():
     TODO: Implementar con GetSocialNetworksGroupedUseCase
     TODO: Ordenar redes dentro de cada plataforma por order_index
     """
-    grouped = {}
+    grouped: dict[str, list[SocialNetworkResponse]] = {}
     for social in MOCK_SOCIAL_NETWORKS:
         if social.platform not in grouped:
             grouped[social.platform] = []

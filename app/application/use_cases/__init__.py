@@ -14,35 +14,20 @@ Organization:
 - cv/: CV aggregation and generation use cases
 """
 
-from .profile import (
-    GetProfileUseCase,
-    CreateProfileUseCase,
-    UpdateProfileUseCase,
-)
-
-from .work_experience import (
-    AddExperienceUseCase,
-    EditExperienceUseCase,
-    DeleteExperienceUseCase,
-    ListExperiencesUseCase,
-)
-
+from .cv import GenerateCVPDFUseCase, GetCompleteCVUseCase
+from .education import AddEducationUseCase, DeleteEducationUseCase, EditEducationUseCase
+from .profile import CreateProfileUseCase, GetProfileUseCase, UpdateProfileUseCase
 from .skill import (
     AddSkillUseCase,
-    EditSkillUseCase,
     DeleteSkillUseCase,
+    EditSkillUseCase,
     ListSkillsUseCase,
 )
-
-from .education import (
-    AddEducationUseCase,
-    EditEducationUseCase,
-    DeleteEducationUseCase,
-)
-
-from .cv import (
-    GetCompleteCVUseCase,
-    GenerateCVPDFUseCase,
+from .work_experience import (
+    AddExperienceUseCase,
+    DeleteExperienceUseCase,
+    EditExperienceUseCase,
+    ListExperiencesUseCase,
 )
 
 __all__ = [

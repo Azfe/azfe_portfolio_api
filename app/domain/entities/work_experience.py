@@ -13,18 +13,17 @@ Business Rules Applied:
 - RB-W07: orderIndex is required and must be unique per profile
 """
 
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, List
-import uuid
 
 from ..exceptions import (
     EmptyFieldError,
-    InvalidLengthError,
-    InvalidDateRangeError,
-    InvalidRoleError,
     InvalidCompanyError,
+    InvalidDateRangeError,
+    InvalidLengthError,
     InvalidOrderIndexError,
+    InvalidRoleError,
 )
 
 
@@ -32,7 +31,7 @@ from ..exceptions import (
 class WorkExperience:
     """
     WorkExperience entity representing a professional role.
-    
+
     This entity maintains temporal coherence and ordering invariants.
     """
 
@@ -42,9 +41,9 @@ class WorkExperience:
     company: str
     start_date: datetime
     order_index: int
-    description: Optional[str] = None
-    end_date: Optional[datetime] = None
-    responsibilities: List[str] = field(default_factory=list)
+    description: str | None = None
+    end_date: datetime | None = None
+    responsibilities: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -72,13 +71,13 @@ class WorkExperience:
         company: str,
         start_date: datetime,
         order_index: int,
-        description: Optional[str] = None,
-        end_date: Optional[datetime] = None,
-        responsibilities: Optional[List[str]] = None,
+        description: str | None = None,
+        end_date: datetime | None = None,
+        responsibilities: list[str] | None = None,
     ) -> "WorkExperience":
         """
         Factory method to create a new WorkExperience.
-        
+
         Args:
             profile_id: Reference to the Profile
             role: Job title/role
@@ -88,7 +87,7 @@ class WorkExperience:
             description: Optional job description
             end_date: When the role ended (None if current)
             responsibilities: Optional list of responsibilities
-            
+
         Returns:
             A new WorkExperience instance with generated UUID
         """
@@ -106,15 +105,15 @@ class WorkExperience:
 
     def update_info(
         self,
-        role: Optional[str] = None,
-        company: Optional[str] = None,
-        description: Optional[str] = None,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
+        role: str | None = None,
+        company: str | None = None,
+        description: str | None = None,
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
     ) -> None:
         """
         Update work experience information.
-        
+
         Args:
             role: New role (optional)
             company: New company (optional)
@@ -125,28 +124,28 @@ class WorkExperience:
         if role is not None:
             self.role = role
             self._validate_role()
-        
+
         if company is not None:
             self.company = company
             self._validate_company()
-        
+
         if description is not None:
             self.description = description
             self._validate_description()
-        
+
         if start_date is not None:
             self.start_date = start_date
-        
+
         if end_date is not None:
             self.end_date = end_date
-        
+
         self._validate_dates()
         self._mark_as_updated()
 
-    def update_responsibilities(self, responsibilities: List[str]) -> None:
+    def update_responsibilities(self, responsibilities: list[str]) -> None:
         """
         Update responsibilities list.
-        
+
         Args:
             responsibilities: New list of responsibilities
         """
@@ -157,32 +156,30 @@ class WorkExperience:
     def add_responsibility(self, responsibility: str) -> None:
         """
         Add a single responsibility.
-        
+
         Args:
             responsibility: Responsibility text to add
         """
         if len(self.responsibilities) >= self.MAX_RESPONSIBILITIES:
             raise InvalidLengthError(
-                "responsibilities",
-                max_length=self.MAX_RESPONSIBILITIES
+                "responsibilities", max_length=self.MAX_RESPONSIBILITIES
             )
-        
+
         if not responsibility or not responsibility.strip():
             raise EmptyFieldError("responsibility")
-        
+
         if len(responsibility) > self.MAX_RESPONSIBILITY_LENGTH:
             raise InvalidLengthError(
-                "responsibility",
-                max_length=self.MAX_RESPONSIBILITY_LENGTH
+                "responsibility", max_length=self.MAX_RESPONSIBILITY_LENGTH
             )
-        
+
         self.responsibilities.append(responsibility)
         self._mark_as_updated()
 
     def update_order(self, new_order_index: int) -> None:
         """
         Update the order index.
-        
+
         Args:
             new_order_index: New position in the list
         """
@@ -203,7 +200,7 @@ class WorkExperience:
         """Validate role field according to business rules."""
         if not self.role or not self.role.strip():
             raise InvalidRoleError("Role cannot be empty")
-        
+
         if len(self.role) > self.MAX_ROLE_LENGTH:
             raise InvalidLengthError("role", max_length=self.MAX_ROLE_LENGTH)
 
@@ -211,7 +208,7 @@ class WorkExperience:
         """Validate company field according to business rules."""
         if not self.company or not self.company.strip():
             raise InvalidCompanyError("Company name cannot be empty")
-        
+
         if len(self.company) > self.MAX_COMPANY_LENGTH:
             raise InvalidLengthError("company", max_length=self.MAX_COMPANY_LENGTH)
 
@@ -221,31 +218,28 @@ class WorkExperience:
             if self.description.strip() == "":
                 self.description = None
             elif len(self.description) > self.MAX_DESCRIPTION_LENGTH:
-                raise InvalidLengthError("description", max_length=self.MAX_DESCRIPTION_LENGTH)
+                raise InvalidLengthError(
+                    "description", max_length=self.MAX_DESCRIPTION_LENGTH
+                )
 
     def _validate_dates(self) -> None:
         """Validate date range coherence."""
         if self.end_date is not None and self.end_date <= self.start_date:
-            raise InvalidDateRangeError(
-                str(self.start_date),
-                str(self.end_date)
-            )
+            raise InvalidDateRangeError(str(self.start_date), str(self.end_date))
 
     def _validate_responsibilities(self) -> None:
         """Validate responsibilities list."""
         if len(self.responsibilities) > self.MAX_RESPONSIBILITIES:
             raise InvalidLengthError(
-                "responsibilities",
-                max_length=self.MAX_RESPONSIBILITIES
+                "responsibilities", max_length=self.MAX_RESPONSIBILITIES
             )
-        
+
         for resp in self.responsibilities:
             if not resp or not resp.strip():
                 raise EmptyFieldError("responsibility item")
             if len(resp) > self.MAX_RESPONSIBILITY_LENGTH:
                 raise InvalidLengthError(
-                    "responsibility item",
-                    max_length=self.MAX_RESPONSIBILITY_LENGTH
+                    "responsibility item", max_length=self.MAX_RESPONSIBILITY_LENGTH
                 )
 
     def _validate_order_index(self) -> None:
