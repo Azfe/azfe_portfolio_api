@@ -25,7 +25,7 @@ class Settings(BaseSettings):
         return self.ENVIRONMENT in ["development", "test"]
 
     # MongoDB
-    MONGODB_URL: str = Field(default="mongodb://mongodb:27017")
+    MONGODB_URL: str = Field(default="mongodb://localhost:27017")
     MONGODB_DB_NAME: str = Field(default="portfolio_db", alias="DATABASE_NAME")
 
     # CORS
@@ -57,10 +57,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     model_config = SettingsConfigDict(
-        env_file=".env.development",
+        env_file=".env.development.local",
         env_file_encoding="utf-8",
         case_sensitive=True,
-        extra="ignore",  # Ignora variables extra sin fallar
+        extra="ignore",
     )
 
 
