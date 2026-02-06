@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, status
 
@@ -17,8 +17,9 @@ MOCK_EDUCATION = [
         id="edu_001",
         institution="Universidad Politécnica de Valencia",
         degree="Grado en Ingeniería Informática",
-        start_date=date(2015, 9, 1),
-        end_date=date(2019, 6, 30),
+        field="Ingeniería del Software",
+        start_date=datetime(2015, 9, 1),
+        end_date=datetime(2019, 6, 30),
         description="Especialización en Ingeniería del Software. Proyecto final: Sistema de gestión hospitalaria con arquitectura microservicios. Nota media: 8.5/10",
         order_index=1,
         created_at=datetime.now(),
@@ -28,8 +29,9 @@ MOCK_EDUCATION = [
         id="edu_002",
         institution="IES Valencia",
         degree="Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Web",
-        start_date=date(2013, 9, 1),
-        end_date=date(2015, 6, 30),
+        field="Desarrollo de Aplicaciones Web",
+        start_date=datetime(2013, 9, 1),
+        end_date=datetime(2015, 6, 30),
         description="Formación práctica en desarrollo web. Tecnologías: HTML, CSS, JavaScript, PHP, MySQL",
         order_index=2,
         created_at=datetime.now(),
@@ -39,7 +41,8 @@ MOCK_EDUCATION = [
         id="edu_003",
         institution="Universidad de Valencia",
         degree="Máster en Ingeniería del Software",
-        start_date=date(2023, 9, 1),
+        field="Ingeniería del Software",
+        start_date=datetime(2023, 9, 1),
         end_date=None,  # En curso
         description="Cursando actualmente. Enfoque en arquitecturas de software, microservicios y DevOps",
         order_index=0,  # Orden 0 para mostrar primero (en curso)
@@ -119,6 +122,7 @@ async def create_education(_education_data: EducationCreate):
     **Invariantes que se validan automáticamente:**
     - `institution` no puede estar vacía (min_length=1)
     - `degree` no puede estar vacío (min_length=1)
+    - `field` no puede estar vacío (min_length=1)
     - `startDate` es obligatoria
     - Si `endDate` existe, debe ser posterior a `startDate` (validador Pydantic)
 
@@ -151,6 +155,7 @@ async def update_education(education_id: str, _education_data: EducationUpdate):
     **Invariantes:**
     - Si se actualiza `institution`, no puede estar vacía
     - Si se actualiza `degree`, no puede estar vacío
+    - Si se actualiza `field`, no puede estar vacío
     - Si se actualiza `endDate`, debe ser posterior a `startDate`
 
     Args:

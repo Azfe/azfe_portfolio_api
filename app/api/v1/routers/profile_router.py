@@ -10,12 +10,11 @@ router = APIRouter(prefix="/profile", tags=["Profile"])
 # Mock data - Simula el ÚNICO perfil del sistema
 MOCK_PROFILE = ProfileResponse(
     id="profile_001",
-    full_name="Juan Pérez García",
+    name="Juan Pérez García",
     headline="Full Stack Developer & Software Engineer",
-    about="Desarrollador Full Stack apasionado por crear soluciones escalables y maintener código limpio. Especializado en Python, FastAPI, React y arquitecturas limpias. Con más de 5 años de experiencia en desarrollo web y APIs RESTful.",
+    bio="Desarrollador Full Stack apasionado por crear soluciones escalables y maintener código limpio. Especializado en Python, FastAPI, React y arquitecturas limpias. Con más de 5 años de experiencia en desarrollo web y APIs RESTful.",
     location="Valencia, España (Remoto)",
-    profile_image="https://example.com/images/profile.jpg",
-    banner_image="https://example.com/images/banner.jpg",
+    avatar_url="https://example.com/images/profile.jpg",
     created_at=datetime.now(),
     updated_at=datetime.now(),
 )

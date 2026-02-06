@@ -1,27 +1,6 @@
-from typing import Literal
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.schemas.common_schema import TimestampMixin
-
-# Niveles de conocimiento permitidos (opcional)
-ToolKnowledgeLevel = Literal["basic", "intermediate", "advanced", "expert"]
-
-# Categorías de herramientas permitidas
-ToolCategory = Literal[
-    "ide",
-    "cloud",
-    "ci_cd",
-    "design",
-    "project_management",
-    "communication",
-    "version_control",
-    "database_tools",
-    "testing_tools",
-    "monitoring",
-    "containerization",
-    "other",
-]
 
 
 class ToolBase(BaseModel):
@@ -31,18 +10,18 @@ class ToolBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, description="Nombre de la herramienta (no puede estar vacío)"
+        ..., min_length=1, max_length=50, description="Nombre de la herramienta (no puede estar vacío)"
     )
-    category: ToolCategory = Field(
-        ..., description="Tipo de herramienta (IDE, cloud, CI/CD, etc.)"
-    )
-    knowledge_level: ToolKnowledgeLevel | None = Field(
-        None, description="Nivel de conocimiento (opcional)"
+    category: str = Field(
+        ..., min_length=1, max_length=50, description="Tipo de herramienta (IDE, cloud, CI/CD, etc.)"
     )
     order_index: int = Field(
         ...,
         ge=0,
         description="Orden de aparición en el portafolio (debe ser único dentro del perfil)",
+    )
+    icon_url: str | None = Field(
+        None, description="URL del icono o logo de la herramienta (opcional)"
     )
 
 
@@ -52,7 +31,7 @@ class ToolCreate(ToolBase):
 
     Invariantes:
     - name no puede estar vacío
-    - category debe ser un valor permitido
+    - category debe ser un valor válido
     - orderIndex debe ser único dentro del perfil
     """
 
@@ -66,9 +45,9 @@ class ToolUpdate(BaseModel):
     Todos los campos son opcionales, pero name no puede quedar vacío si se actualiza.
     """
 
-    name: str | None = Field(None, min_length=1)
-    category: ToolCategory | None = None
-    knowledge_level: ToolKnowledgeLevel | None = None
+    name: str | None = Field(None, min_length=1, max_length=50)
+    category: str | None = Field(None, min_length=1, max_length=50)
+    icon_url: str | None = None
     order_index: int | None = Field(None, ge=0)
 
 
@@ -86,5 +65,4 @@ class ToolResponse(ToolBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

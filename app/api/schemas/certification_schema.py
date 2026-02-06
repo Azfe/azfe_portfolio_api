@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import datetime
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -11,26 +11,27 @@ class CertificationBase(BaseModel):
     Representa certificaciones oficiales de proveedores tecnológicos, organizaciones, etc.
     """
 
-    name: str = Field(
+    title: str = Field(
         ...,
         min_length=1,
+        max_length=100,
         description="Nombre de la certificación (no puede estar vacío)",
     )
     issuer: str = Field(
-        ..., min_length=1, description="Entidad emisora (no puede estar vacía)"
+        ..., min_length=1, max_length=100, description="Entidad emisora (no puede estar vacía)"
     )
-    issue_date: date = Field(..., description="Fecha de emisión (obligatoria)")
-    expiration_date: date | None = Field(
+    issue_date: datetime = Field(..., description="Fecha de emisión (obligatoria)")
+    order_index: int = Field(
+        ..., ge=0, description="Orden de aparición en el portafolio"
+    )
+    expiry_date: datetime | None = Field(
         None, description="Fecha de expiración (opcional, None = no expira)"
     )
     credential_id: str | None = Field(
         None, description="Identificador de la credencial (opcional)"
     )
-    credential_url: HttpUrl | None = Field(
+    credential_url: str | None = Field(
         None, description="URL verificable de la credencial (opcional)"
-    )
-    order_index: int = Field(
-        ..., ge=0, description="Orden de aparición en el portafolio"
     )
 
 
@@ -39,7 +40,7 @@ class CertificationCreate(CertificationBase):
     Schema para crear certificación.
 
     Invariantes:
-    - name no puede estar vacío
+    - title no puede estar vacío
     - issuer no puede estar vacío
     - issueDate es obligatoria
     """
@@ -51,16 +52,16 @@ class CertificationUpdate(BaseModel):
     """
     Schema para actualizar certificación.
 
-    Todos los campos son opcionales, pero name e issuer
+    Todos los campos son opcionales, pero title e issuer
     no pueden quedar vacíos si se actualizan.
     """
 
-    name: str | None = Field(None, min_length=1)
-    issuer: str | None = Field(None, min_length=1)
-    issue_date: date | None = None
-    expiration_date: date | None = None
+    title: str | None = Field(None, min_length=1, max_length=100)
+    issuer: str | None = Field(None, min_length=1, max_length=100)
+    issue_date: datetime | None = None
+    expiry_date: datetime | None = None
     credential_id: str | None = None
-    credential_url: HttpUrl | None = None
+    credential_url: str | None = None
     order_index: int | None = Field(None, ge=0)
 
 
@@ -75,5 +76,4 @@ class CertificationResponse(CertificationBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

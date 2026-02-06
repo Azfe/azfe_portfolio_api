@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import datetime
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -12,27 +12,34 @@ class EducationBase(BaseModel):
     """
 
     institution: str = Field(
-        ..., min_length=1, description="Nombre de la institución (no puede estar vacía)"
+        ..., min_length=1, max_length=100, description="Nombre de la institución (no puede estar vacía)"
     )
     degree: str = Field(
         ...,
         min_length=1,
+        max_length=100,
         description="Título obtenido o en curso (no puede estar vacío)",
     )
-    start_date: date = Field(..., description="Fecha de inicio (obligatoria)")
-    end_date: date | None = Field(
-        None, description="Fecha de fin (opcional, None = en curso)"
+    field: str = Field(
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Campo de estudio (no puede estar vacío)",
     )
-    description: str | None = Field(
-        None, description="Detalles adicionales (especialización, logros, etc.)"
-    )
+    start_date: datetime = Field(..., description="Fecha de inicio (obligatoria)")
     order_index: int = Field(
         ..., ge=0, description="Orden de aparición en el portafolio"
+    )
+    description: str | None = Field(
+        None, max_length=1000, description="Detalles adicionales (especialización, logros, etc.)"
+    )
+    end_date: datetime | None = Field(
+        None, description="Fecha de fin (opcional, None = en curso)"
     )
 
     @field_validator("end_date")
     @classmethod
-    def validate_end_date(cls, v: date | None, info) -> date | None:
+    def validate_end_date(cls, v: datetime | None, info) -> datetime | None:
         """
         Valida que endDate sea posterior a startDate si existe.
 
@@ -52,6 +59,7 @@ class EducationCreate(EducationBase):
     Invariantes:
     - institution no puede estar vacía
     - degree no puede estar vacío
+    - field no puede estar vacío
     - startDate es obligatoria
     - Si endDate existe, debe ser posterior a startDate
     """
@@ -63,20 +71,21 @@ class EducationUpdate(BaseModel):
     """
     Schema para actualizar formación académica.
 
-    Todos los campos son opcionales, pero institution y degree
+    Todos los campos son opcionales, pero institution, degree y field
     no pueden quedar vacíos si se actualizan.
     """
 
-    institution: str | None = Field(None, min_length=1)
-    degree: str | None = Field(None, min_length=1)
-    start_date: date | None = None
-    end_date: date | None = None
-    description: str | None = None
+    institution: str | None = Field(None, min_length=1, max_length=100)
+    degree: str | None = Field(None, min_length=1, max_length=100)
+    field: str | None = Field(None, min_length=1, max_length=100)
+    start_date: datetime | None = None
+    end_date: datetime | None = None
+    description: str | None = Field(None, max_length=1000)
     order_index: int | None = Field(None, ge=0)
 
     @field_validator("end_date")
     @classmethod
-    def validate_end_date(cls, v: date | None, info) -> date | None:
+    def validate_end_date(cls, v: datetime | None, info) -> datetime | None:
         """Valida que endDate sea posterior a startDate si ambos están presentes."""
         if (
             v is not None
@@ -99,5 +108,4 @@ class EducationResponse(EducationBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

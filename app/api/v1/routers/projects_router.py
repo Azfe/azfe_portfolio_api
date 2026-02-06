@@ -17,6 +17,8 @@ MOCK_PROJECTS = [
         id="proj_001",
         title="Portfolio Personal con Clean Architecture",
         description="Portfolio web profesional desarrollado con Astro en el frontend y FastAPI en el backend, siguiendo principios de Clean Architecture. Incluye sistema de gestión de contenido dinámico con MongoDB, generación automática de CV en PDF y panel de administración para actualizar información sin tocar código.",
+        start_date=datetime(2024, 1, 1),
+        end_date=None,
         technologies=[
             "Astro",
             "FastAPI",
@@ -26,13 +28,8 @@ MOCK_PROJECTS = [
             "Python",
             "TypeScript",
         ],
-        repository_url="https://github.com/juanperez/portfolio",
-        live_demo_url="https://juanperez.dev",
-        images=[
-            "https://example.com/images/portfolio-home.jpg",
-            "https://example.com/images/portfolio-cv.jpg",
-            "https://example.com/images/portfolio-admin.jpg",
-        ],
+        repo_url="https://github.com/juanperez/portfolio",
+        live_url="https://juanperez.dev",
         order_index=1,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -41,6 +38,8 @@ MOCK_PROJECTS = [
         id="proj_002",
         title="E-commerce API REST",
         description="API REST completa para e-commerce con sistema de autenticación JWT, gestión de productos, inventario, carrito de compras y procesamiento de pagos con Stripe. Incluye sistema de notificaciones por email y webhooks para sincronización con sistemas externos.",
+        start_date=datetime(2023, 6, 1),
+        end_date=datetime(2024, 2, 15),
         technologies=[
             "Python",
             "FastAPI",
@@ -50,12 +49,8 @@ MOCK_PROJECTS = [
             "Docker",
             "Celery",
         ],
-        repository_url="https://github.com/juanperez/ecommerce-api",
-        live_demo_url="https://ecommerce-demo.juanperez.dev",
-        images=[
-            "https://example.com/images/ecommerce-api.jpg",
-            "https://example.com/images/ecommerce-docs.jpg",
-        ],
+        repo_url="https://github.com/juanperez/ecommerce-api",
+        live_url="https://ecommerce-demo.juanperez.dev",
         order_index=2,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -64,6 +59,8 @@ MOCK_PROJECTS = [
         id="proj_003",
         title="Task Management Dashboard",
         description="Dashboard de gestión de tareas tipo Trello con drag & drop, colaboración en tiempo real usando WebSockets, notificaciones push y sistema de roles y permisos.",
+        start_date=datetime(2022, 9, 1),
+        end_date=datetime(2023, 3, 30),
         technologies=[
             "React",
             "Node.js",
@@ -72,12 +69,8 @@ MOCK_PROJECTS = [
             "Redux",
             "Material-UI",
         ],
-        repository_url="https://github.com/juanperez/task-dashboard",
-        live_demo_url="https://tasks.juanperez.dev",
-        images=[
-            "https://example.com/images/tasks-board.jpg",
-            "https://example.com/images/tasks-kanban.jpg",
-        ],
+        repo_url="https://github.com/juanperez/task-dashboard",
+        live_url="https://tasks.juanperez.dev",
         order_index=3,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -172,13 +165,6 @@ async def create_project(_project_data: ProjectCreate):
     TODO: Considerar auto-incrementar orderIndex si no se proporciona
     TODO: Requiere autenticación de admin
     """
-    # Mock: Validar orderIndex único
-    # if any(p.order_index == project_data.order_index for p in MOCK_PROJECTS):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_409_CONFLICT,
-    #         detail=f"Ya existe un proyecto con orderIndex {project_data.order_index}"
-    #     )
-
     return MOCK_PROJECTS[0]
 
 
@@ -215,14 +201,6 @@ async def update_project(project_id: str, _project_data: ProjectUpdate):
     """
     for proj in MOCK_PROJECTS:
         if proj.id == project_id:
-            # Mock: Validar orderIndex único si se actualiza
-            # if project_data.order_index is not None:
-            #     if any(p.order_index == project_data.order_index and p.id != project_id
-            #            for p in MOCK_PROJECTS):
-            #         raise HTTPException(
-            #             status_code=status.HTTP_409_CONFLICT,
-            #             detail=f"Ya existe otro proyecto con orderIndex {project_data.order_index}"
-            #         )
             return proj
 
     raise HTTPException(

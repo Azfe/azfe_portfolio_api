@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, status
 
@@ -17,20 +17,16 @@ MOCK_EXPERIENCES = [
         id="exp_001",
         role="Senior Full Stack Developer",
         company="Tech Solutions S.L.",
-        location="Valencia, España",
-        start_date=date(2021, 3, 1),
+        start_date=datetime(2021, 3, 1),
         end_date=None,  # Actualmente trabajando
         description="Desarrollo de aplicaciones web escalables usando FastAPI y React. Implementación de arquitectura Clean Architecture en proyectos empresariales. Liderazgo técnico de equipo de 4 desarrolladores junior. Responsable de code reviews y definición de estándares de código.",
-        technologies=[
-            "Python",
-            "FastAPI",
-            "React",
-            "MongoDB",
-            "Docker",
-            "AWS",
-            "TypeScript",
+        responsibilities=[
+            "Desarrollo de aplicaciones web escalables",
+            "Implementación de Clean Architecture",
+            "Liderazgo técnico de equipo",
+            "Code reviews y estándares de código",
         ],
-        order_index=0,  # Empleo actual, se muestra primero
+        order_index=0,
         created_at=datetime.now(),
         updated_at=datetime.now(),
     ),
@@ -38,11 +34,14 @@ MOCK_EXPERIENCES = [
         id="exp_002",
         role="Full Stack Developer",
         company="StartupXYZ - Fintech",
-        location="Remoto",
-        start_date=date(2019, 6, 1),
-        end_date=date(2021, 2, 28),
+        start_date=datetime(2019, 6, 1),
+        end_date=datetime(2021, 2, 28),
         description="Desarrollo del MVP de una plataforma fintech desde cero. Implementación de sistema de pagos con Stripe. Desarrollo de API REST y dashboard administrativo. Trabajo en equipo ágil con sprints de 2 semanas.",
-        technologies=["Node.js", "Vue.js", "PostgreSQL", "Stripe", "Docker", "Redis"],
+        responsibilities=[
+            "Desarrollo del MVP desde cero",
+            "Implementación de sistema de pagos con Stripe",
+            "Desarrollo de API REST y dashboard",
+        ],
         order_index=1,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -51,11 +50,14 @@ MOCK_EXPERIENCES = [
         id="exp_003",
         role="Backend Developer",
         company="Digital Agency Corp",
-        location="Barcelona, España",
-        start_date=date(2018, 9, 1),
-        end_date=date(2019, 5, 31),
+        start_date=datetime(2018, 9, 1),
+        end_date=datetime(2019, 5, 31),
         description="Desarrollo de APIs RESTful para aplicaciones móviles y web. Mantenimiento de bases de datos MySQL y optimización de queries. Integración con servicios de terceros (Google Maps, SendGrid, Twilio).",
-        technologies=["PHP", "Laravel", "MySQL", "Redis", "jQuery"],
+        responsibilities=[
+            "Desarrollo de APIs RESTful",
+            "Mantenimiento y optimización de bases de datos",
+            "Integración con servicios de terceros",
+        ],
         order_index=2,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -64,11 +66,14 @@ MOCK_EXPERIENCES = [
         id="exp_004",
         role="Junior Web Developer",
         company="WebStudio",
-        location="Valencia, España",
-        start_date=date(2017, 3, 15),
-        end_date=date(2018, 8, 31),
+        start_date=datetime(2017, 3, 15),
+        end_date=datetime(2018, 8, 31),
         description="Primer empleo como desarrollador. Desarrollo de sitios web corporativos con WordPress. Maquetación HTML/CSS responsive. Mantenimiento de sitios existentes y corrección de bugs.",
-        technologies=["HTML", "CSS", "JavaScript", "WordPress", "PHP", "MySQL"],
+        responsibilities=[
+            "Desarrollo de sitios web corporativos",
+            "Maquetación HTML/CSS responsive",
+            "Mantenimiento y corrección de bugs",
+        ],
         order_index=3,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -94,7 +99,6 @@ async def get_work_experiences():
 
     Relación:
     - Todas las experiencias pertenecen al Profile único del sistema
-    - technologies se relaciona con Skills del perfil
 
     TODO: Implementar con GetWorkExperiencesUseCase
     TODO: Ordenar por order_index ASC (empleo actual primero, luego cronológico inverso)
@@ -162,22 +166,11 @@ async def create_work_experience(_experience_data: WorkExperienceCreate):
         HTTPException 409: Si orderIndex ya está en uso
         HTTPException 400: Si los datos no cumplen las invariantes
 
-    Notas sobre technologies:
-    - Las tecnologías listadas deberían idealmente existir como Skills en el perfil
-    - Esto ayuda a demostrar dónde se usaron las habilidades
-
     TODO: Implementar con CreateWorkExperienceUseCase
     TODO: Validar que orderIndex sea único dentro del perfil
     TODO: Considerar auto-incrementar orderIndex si no se proporciona
     TODO: Requiere autenticación de admin
     """
-    # Mock: Validar orderIndex único
-    # if any(exp.order_index == experience_data.order_index for exp in MOCK_EXPERIENCES):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_409_CONFLICT,
-    #         detail=f"Ya existe una experiencia con orderIndex {experience_data.order_index}"
-    #     )
-
     return MOCK_EXPERIENCES[0]
 
 
@@ -212,11 +205,6 @@ async def update_work_experience(
         HTTPException 409: Si el nuevo orderIndex ya está en uso
         HTTPException 400: Si los datos no cumplen las invariantes
 
-    Casos de uso comunes:
-    - Actualizar endDate cuando dejas un empleo (de None a fecha específica)
-    - Actualizar description para añadir nuevos logros
-    - Actualizar technologies si aprendes nuevas tecnologías en el trabajo
-
     TODO: Implementar con UpdateWorkExperienceUseCase
     TODO: Validar fechas si se actualizan
     TODO: Validar que orderIndex sea único si se actualiza
@@ -224,14 +212,6 @@ async def update_work_experience(
     """
     for exp in MOCK_EXPERIENCES:
         if exp.id == experience_id:
-            # Mock: Validar orderIndex único si se actualiza
-            # if experience_data.order_index is not None:
-            #     if any(e.order_index == experience_data.order_index and e.id != experience_id
-            #            for e in MOCK_EXPERIENCES):
-            #         raise HTTPException(
-            #             status_code=status.HTTP_409_CONFLICT,
-            #             detail=f"Ya existe otra experiencia con orderIndex {experience_data.order_index}"
-            #         )
             return exp
 
     raise HTTPException(
@@ -357,37 +337,3 @@ async def get_experiences_by_company(company: str):
     company_lower = company.lower()
     filtered = [exp for exp in MOCK_EXPERIENCES if company_lower in exp.company.lower()]
     return sorted(filtered, key=lambda x: x.start_date, reverse=True)
-
-
-@router.get(
-    "/by-technology/{technology}",
-    response_model=list[WorkExperienceResponse],
-    summary="Filtrar experiencias por tecnología",
-    description="Obtiene experiencias donde se usó una tecnología específica",
-)
-async def get_experiences_by_technology(technology: str):
-    """
-    Filtra experiencias laborales por tecnología usada.
-
-    Útil para demostrar experiencia práctica con una tecnología específica.
-
-    Args:
-        technology: Nombre de la tecnología (case-insensitive)
-
-    Returns:
-        List[WorkExperienceResponse]: Experiencias que usaron esa tecnología
-
-    Relación con Skills:
-    - Este endpoint ayuda a vincular Skills con experiencia laboral real
-    - Muestra dónde y cuándo se aplicó una habilidad
-
-    TODO: Implementar con GetExperiencesByTechnologyUseCase
-    TODO: Hacer búsqueda case-insensitive
-    """
-    tech_lower = technology.lower()
-    filtered = [
-        exp
-        for exp in MOCK_EXPERIENCES
-        if any(tech.lower() == tech_lower for tech in exp.technologies)
-    ]
-    return sorted(filtered, key=lambda x: x.order_index)

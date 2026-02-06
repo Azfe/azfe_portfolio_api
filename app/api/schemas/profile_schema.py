@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -9,22 +9,20 @@ class ProfileBase(BaseModel):
     Representa la información personal y profesional visible en el portfolio.
     """
 
-    full_name: str = Field(
-        ..., min_length=1, description="Nombre completo (no puede estar vacío)"
+    name: str = Field(
+        ..., min_length=1, max_length=100, description="Nombre completo (no puede estar vacío)"
     )
     headline: str = Field(
         ...,
         min_length=1,
+        max_length=100,
         description="Título profesional o rol principal (no puede estar vacío)",
     )
-    about: str | None = Field(None, description="Descripción o resumen profesional")
+    bio: str | None = Field(None, max_length=1000, description="Descripción o resumen profesional")
     location: str | None = Field(
-        None, description="Ubicación física o modalidad de trabajo"
+        None, max_length=100, description="Ubicación física o modalidad de trabajo"
     )
-    profile_image: str | None = Field(None, description="URL de la imagen de perfil")
-    banner_image: str | None = Field(
-        None, description="URL de la imagen de portada/banner"
-    )
+    avatar_url: str | None = Field(None, description="URL de la imagen de perfil")
 
 
 class ProfileCreate(ProfileBase):
@@ -41,16 +39,15 @@ class ProfileUpdate(BaseModel):
     """
     Schema para actualizar perfil.
 
-    Todos los campos son opcionales excepto full_name y headline
+    Todos los campos son opcionales excepto name y headline
     que no pueden quedar vacíos si se actualizan.
     """
 
-    full_name: str | None = Field(None, min_length=1)
-    headline: str | None = Field(None, min_length=1)
-    about: str | None = None
-    location: str | None = None
-    profile_image: str | None = None
-    banner_image: str | None = None
+    name: str | None = Field(None, min_length=1, max_length=100)
+    headline: str | None = Field(None, min_length=1, max_length=100)
+    bio: str | None = Field(None, max_length=1000)
+    location: str | None = Field(None, max_length=100)
+    avatar_url: str | None = None
 
 
 class ProfileResponse(ProfileBase, TimestampMixin):
@@ -71,5 +68,4 @@ class ProfileResponse(ProfileBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

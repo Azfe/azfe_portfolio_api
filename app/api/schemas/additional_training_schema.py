@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -14,27 +14,24 @@ class AdditionalTrainingBase(BaseModel):
     title: str = Field(
         ...,
         min_length=1,
+        max_length=100,
         description="Nombre del curso o formación (no puede estar vacío)",
     )
-    institution: str = Field(
-        ..., min_length=1, description="Entidad que lo impartió (no puede estar vacía)"
+    provider: str = Field(
+        ..., min_length=1, max_length=100, description="Entidad que lo impartió (no puede estar vacía)"
     )
-    end_date: date = Field(..., description="Fecha de realización (obligatoria)")
-    duration_hours: int | None = Field(
-        None, ge=1, description="Duración en horas (opcional)"
-    )
-    description: str | None = Field(
-        None, description="Detalles adicionales (temario, logros, etc.)"
-    )
-    location: str | None = Field(
-        None, description="Ubicación del centro (presencial, online, ciudad)"
-    )
-    technologies: list[str] = Field(
-        default_factory=list,
-        description="Tecnologías aprendidas (se vincula con Skills)",
-    )
+    completion_date: datetime = Field(..., description="Fecha de realización (obligatoria)")
     order_index: int = Field(
         ..., ge=0, description="Orden de aparición en el portafolio"
+    )
+    duration: str | None = Field(
+        None, max_length=50, description="Duración del curso (ej: '40 horas', '3 meses')"
+    )
+    certificate_url: str | None = Field(
+        None, description="URL del certificado (opcional)"
+    )
+    description: str | None = Field(
+        None, max_length=1000, description="Detalles adicionales (temario, logros, etc.)"
     )
 
 
@@ -44,8 +41,8 @@ class AdditionalTrainingCreate(AdditionalTrainingBase):
 
     Invariantes:
     - title no puede estar vacío
-    - institution no puede estar vacía
-    - date es obligatoria
+    - provider no puede estar vacía
+    - completion_date es obligatoria
     """
 
     pass
@@ -55,17 +52,16 @@ class AdditionalTrainingUpdate(BaseModel):
     """
     Schema para actualizar formación adicional.
 
-    Todos los campos son opcionales, pero title e institution
+    Todos los campos son opcionales, pero title y provider
     no pueden quedar vacíos si se actualizan.
     """
 
-    title: str | None = Field(None, min_length=1)
-    institution: str | None = Field(None, min_length=1)
-    end_date: date | None = None
-    duration_hours: int | None = Field(None, ge=1)
-    description: str | None = None
-    location: str | None = None
-    technologies: list[str] | None = None
+    title: str | None = Field(None, min_length=1, max_length=100)
+    provider: str | None = Field(None, min_length=1, max_length=100)
+    completion_date: datetime | None = None
+    duration: str | None = Field(None, max_length=50)
+    certificate_url: str | None = None
+    description: str | None = Field(None, max_length=1000)
     order_index: int | None = Field(None, ge=0)
 
 
@@ -76,10 +72,8 @@ class AdditionalTrainingResponse(AdditionalTrainingBase, TimestampMixin):
     Relaciones:
     - Pertenece a un único Profile
     - Un Profile tiene muchos AdditionalTraining
-    - technologies se vincula con Skills (tecnologías aprendidas)
     """
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
