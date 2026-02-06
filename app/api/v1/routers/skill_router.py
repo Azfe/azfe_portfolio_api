@@ -138,9 +138,7 @@ MOCK_SKILLS = [
     summary="Listar habilidades técnicas",
     description="Obtiene todas las habilidades técnicas del perfil",
 )
-async def get_skills(
-    category: str | None = None, level: SkillLevel | None = None
-):
+async def get_skills(category: str | None = None, level: SkillLevel | None = None):
     """
     Lista todas las habilidades técnicas del perfil único del sistema.
 

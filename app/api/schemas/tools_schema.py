@@ -10,10 +10,16 @@ class ToolBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, max_length=50, description="Nombre de la herramienta (no puede estar vacío)"
+        ...,
+        min_length=1,
+        max_length=50,
+        description="Nombre de la herramienta (no puede estar vacío)",
     )
     category: str = Field(
-        ..., min_length=1, max_length=50, description="Tipo de herramienta (IDE, cloud, CI/CD, etc.)"
+        ...,
+        min_length=1,
+        max_length=50,
+        description="Tipo de herramienta (IDE, cloud, CI/CD, etc.)",
     )
     order_index: int = Field(
         ...,

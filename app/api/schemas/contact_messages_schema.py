@@ -16,7 +16,10 @@ class ContactMessageBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, max_length=100, description="Nombre del remitente (no puede estar vacío)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Nombre del remitente (no puede estar vacío)",
     )
     email: EmailStr = Field(
         ..., description="Correo del remitente (no puede estar vacío)"
