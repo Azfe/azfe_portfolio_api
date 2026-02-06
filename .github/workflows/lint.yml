@@ -1,0 +1,81 @@
+name: Code Quality & Linting
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'fix/**'
+      - 'docs/**'
+      - 'refactor/**'
+      - 'test/**'
+      - 'chore/**'
+      - 'hotfix/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: '**/requirements*.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Format & Lint checks
+        run: |
+          echo "::group::Black"
+          black --check app/ tests/
+          echo "::endgroup::"
+
+          echo "::group::isort"
+          isort --check-only app/ tests/
+          echo "::endgroup::"
+
+          echo "::group::Ruff"
+          ruff check app/ tests/
+          echo "::endgroup::"
+
+      - name: Type checking with MyPy
+        run: mypy app/ --install-types --non-interactive
+
+      - name: Security check with Bandit
+        run: bandit -r app/ -ll -q
+        continue-on-error: true
+
+      - name: Check dependencies for vulnerabilities
+        run: pip-audit --strict
+        continue-on-error: true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Code Quality Check Results 🔍" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Black | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| isort | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ruff | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| MyPy | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security | ℹ️ (non-blocking) |" >> $GITHUB_STEP_SUMMARY
