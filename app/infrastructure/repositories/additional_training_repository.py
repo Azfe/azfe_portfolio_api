@@ -2,27 +2,27 @@ from typing import Any
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from app.domain.entities import WorkExperience
-from app.infrastructure.mappers import WorkExperienceMapper
+from app.domain.entities import AdditionalTraining
+from app.infrastructure.mappers import AdditionalTrainingMapper
 from app.shared.interfaces.repository import IOrderedRepository
 
 
-class WorkExperienceRepository(IOrderedRepository[WorkExperience]):
-    """Concrete implementation of WorkExperience repository using MongoDB."""
+class AdditionalTrainingRepository(IOrderedRepository[AdditionalTraining]):
+    """Concrete implementation of AdditionalTraining repository using MongoDB."""
 
-    collection_name = "work_experiences"
+    collection_name = "additional_trainings"
 
     def __init__(self, db: AsyncIOMotorDatabase):
         self._db = db
         self._collection = db[self.collection_name]
-        self._mapper = WorkExperienceMapper()
+        self._mapper = AdditionalTrainingMapper()
 
-    async def add(self, entity: WorkExperience) -> WorkExperience:
+    async def add(self, entity: AdditionalTraining) -> AdditionalTraining:
         doc = self._mapper.to_persistence(entity)
         await self._collection.insert_one(doc)
         return entity
 
-    async def update(self, entity: WorkExperience) -> WorkExperience:
+    async def update(self, entity: AdditionalTraining) -> AdditionalTraining:
         doc = self._mapper.to_persistence(entity)
         await self._collection.replace_one({"_id": entity.id}, doc)
         return entity
@@ -31,7 +31,7 @@ class WorkExperienceRepository(IOrderedRepository[WorkExperience]):
         result = await self._collection.delete_one({"_id": entity_id})
         return result.deleted_count > 0
 
-    async def get_by_id(self, entity_id: str) -> WorkExperience | None:
+    async def get_by_id(self, entity_id: str) -> AdditionalTraining | None:
         doc = await self._collection.find_one({"_id": entity_id})
         if doc is None:
             return None
@@ -43,7 +43,7 @@ class WorkExperienceRepository(IOrderedRepository[WorkExperience]):
         limit: int = 100,
         sort_by: str | None = None,
         ascending: bool = True,
-    ) -> list[WorkExperience]:
+    ) -> list[AdditionalTraining]:
         cursor = self._collection.find().skip(skip).limit(limit)
         if sort_by:
             cursor = cursor.sort(sort_by, 1 if ascending else -1)
@@ -57,13 +57,13 @@ class WorkExperienceRepository(IOrderedRepository[WorkExperience]):
         count = await self._collection.count_documents({"_id": entity_id})
         return count > 0
 
-    async def find_by(self, **filters: Any) -> list[WorkExperience]:
+    async def find_by(self, **filters: Any) -> list[AdditionalTraining]:
         docs = await self._collection.find(filters).to_list(length=100)
         return self._mapper.to_domain_list(docs)
 
     async def get_by_order_index(
         self, profile_id: str, order_index: int
-    ) -> WorkExperience | None:
+    ) -> AdditionalTraining | None:
         doc = await self._collection.find_one(
             {"profile_id": profile_id, "order_index": order_index}
         )
@@ -73,7 +73,7 @@ class WorkExperienceRepository(IOrderedRepository[WorkExperience]):
 
     async def get_all_ordered(
         self, profile_id: str, ascending: bool = True
-    ) -> list[WorkExperience]:
+    ) -> list[AdditionalTraining]:
         cursor = self._collection.find({"profile_id": profile_id}).sort(
             "order_index", 1 if ascending else -1
         )
