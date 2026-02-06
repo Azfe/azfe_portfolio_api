@@ -210,10 +210,18 @@ async def get_contact_messages_stats():
         "total": len(MOCK_MESSAGES),
         "today": len([m for m in MOCK_MESSAGES if m.created_at.date() == today]),
         "this_week": len(
-            [m for m in MOCK_MESSAGES if m.created_at.date() >= today - timedelta(days=7)]
+            [
+                m
+                for m in MOCK_MESSAGES
+                if m.created_at.date() >= today - timedelta(days=7)
+            ]
         ),
         "this_month": len(
-            [m for m in MOCK_MESSAGES if m.created_at.date() >= today - timedelta(days=30)]
+            [
+                m
+                for m in MOCK_MESSAGES
+                if m.created_at.date() >= today - timedelta(days=30)
+            ]
         ),
         "by_day": {},
     }

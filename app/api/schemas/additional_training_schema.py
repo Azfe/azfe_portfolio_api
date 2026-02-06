@@ -18,20 +18,29 @@ class AdditionalTrainingBase(BaseModel):
         description="Nombre del curso o formación (no puede estar vacío)",
     )
     provider: str = Field(
-        ..., min_length=1, max_length=100, description="Entidad que lo impartió (no puede estar vacía)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Entidad que lo impartió (no puede estar vacía)",
     )
-    completion_date: datetime = Field(..., description="Fecha de realización (obligatoria)")
+    completion_date: datetime = Field(
+        ..., description="Fecha de realización (obligatoria)"
+    )
     order_index: int = Field(
         ..., ge=0, description="Orden de aparición en el portafolio"
     )
     duration: str | None = Field(
-        None, max_length=50, description="Duración del curso (ej: '40 horas', '3 meses')"
+        None,
+        max_length=50,
+        description="Duración del curso (ej: '40 horas', '3 meses')",
     )
     certificate_url: str | None = Field(
         None, description="URL del certificado (opcional)"
     )
     description: str | None = Field(
-        None, max_length=1000, description="Detalles adicionales (temario, logros, etc.)"
+        None,
+        max_length=1000,
+        description="Detalles adicionales (temario, logros, etc.)",
     )
 
 

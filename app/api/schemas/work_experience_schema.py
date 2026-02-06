@@ -12,7 +12,10 @@ class WorkExperienceBase(BaseModel):
     """
 
     role: str = Field(
-        ..., min_length=1, max_length=100, description="Cargo desempeñado (no puede estar vacío)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Cargo desempeñado (no puede estar vacío)",
     )
     company: str = Field(
         ...,
@@ -27,7 +30,9 @@ class WorkExperienceBase(BaseModel):
         description="Orden de aparición en el CV (debe ser único dentro del perfil)",
     )
     description: str | None = Field(
-        None, max_length=2000, description="Resumen de tareas, responsabilidades o logros"
+        None,
+        max_length=2000,
+        description="Resumen de tareas, responsabilidades o logros",
     )
     end_date: datetime | None = Field(
         None, description="Fecha de fin (opcional, None = actualmente trabajando)"

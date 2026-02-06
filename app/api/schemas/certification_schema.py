@@ -18,7 +18,10 @@ class CertificationBase(BaseModel):
         description="Nombre de la certificación (no puede estar vacío)",
     )
     issuer: str = Field(
-        ..., min_length=1, max_length=100, description="Entidad emisora (no puede estar vacía)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Entidad emisora (no puede estar vacía)",
     )
     issue_date: datetime = Field(..., description="Fecha de emisión (obligatoria)")
     order_index: int = Field(

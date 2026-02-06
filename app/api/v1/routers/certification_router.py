@@ -350,7 +350,6 @@ async def get_expiring_soon_certifications(days: int = 90):
     expiring = [
         cert
         for cert in MOCK_CERTIFICATIONS
-        if cert.expiry_date is not None
-        and today < cert.expiry_date.date() <= threshold
+        if cert.expiry_date is not None and today < cert.expiry_date.date() <= threshold
     ]
     return sorted(expiring, key=lambda x: x.expiry_date or datetime.max)

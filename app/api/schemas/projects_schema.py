@@ -12,7 +12,10 @@ class ProjectBase(BaseModel):
     """
 
     title: str = Field(
-        ..., min_length=1, max_length=100, description="Nombre del proyecto (no puede estar vacío)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Nombre del proyecto (no puede estar vacío)",
     )
     description: str = Field(
         ...,
