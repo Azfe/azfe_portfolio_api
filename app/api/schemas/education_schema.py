@@ -12,7 +12,10 @@ class EducationBase(BaseModel):
     """
 
     institution: str = Field(
-        ..., min_length=1, max_length=100, description="Nombre de la institución (no puede estar vacía)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Nombre de la institución (no puede estar vacía)",
     )
     degree: str = Field(
         ...,
@@ -31,7 +34,9 @@ class EducationBase(BaseModel):
         ..., ge=0, description="Orden de aparición en el portafolio"
     )
     description: str | None = Field(
-        None, max_length=1000, description="Detalles adicionales (especialización, logros, etc.)"
+        None,
+        max_length=1000,
+        description="Detalles adicionales (especialización, logros, etc.)",
     )
     end_date: datetime | None = Field(
         None, description="Fecha de fin (opcional, None = en curso)"

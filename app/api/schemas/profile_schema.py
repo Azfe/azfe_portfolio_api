@@ -10,7 +10,10 @@ class ProfileBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, max_length=100, description="Nombre completo (no puede estar vacío)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Nombre completo (no puede estar vacío)",
     )
     headline: str = Field(
         ...,
@@ -18,7 +21,9 @@ class ProfileBase(BaseModel):
         max_length=100,
         description="Título profesional o rol principal (no puede estar vacío)",
     )
-    bio: str | None = Field(None, max_length=1000, description="Descripción o resumen profesional")
+    bio: str | None = Field(
+        None, max_length=1000, description="Descripción o resumen profesional"
+    )
     location: str | None = Field(
         None, max_length=100, description="Ubicación física o modalidad de trabajo"
     )

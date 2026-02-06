@@ -15,10 +15,16 @@ class SkillBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, max_length=50, description="Nombre de la tecnología (no puede estar vacío)"
+        ...,
+        min_length=1,
+        max_length=50,
+        description="Nombre de la tecnología (no puede estar vacío)",
     )
     category: str = Field(
-        ..., min_length=1, max_length=50, description="Categoría (backend, frontend, devops, etc.)"
+        ...,
+        min_length=1,
+        max_length=50,
+        description="Categoría (backend, frontend, devops, etc.)",
     )
     order_index: int = Field(
         ...,

@@ -10,7 +10,10 @@ class SocialNetworkBase(BaseModel):
     """
 
     platform: str = Field(
-        ..., min_length=1, max_length=50, description="Nombre de la red social (linkedin, github, twitter, etc.)"
+        ...,
+        min_length=1,
+        max_length=50,
+        description="Nombre de la red social (linkedin, github, twitter, etc.)",
     )
     url: str = Field(..., description="Enlace al perfil (debe ser válida)")
     order_index: int = Field(
@@ -19,7 +22,9 @@ class SocialNetworkBase(BaseModel):
         description="Orden de aparición en el portafolio (debe ser único dentro del perfil)",
     )
     username: str | None = Field(
-        None, max_length=100, description="Nombre de usuario en la plataforma (opcional)"
+        None,
+        max_length=100,
+        description="Nombre de usuario en la plataforma (opcional)",
     )
 
 
