@@ -65,15 +65,19 @@ class ContactMessageRepository(IContactMessageRepository):
         return self._mapper.to_domain_list(docs)
 
     async def get_pending_messages(self) -> list[ContactMessage]:
-        docs = await self._collection.find({"status": "pending"}).sort(
-            "created_at", -1
-        ).to_list(length=100)
+        docs = (
+            await self._collection.find({"status": "pending"})
+            .sort("created_at", -1)
+            .to_list(length=100)
+        )
         return self._mapper.to_domain_list(docs)
 
     async def get_messages_by_status(self, status: str) -> list[ContactMessage]:
-        docs = await self._collection.find({"status": status}).sort(
-            "created_at", -1
-        ).to_list(length=100)
+        docs = (
+            await self._collection.find({"status": status})
+            .sort("created_at", -1)
+            .to_list(length=100)
+        )
         return self._mapper.to_domain_list(docs)
 
     async def mark_as_read(self, message_id: str) -> bool:
