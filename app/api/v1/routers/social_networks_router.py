@@ -1,14 +1,13 @@
-from fastapi import APIRouter, HTTPException, status
-from typing import List
 from datetime import datetime
 
-from app.api.schemas.social_networks_schema import (
-    SocialNetworkResponse,
-    SocialNetworkCreate,
-    SocialNetworkUpdate,
-    SocialPlatform,
-)
+from fastapi import APIRouter, HTTPException, status
+
 from app.api.schemas.common_schema import MessageResponse
+from app.api.schemas.social_networks_schema import (
+    SocialNetworkCreate,
+    SocialNetworkResponse,
+    SocialNetworkUpdate,
+)
 
 router = APIRouter(prefix="/social-networks", tags=["Social Networks"])
 
@@ -18,7 +17,7 @@ MOCK_SOCIAL_NETWORKS = [
         id="social_001",
         platform="github",
         url="https://github.com/juanperez",
-        icon="fab fa-github",  # Font Awesome icon
+        username="juanperez",
         order_index=0,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -27,7 +26,7 @@ MOCK_SOCIAL_NETWORKS = [
         id="social_002",
         platform="linkedin",
         url="https://www.linkedin.com/in/juanperez",
-        icon="fab fa-linkedin",
+        username="juanperez",
         order_index=1,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -36,7 +35,7 @@ MOCK_SOCIAL_NETWORKS = [
         id="social_003",
         platform="twitter",
         url="https://twitter.com/juanperez",
-        icon="fab fa-twitter",
+        username="juanperez",
         order_index=2,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -45,7 +44,7 @@ MOCK_SOCIAL_NETWORKS = [
         id="social_004",
         platform="stackoverflow",
         url="https://stackoverflow.com/users/12345/juanperez",
-        icon="fab fa-stack-overflow",
+        username="juanperez",
         order_index=3,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -54,7 +53,7 @@ MOCK_SOCIAL_NETWORKS = [
         id="social_005",
         platform="dev_to",
         url="https://dev.to/juanperez",
-        icon="fab fa-dev",
+        username="juanperez",
         order_index=4,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -63,7 +62,7 @@ MOCK_SOCIAL_NETWORKS = [
         id="social_006",
         platform="medium",
         url="https://medium.com/@juanperez",
-        icon="fab fa-medium",
+        username="juanperez",
         order_index=5,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -73,7 +72,7 @@ MOCK_SOCIAL_NETWORKS = [
 
 @router.get(
     "",
-    response_model=List[SocialNetworkResponse],
+    response_model=list[SocialNetworkResponse],
     summary="Listar redes sociales",
     description="Obtiene todas las redes sociales ordenadas por orderIndex",
 )
@@ -134,13 +133,13 @@ async def get_social_network(social_id: str):
     summary="Crear red social",
     description="Crea una nueva red social asociada al perfil",
 )
-async def create_social_network(social_data: SocialNetworkCreate):
+async def create_social_network(_social_data: SocialNetworkCreate):
     """
     Crea una nueva red social y la asocia al perfil único del sistema.
 
     **Invariantes que se validan automáticamente:**
-    - `platform` no puede estar vacío y debe ser un valor permitido
-    - `url` debe ser una URL válida (validación automática con HttpUrl)
+    - `platform` no puede estar vacío
+    - `url` debe ser una URL válida
     - `orderIndex` debe ser único dentro del perfil
 
     Args:
@@ -150,28 +149,15 @@ async def create_social_network(social_data: SocialNetworkCreate):
         SocialNetworkResponse: Red social creada
 
     Raises:
-        HTTPException 422: Si url no es válida o platform no es permitido
+        HTTPException 422: Si url no es válida
         HTTPException 409: Si orderIndex ya está en uso
         HTTPException 400: Si los datos no cumplen las invariantes
-
-    Nota sobre icon:
-    - Puede ser una clase de Font Awesome: "fab fa-github"
-    - Puede ser una URL de imagen: "https://example.com/github-icon.svg"
-    - Puede ser un emoji: "🐙" (para GitHub)
-    - Puede ser null si se usa el platform para determinar el icono automáticamente
 
     TODO: Implementar con CreateSocialNetworkUseCase
     TODO: Validar que orderIndex sea único dentro del perfil
     TODO: Considerar auto-incrementar orderIndex si no se proporciona
     TODO: Requiere autenticación de admin
     """
-    # Mock: Validar orderIndex único
-    # if any(s.order_index == social_data.order_index for s in MOCK_SOCIAL_NETWORKS):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_409_CONFLICT,
-    #         detail=f"Ya existe una red social con orderIndex {social_data.order_index}"
-    #     )
-
     return MOCK_SOCIAL_NETWORKS[0]
 
 
@@ -181,12 +167,12 @@ async def create_social_network(social_data: SocialNetworkCreate):
     summary="Actualizar red social",
     description="Actualiza una red social existente",
 )
-async def update_social_network(social_id: str, social_data: SocialNetworkUpdate):
+async def update_social_network(social_id: str, _social_data: SocialNetworkUpdate):
     """
     Actualiza una red social existente.
 
     **Invariantes:**
-    - Si se actualiza `platform`, no puede estar vacío y debe ser permitido
+    - Si se actualiza `platform`, no puede estar vacío
     - Si se actualiza `url`, debe ser válida
     - Si se actualiza `orderIndex`, debe ser único dentro del perfil
 
@@ -199,13 +185,8 @@ async def update_social_network(social_id: str, social_data: SocialNetworkUpdate
 
     Raises:
         HTTPException 404: Si la red social no existe
-        HTTPException 422: Si url no es válida o platform no es permitido
+        HTTPException 422: Si url no es válida
         HTTPException 409: Si el nuevo orderIndex ya está en uso
-
-    Casos de uso comunes:
-    - Cambiar URL cuando cambias tu username en la plataforma
-    - Actualizar icono para usar uno personalizado
-    - Reordenar prioridad (orderIndex)
 
     TODO: Implementar con UpdateSocialNetworkUseCase
     TODO: Validar que orderIndex sea único si se actualiza
@@ -213,14 +194,6 @@ async def update_social_network(social_id: str, social_data: SocialNetworkUpdate
     """
     for social in MOCK_SOCIAL_NETWORKS:
         if social.id == social_id:
-            # Mock: Validar orderIndex único si se actualiza
-            # if social_data.order_index is not None:
-            #     if any(s.order_index == social_data.order_index and s.id != social_id
-            #            for s in MOCK_SOCIAL_NETWORKS):
-            #         raise HTTPException(
-            #             status_code=status.HTTP_409_CONFLICT,
-            #             detail=f"Ya existe otra red social con orderIndex {social_data.order_index}"
-            #         )
             return social
 
     raise HTTPException(
@@ -262,11 +235,11 @@ async def delete_social_network(social_id: str):
 
 @router.patch(
     "/reorder",
-    response_model=List[SocialNetworkResponse],
+    response_model=list[SocialNetworkResponse],
     summary="Reordenar redes sociales",
     description="Actualiza el orderIndex de múltiples redes sociales de una vez",
 )
-async def reorder_social_networks(social_orders: List[dict]):
+async def reorder_social_networks(_social_orders: list[dict]):
     """
     Reordena múltiples redes sociales de una sola vez.
 
@@ -298,11 +271,11 @@ async def reorder_social_networks(social_orders: List[dict]):
 
 @router.get(
     "/by-platform/{platform}",
-    response_model=List[SocialNetworkResponse],
+    response_model=list[SocialNetworkResponse],
     summary="Filtrar por plataforma",
     description="Obtiene redes sociales de una plataforma específica",
 )
-async def get_social_networks_by_platform(platform: SocialPlatform):
+async def get_social_networks_by_platform(platform: str):
     """
     Filtra redes sociales por plataforma.
 
@@ -345,7 +318,7 @@ async def get_social_networks_grouped():
     TODO: Implementar con GetSocialNetworksGroupedUseCase
     TODO: Ordenar redes dentro de cada plataforma por order_index
     """
-    grouped = {}
+    grouped: dict[str, list[SocialNetworkResponse]] = {}
     for social in MOCK_SOCIAL_NETWORKS:
         if social.platform not in grouped:
             grouped[social.platform] = []
