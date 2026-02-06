@@ -245,7 +245,7 @@ class IProfileRepository(IRepository["Profile"]):
     """
 
     @abstractmethod
-    async def get_profile(self) -> "Profile" | None:
+    async def get_profile(self) -> Profile | None:
         """
         Get the single profile (only one should exist).
 
@@ -333,7 +333,7 @@ class IContactMessageRepository(IRepository["ContactMessage"]):
     """
 
     @abstractmethod
-    async def get_pending_messages(self) -> list["ContactMessage"]:
+    async def get_pending_messages(self) -> list[ContactMessage]:
         """
         Get all pending contact messages.
 
@@ -343,7 +343,7 @@ class IContactMessageRepository(IRepository["ContactMessage"]):
         pass
 
     @abstractmethod
-    async def get_messages_by_status(self, status: str) -> list["ContactMessage"]:
+    async def get_messages_by_status(self, status: str) -> list[ContactMessage]:
         """
         Get messages filtered by status.
 
@@ -445,7 +445,7 @@ class ISocialNetworkRepository(IRepository["SocialNetwork"]):
     @abstractmethod
     async def get_by_platform(
         self, profile_id: str, platform: str
-    ) -> "SocialNetwork" | None:
+    ) -> SocialNetwork | None:
         """
         Get social network by platform within a profile.
 
