@@ -5,7 +5,6 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.skill_schema import (
-    SkillCategory,
     SkillCreate,
     SkillLevel,
     SkillResponse,
@@ -140,7 +139,7 @@ MOCK_SKILLS = [
     description="Obtiene todas las habilidades técnicas del perfil",
 )
 async def get_skills(
-    category: SkillCategory | None = None, level: SkillLevel | None = None
+    category: str | None = None, level: SkillLevel | None = None
 ):
     """
     Lista todas las habilidades técnicas del perfil único del sistema.
@@ -149,14 +148,13 @@ async def get_skills(
 
     Args:
         category: Filtrar por categoría (backend, frontend, devops, etc.)
-        level: Filtrar por nivel (beginner, intermediate, advanced, expert)
+        level: Filtrar por nivel (basic, intermediate, advanced, expert)
 
     Returns:
         List[SkillResponse]: Lista de habilidades ordenadas por order_index
 
     Relación:
     - Todas las habilidades pertenecen al Profile único del sistema
-    - Se relacionan con technologies en WorkExperience, Projects, AdditionalTraining
 
     Ejemplos:
     - GET /skills?category=backend
@@ -221,8 +219,8 @@ async def create_skill(_skill_data: SkillCreate):
 
     **Invariantes que se validan automáticamente:**
     - `name` no puede estar vacío (min_length=1)
-    - `level` debe ser: beginner, intermediate, advanced, expert
-    - `category` debe ser un valor permitido
+    - `level` debe ser: basic, intermediate, advanced, expert
+    - `category` debe ser un valor válido
     - `orderIndex` debe ser único dentro del perfil
 
     Args:
@@ -241,13 +239,6 @@ async def create_skill(_skill_data: SkillCreate):
     TODO: Considerar auto-incrementar orderIndex si no se proporciona
     TODO: Requiere autenticación de admin
     """
-    # Mock: Validar orderIndex único
-    # if any(s.order_index == skill_data.order_index for s in MOCK_SKILLS):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_409_CONFLICT,
-    #         detail=f"Ya existe una habilidad con orderIndex {skill_data.order_index}"
-    #     )
-
     return MOCK_SKILLS[0]
 
 
@@ -278,10 +269,6 @@ async def update_skill(skill_id: str, _skill_data: SkillUpdate):
         HTTPException 404: Si la habilidad no existe
         HTTPException 422: Si level o category no son válidos
         HTTPException 409: Si el nuevo orderIndex ya está en uso
-
-    Caso de uso común:
-    - Actualizar level cuando mejoras en una tecnología
-      (ej: de "intermediate" a "advanced")
 
     TODO: Implementar con UpdateSkillUseCase
     TODO: Validar que orderIndex sea único si se actualiza
@@ -427,9 +414,10 @@ async def get_skills_grouped_by_level():
     """
     grouped: dict[str, list[SkillResponse]] = {}
     for skill in MOCK_SKILLS:
-        if skill.level not in grouped:
-            grouped[skill.level] = []
-        grouped[skill.level].append(skill)
+        level = skill.level or "none"
+        if level not in grouped:
+            grouped[level] = []
+        grouped[level].append(skill)
 
     # Ordenar skills dentro de cada nivel por order_index
     for level in grouped:
@@ -459,7 +447,7 @@ async def get_skills_stats():
                 "expert": 2,
                 "advanced": 6,
                 "intermediate": 3,
-                "beginner": 1
+                "basic": 1
             },
             "by_category": {
                 "backend": 3,
@@ -481,7 +469,8 @@ async def get_skills_stats():
 
     # Contar por nivel
     for skill in MOCK_SKILLS:
-        stats["by_level"][skill.level] = stats["by_level"].get(skill.level, 0) + 1
+        level = skill.level or "none"
+        stats["by_level"][level] = stats["by_level"].get(level, 0) + 1
         stats["by_category"][skill.category] = (
             stats["by_category"].get(skill.category, 0) + 1
         )

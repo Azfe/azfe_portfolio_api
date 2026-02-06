@@ -1,8 +1,12 @@
 from datetime import datetime
+from typing import Literal
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.api.schemas.common_schema import TimestampMixin
+
+# Estados válidos de un mensaje
+MessageStatus = Literal["pending", "read", "replied"]
 
 
 class ContactMessageBase(BaseModel):
@@ -12,32 +16,32 @@ class ContactMessageBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, description="Nombre del remitente (no puede estar vacío)"
+        ..., min_length=1, max_length=100, description="Nombre del remitente (no puede estar vacío)"
     )
     email: EmailStr = Field(
         ..., description="Correo del remitente (no puede estar vacío)"
     )
     message: str = Field(
-        ..., min_length=1, description="Contenido del mensaje (no puede estar vacío)"
+        ...,
+        min_length=10,
+        max_length=2000,
+        description="Contenido del mensaje (no puede estar vacío)",
     )
-    sent_at: datetime = Field(..., description="Fecha y hora del envío (obligatorio)")
 
 
-class ContactMessageCreate(BaseModel):
+class ContactMessageCreate(ContactMessageBase):
     """
     Schema para crear mensaje de contacto (desde formulario público).
 
-    Nota: sent_at se genera automáticamente en el servidor.
+    Nota: created_at y status se generan automáticamente en el servidor.
 
     Invariantes:
     - name no puede estar vacío
     - email no puede estar vacío y debe ser válido
-    - message no puede estar vacío
+    - message no puede estar vacío (mínimo 10 caracteres)
     """
 
-    name: str = Field(..., min_length=1)
-    email: EmailStr
-    message: str = Field(..., min_length=1)
+    pass
 
 
 class ContactMessageUpdate(BaseModel):
@@ -48,9 +52,7 @@ class ContactMessageUpdate(BaseModel):
     Los campos del remitente NO deberían modificarse.
     """
 
-    # No se permite actualizar name, email, message, sent_at
-    # Solo campos administrativos (implementar según necesidad)
-    pass
+    status: MessageStatus | None = None
 
 
 class ContactMessageResponse(ContactMessageBase, TimestampMixin):
@@ -58,14 +60,15 @@ class ContactMessageResponse(ContactMessageBase, TimestampMixin):
     Schema de respuesta de mensaje de contacto.
 
     Relaciones:
-    - Pertenece a un único Profile
-    - Un Profile tiene muchos ContactMessage
+    - Los mensajes son independientes (no pertenecen a un perfil)
 
     Invariantes:
-    - sent_at es obligatorio (generado al crear)
+    - created_at es obligatorio (generado al crear)
     """
 
     id: str
+    status: MessageStatus = "pending"
+    read_at: datetime | None = None
+    replied_at: datetime | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

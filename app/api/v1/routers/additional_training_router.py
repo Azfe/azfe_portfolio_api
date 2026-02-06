@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, status
 
@@ -16,12 +16,10 @@ MOCK_TRAININGS = [
     AdditionalTrainingResponse(
         id="train_001",
         title="Clean Architecture y Domain-Driven Design en Python",
-        institution="Udemy",
-        end_date=date(2023, 4, 15),
-        duration_hours=40,
+        provider="Udemy",
+        completion_date=datetime(2023, 4, 15),
+        duration="40 horas",
         description="Curso avanzado sobre arquitecturas limpias, DDD y principios SOLID aplicados a Python. Incluye implementación práctica de casos de uso, repositorios y mappers.",
-        location="Online",
-        technologies=["Python", "FastAPI", "Design Patterns", "SOLID", "DDD"],
         order_index=1,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -29,12 +27,10 @@ MOCK_TRAININGS = [
     AdditionalTrainingResponse(
         id="train_002",
         title="Advanced React Patterns and Performance",
-        institution="Frontend Masters",
-        end_date=date(2023, 7, 1),
-        duration_hours=30,
+        provider="Frontend Masters",
+        completion_date=datetime(2023, 7, 1),
+        duration="30 horas",
         description="Patrones avanzados de React: Custom Hooks, Compound Components, Render Props, Context optimization. Técnicas de optimización de rendimiento.",
-        location="Online",
-        technologies=["React", "TypeScript", "JavaScript", "Performance Optimization"],
         order_index=2,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -42,12 +38,10 @@ MOCK_TRAININGS = [
     AdditionalTrainingResponse(
         id="train_003",
         title="Docker y Kubernetes: De Cero a Experto",
-        institution="Platzi",
-        end_date=date(2022, 11, 20),
-        duration_hours=50,
+        provider="Platzi",
+        completion_date=datetime(2022, 11, 20),
+        duration="50 horas",
         description="Containerización con Docker, orquestación con Kubernetes, CI/CD pipelines, y despliegue en producción.",
-        location="Online",
-        technologies=["Docker", "Kubernetes", "CI/CD", "DevOps"],
         order_index=3,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -55,25 +49,21 @@ MOCK_TRAININGS = [
     AdditionalTrainingResponse(
         id="train_004",
         title="MongoDB University: M320 Data Modeling",
-        institution="MongoDB University",
-        end_date=date(2024, 1, 10),
-        duration_hours=20,
+        provider="MongoDB University",
+        completion_date=datetime(2024, 1, 10),
+        duration="20 horas",
         description="Diseño de modelos de datos para MongoDB. Patrones de modelado, optimización de queries y buenas prácticas.",
-        location="Online",
-        technologies=["MongoDB", "NoSQL", "Database Design"],
-        order_index=0,  # Más reciente
+        order_index=0,
         created_at=datetime.now(),
         updated_at=datetime.now(),
     ),
     AdditionalTrainingResponse(
         id="train_005",
         title="Testing en Python: Pytest y TDD",
-        institution="Real Python",
-        end_date=date(2023, 9, 15),
-        duration_hours=25,
+        provider="Real Python",
+        completion_date=datetime(2023, 9, 15),
+        duration="25 horas",
         description="Test-Driven Development con Pytest. Fixtures, mocking, coverage y testing de APIs.",
-        location="Online",
-        technologies=["Python", "Pytest", "TDD", "Testing"],
         order_index=4,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -81,12 +71,10 @@ MOCK_TRAININGS = [
     AdditionalTrainingResponse(
         id="train_006",
         title="Bootcamp Full Stack Development",
-        institution="Ironhack",
-        end_date=date(2021, 8, 30),
-        duration_hours=400,
+        provider="Ironhack",
+        completion_date=datetime(2021, 8, 30),
+        duration="400 horas",
         description="Bootcamp intensivo de 10 semanas en desarrollo Full Stack. Proyectos reales, metodologías ágiles y preparación para el mercado laboral.",
-        location="Barcelona, España",
-        technologies=["JavaScript", "Node.js", "React", "MongoDB", "Express"],
         order_index=5,
         created_at=datetime.now(),
         updated_at=datetime.now(),
@@ -112,11 +100,9 @@ async def get_additional_trainings():
 
     Relación:
     - Toda la formación pertenece al Profile único del sistema
-    - technologies se relaciona con Skills del perfil
 
     TODO: Implementar con GetAdditionalTrainingsUseCase
     TODO: Ordenar por order_index ASC (más reciente primero)
-    TODO: Considerar ordenar también por date DESC como criterio secundario
     """
     return sorted(MOCK_TRAININGS, key=lambda x: x.order_index)
 
@@ -163,28 +149,7 @@ async def create_additional_training(_training_data: AdditionalTrainingCreate):
     """
     Crea una nueva formación adicional y la asocia al perfil único del sistema.
 
-    **Invariantes que se validan automáticamente:**
-    - `title` no puede estar vacío (min_length=1)
-    - `institution` no puede estar vacía (min_length=1)
-    - `date` es obligatoria
-    - `duration_hours` si se proporciona, debe ser >= 1
-
-    Args:
-        training_data: Datos de la formación a crear
-
-    Returns:
-        AdditionalTrainingResponse: Formación creada
-
-    Raises:
-        HTTPException 422: Si los datos no cumplen las invariantes
-
-    Nota sobre technologies:
-    - Las tecnologías listadas deberían idealmente existir como Skills en el perfil
-    - Esto ayuda a vincular la formación con las habilidades adquiridas
-
     TODO: Implementar con CreateAdditionalTrainingUseCase
-    TODO: Considerar auto-incrementar orderIndex si no se proporciona
-    TODO: Validar que las technologies existan como Skills (opcional)
     TODO: Requiere autenticación de admin
     """
     return MOCK_TRAININGS[0]
@@ -201,22 +166,6 @@ async def update_additional_training(
 ):
     """
     Actualiza una formación adicional existente.
-
-    **Invariantes:**
-    - Si se actualiza `title`, no puede estar vacío
-    - Si se actualiza `institution`, no puede estar vacía
-    - Si se actualiza `duration_hours`, debe ser >= 1
-
-    Args:
-        training_id: ID de la formación a actualizar
-        training_data: Datos a actualizar (campos opcionales)
-
-    Returns:
-        AdditionalTrainingResponse: Formación actualizada
-
-    Raises:
-        HTTPException 404: Si la formación no existe
-        HTTPException 422: Si los datos no cumplen las invariantes
 
     TODO: Implementar con UpdateAdditionalTrainingUseCase
     TODO: Requiere autenticación de admin
@@ -241,20 +190,7 @@ async def delete_additional_training(training_id: str):
     """
     Elimina una formación adicional del perfil.
 
-    Nota: Al eliminar una formación, puede ser necesario reordenar
-    los orderIndex de la formación restante para mantener la coherencia.
-
-    Args:
-        training_id: ID de la formación a eliminar
-
-    Returns:
-        MessageResponse: Confirmación de eliminación
-
-    Raises:
-        HTTPException 404: Si la formación no existe
-
     TODO: Implementar con DeleteAdditionalTrainingUseCase
-    TODO: Considerar reordenamiento automático de orderIndex
     TODO: Requiere autenticación de admin
     """
     return MessageResponse(
@@ -273,63 +209,7 @@ async def reorder_additional_trainings(_training_orders: list[dict]):
     """
     Reordena múltiples formaciones adicionales de una sola vez.
 
-    Útil para drag & drop en el panel de administración.
-
-    Args:
-        training_orders: Lista de objetos con {id, orderIndex}
-        Ejemplo: [
-            {"id": "train_001", "orderIndex": 2},
-            {"id": "train_002", "orderIndex": 1},
-            {"id": "train_003", "orderIndex": 0}
-        ]
-
-    Returns:
-        List[AdditionalTrainingResponse]: Formaciones reordenadas
-
-    Raises:
-        HTTPException 400: Si hay orderIndex duplicados
-        HTTPException 404: Si algún training_id no existe
-
     TODO: Implementar con ReorderAdditionalTrainingsUseCase
-    TODO: Validar que todos los orderIndex sean únicos
-    TODO: Validar que todos los training_id existan
-    TODO: Hacer update en transacción (todo o nada)
     TODO: Requiere autenticación de admin
     """
     return sorted(MOCK_TRAININGS, key=lambda x: x.order_index)
-
-
-@router.get(
-    "/by-technology/{technology}",
-    response_model=list[AdditionalTrainingResponse],
-    summary="Filtrar formación por tecnología",
-    description="Obtiene formaciones que incluyan una tecnología específica",
-)
-async def get_trainings_by_technology(technology: str):
-    """
-    Filtra formaciones adicionales por tecnología aprendida.
-
-    Útil para mostrar qué cursos/formaciones se hicieron para aprender
-    una tecnología específica.
-
-    Args:
-        technology: Nombre de la tecnología (case-insensitive)
-
-    Returns:
-        List[AdditionalTrainingResponse]: Formaciones que incluyen esa tecnología
-
-    Relación con Skills:
-    - Este endpoint ayuda a vincular formación con habilidades adquiridas
-    - Las tecnologías deberían coincidir con Skills del perfil
-
-    TODO: Implementar con GetTrainingsByTechnologyUseCase
-    TODO: Hacer búsqueda case-insensitive
-    TODO: Considerar búsqueda parcial (contains)
-    """
-    tech_lower = technology.lower()
-    filtered = [
-        t
-        for t in MOCK_TRAININGS
-        if any(tech.lower() == tech_lower for tech in t.technologies)
-    ]
-    return sorted(filtered, key=lambda x: x.order_index)

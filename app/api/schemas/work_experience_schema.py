@@ -1,6 +1,6 @@
-from datetime import date
+from datetime import datetime
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -12,33 +12,33 @@ class WorkExperienceBase(BaseModel):
     """
 
     role: str = Field(
-        ..., min_length=1, description="Cargo desempeñado (no puede estar vacío)"
+        ..., min_length=1, max_length=100, description="Cargo desempeñado (no puede estar vacío)"
     )
     company: str = Field(
-        ..., min_length=1, description="Empresa donde se trabajó (no puede estar vacía)"
+        ...,
+        min_length=1,
+        max_length=100,
+        description="Empresa donde se trabajó (no puede estar vacía)",
     )
-    location: str | None = Field(
-        None, description="Ubicación o modalidad (remoto, ciudad, híbrido)"
-    )
-    start_date: date = Field(..., description="Fecha de inicio (obligatoria)")
-    end_date: date | None = Field(
-        None, description="Fecha de fin (opcional, None = actualmente trabajando)"
-    )
-    description: str | None = Field(
-        None, description="Resumen de tareas, responsabilidades o logros"
-    )
-    technologies: list[str] = Field(
-        default_factory=list, description="Lista de tecnologías usadas"
-    )
+    start_date: datetime = Field(..., description="Fecha de inicio (obligatoria)")
     order_index: int = Field(
         ...,
         ge=0,
         description="Orden de aparición en el CV (debe ser único dentro del perfil)",
     )
+    description: str | None = Field(
+        None, max_length=2000, description="Resumen de tareas, responsabilidades o logros"
+    )
+    end_date: datetime | None = Field(
+        None, description="Fecha de fin (opcional, None = actualmente trabajando)"
+    )
+    responsibilities: list[str] = Field(
+        default_factory=list, description="Lista de responsabilidades"
+    )
 
     @field_validator("end_date")
     @classmethod
-    def validate_end_date(cls, v: date | None, info) -> date | None:
+    def validate_end_date(cls, v: datetime | None, info) -> datetime | None:
         """
         Valida que endDate sea posterior a startDate si existe.
 
@@ -74,18 +74,17 @@ class WorkExperienceUpdate(BaseModel):
     no pueden quedar vacíos si se actualizan.
     """
 
-    role: str | None = Field(None, min_length=1)
-    company: str | None = Field(None, min_length=1)
-    location: str | None = None
-    start_date: date | None = None
-    end_date: date | None = None
-    description: str | None = None
-    technologies: list[str] | None = None
+    role: str | None = Field(None, min_length=1, max_length=100)
+    company: str | None = Field(None, min_length=1, max_length=100)
+    start_date: datetime | None = None
+    end_date: datetime | None = None
+    description: str | None = Field(None, max_length=2000)
+    responsibilities: list[str] | None = None
     order_index: int | None = Field(None, ge=0)
 
     @field_validator("end_date")
     @classmethod
-    def validate_end_date(cls, v: date | None, info) -> date | None:
+    def validate_end_date(cls, v: datetime | None, info) -> datetime | None:
         """Valida que endDate sea posterior a startDate si ambos están presentes."""
         if (
             v is not None
@@ -104,7 +103,6 @@ class WorkExperienceResponse(WorkExperienceBase, TimestampMixin):
     Relaciones:
     - Pertenece a un único Profile
     - Un Profile tiene muchas WorkExperience
-    - technologies se relaciona conceptualmente con Skills
 
     Invariantes:
     - orderIndex debe ser único dentro del mismo perfil
@@ -112,5 +110,4 @@ class WorkExperienceResponse(WorkExperienceBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
