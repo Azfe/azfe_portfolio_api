@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -13,8 +13,9 @@ class ContactInformationBase(BaseModel):
         ..., description="Correo de contacto (no puede estar vacío)"
     )
     phone: str | None = Field(None, description="Número de teléfono (opcional)")
-    location: str | None = Field(None, description="Ubicación general (ciudad, país)")
-    website: HttpUrl | None = Field(None, description="Sitio web personal (opcional)")
+    linkedin: str | None = Field(None, description="URL de LinkedIn (opcional)")
+    github: str | None = Field(None, description="URL de GitHub (opcional)")
+    website: str | None = Field(None, description="Sitio web personal (opcional)")
 
 
 class ContactInformationCreate(ContactInformationBase):
@@ -38,8 +39,9 @@ class ContactInformationUpdate(BaseModel):
 
     email: EmailStr | None = None
     phone: str | None = None
-    location: str | None = None
-    website: HttpUrl | None = None
+    linkedin: str | None = None
+    github: str | None = None
+    website: str | None = None
 
 
 class ContactInformationResponse(ContactInformationBase, TimestampMixin):
@@ -56,5 +58,4 @@ class ContactInformationResponse(ContactInformationBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

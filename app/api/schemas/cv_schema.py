@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from app.api.schemas.additional_training_schema import AdditionalTrainingResponse
 from app.api.schemas.certification_schema import CertificationResponse
@@ -20,7 +20,7 @@ class CVCompleteResponse(BaseModel):
 
     # Información personal
     profile: ProfileResponse
-    contact_info: ContactInformationResponse
+    contact_info: ContactInformationResponse | None = None
     social_networks: list[SocialNetworkResponse] = []
 
     # Experiencia profesional
@@ -36,5 +36,4 @@ class CVCompleteResponse(BaseModel):
     additional_training: list[AdditionalTrainingResponse] = []
     certifications: list[CertificationResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

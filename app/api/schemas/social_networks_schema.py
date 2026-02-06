@@ -1,29 +1,6 @@
-from typing import Literal
-
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.schemas.common_schema import TimestampMixin
-
-# Plataformas de redes sociales más comunes
-SocialPlatform = Literal[
-    "github",
-    "gitlab",
-    "linkedin",
-    "twitter",  # X (Twitter)
-    "x",  # Alias para Twitter
-    "stackoverflow",
-    "medium",
-    "dev_to",
-    "hashnode",
-    "youtube",
-    "instagram",
-    "facebook",
-    "discord",
-    "telegram",
-    "website",  # Sitio web personal
-    "blog",  # Blog personal
-    "other",
-]
 
 
 class SocialNetworkBase(BaseModel):
@@ -32,17 +9,17 @@ class SocialNetworkBase(BaseModel):
     Representa perfiles en plataformas sociales y profesionales.
     """
 
-    platform: SocialPlatform = Field(
-        ..., description="Nombre de la red social (linkedin, github, twitter, etc.)"
+    platform: str = Field(
+        ..., min_length=1, max_length=50, description="Nombre de la red social (linkedin, github, twitter, etc.)"
     )
-    url: HttpUrl = Field(..., description="Enlace al perfil (debe ser válida)")
-    icon: str | None = Field(
-        None, description="Icono o identificador visual (URL, emoji, nombre del icono)"
-    )
+    url: str = Field(..., description="Enlace al perfil (debe ser válida)")
     order_index: int = Field(
         ...,
         ge=0,
         description="Orden de aparición en el portafolio (debe ser único dentro del perfil)",
+    )
+    username: str | None = Field(
+        None, max_length=100, description="Nombre de usuario en la plataforma (opcional)"
     )
 
 
@@ -66,9 +43,9 @@ class SocialNetworkUpdate(BaseModel):
     Todos los campos son opcionales, pero platform no puede quedar vacío si se actualiza.
     """
 
-    platform: SocialPlatform | None = None
-    url: HttpUrl | None = None
-    icon: str | None = None
+    platform: str | None = Field(None, min_length=1, max_length=50)
+    url: str | None = None
+    username: str | None = Field(None, max_length=100)
     order_index: int | None = Field(None, ge=0)
 
 
@@ -86,5 +63,4 @@ class SocialNetworkResponse(SocialNetworkBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

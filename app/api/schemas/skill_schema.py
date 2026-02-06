@@ -1,24 +1,11 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.schemas.common_schema import TimestampMixin
 
 # Niveles de dominio permitidos
-SkillLevel = Literal["beginner", "intermediate", "advanced", "expert"]
-
-# Categorías permitidas
-SkillCategory = Literal[
-    "backend",
-    "frontend",
-    "devops",
-    "database",
-    "mobile",
-    "cloud",
-    "testing",
-    "design",
-    "other",
-]
+SkillLevel = Literal["basic", "intermediate", "advanced", "expert"]
 
 
 class SkillBase(BaseModel):
@@ -28,18 +15,18 @@ class SkillBase(BaseModel):
     """
 
     name: str = Field(
-        ..., min_length=1, description="Nombre de la tecnología (no puede estar vacío)"
+        ..., min_length=1, max_length=50, description="Nombre de la tecnología (no puede estar vacío)"
     )
-    level: SkillLevel = Field(
-        ..., description="Nivel de dominio (beginner, intermediate, advanced, expert)"
-    )
-    category: SkillCategory = Field(
-        ..., description="Categoría (backend, frontend, devops, etc.)"
+    category: str = Field(
+        ..., min_length=1, max_length=50, description="Categoría (backend, frontend, devops, etc.)"
     )
     order_index: int = Field(
         ...,
         ge=0,
         description="Orden de aparición en el portafolio (debe ser único dentro del perfil)",
+    )
+    level: SkillLevel | None = Field(
+        None, description="Nivel de dominio (basic, intermediate, advanced, expert)"
     )
 
 
@@ -49,8 +36,7 @@ class SkillCreate(SkillBase):
 
     Invariantes:
     - name no puede estar vacío
-    - level debe ser un valor permitido (beginner, intermediate, advanced, expert)
-    - category debe ser un valor permitido
+    - category no puede estar vacía
     - orderIndex debe ser único dentro del perfil
     """
 
@@ -64,9 +50,9 @@ class SkillUpdate(BaseModel):
     Todos los campos son opcionales, pero name no puede quedar vacío si se actualiza.
     """
 
-    name: str | None = Field(None, min_length=1)
+    name: str | None = Field(None, min_length=1, max_length=50)
+    category: str | None = Field(None, min_length=1, max_length=50)
     level: SkillLevel | None = None
-    category: SkillCategory | None = None
     order_index: int | None = Field(None, ge=0)
 
 
@@ -77,10 +63,6 @@ class SkillResponse(SkillBase, TimestampMixin):
     Relaciones:
     - Pertenece a un único Profile
     - Un Profile tiene muchas TechnicalSkill (Skills)
-    - Se relaciona conceptualmente con:
-      * WorkExperience.technologies (dónde se usó)
-      * AdditionalTraining.technologies (dónde se aprendió)
-      * Projects.technologies (en qué proyectos)
 
     Invariantes:
     - orderIndex debe ser único dentro del perfil
@@ -88,5 +70,4 @@ class SkillResponse(SkillBase, TimestampMixin):
 
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
