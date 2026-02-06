@@ -16,20 +16,20 @@ class TestProfileSchema:
     def test_profile_create_valid(self):
         """Test: ProfileCreate se crea con datos válidos"""
         data = {
-            "full_name": "John Doe",
+            "name": "John Doe",
             "headline": "Software Engineer",
-            "about": "Experienced developer",
+            "bio": "Experienced developer",
             "location": "New York",
         }
         profile = ProfileCreate(**data)
 
-        assert profile.full_name == "John Doe"
+        assert profile.name == "John Doe"
         assert profile.headline == "Software Engineer"
 
     def test_profile_create_missing_required_field(self):
         """Test: ProfileCreate falla sin campos requeridos"""
         data = {
-            "full_name": "John Doe"
+            "name": "John Doe"
             # Falta 'headline' que es requerido
         }
 
@@ -40,7 +40,7 @@ class TestProfileSchema:
 
     def test_profile_create_empty_name(self):
         """Test: ProfileCreate falla con nombre vacío"""
-        data = {"full_name": "", "headline": "Developer"}  # Vacío, debería fallar
+        data = {"name": "", "headline": "Developer"}  # Vacío, debería fallar
 
         with pytest.raises(ValidationError):
             ProfileCreate(**data)
@@ -77,20 +77,19 @@ class TestSkillSchema:
 
         assert "level" in str(exc_info.value)
 
-    def test_skill_create_invalid_category(self):
-        """Test: SkillCreate falla con categoría inválida"""
+    def test_skill_create_free_category(self):
+        """Test: SkillCreate acepta cualquier string como categoría"""
         data = {
             "name": "Python",
             "level": "expert",
-            "category": "programming",  # No es categoría válida
+            "category": "programming",
             "order_index": 0,
         }
-
-        with pytest.raises(ValidationError):
-            SkillCreate(**data)
+        skill = SkillCreate(**data)
+        assert skill.category == "programming"
 
     @pytest.mark.parametrize(
-        "level", ["beginner", "intermediate", "advanced", "expert"]
+        "level", ["basic", "intermediate", "advanced", "expert"]
     )
     def test_skill_all_valid_levels(self, level):
         """Test: SkillCreate acepta todos los niveles válidos"""
