@@ -23,9 +23,7 @@ class ListProgrammingLanguagesUseCase(
 
     def __init__(
         self,
-        programming_language_repository: IOrderedRepository[
-            "ProgrammingLanguageType"
-        ],
+        programming_language_repository: IOrderedRepository["ProgrammingLanguageType"],
     ):
         self.repo = programming_language_repository
 

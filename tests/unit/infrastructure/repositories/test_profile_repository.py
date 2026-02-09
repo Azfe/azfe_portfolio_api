@@ -35,7 +35,9 @@ class TestProfileRepositoryAdd:
         entity = MagicMock()
         entity.id = "p-1"
 
-        with patch.object(repo._mapper, "to_persistence", return_value={"_id": "p-1"}) as mock_mapper:
+        with patch.object(
+            repo._mapper, "to_persistence", return_value={"_id": "p-1"}
+        ) as mock_mapper:
             await repo.add(entity)
             mock_mapper.assert_called_once_with(entity)
             collection.insert_one.assert_called_once_with({"_id": "p-1"})
@@ -64,7 +66,9 @@ class TestProfileRepositoryGetById:
 
     @pytest.mark.asyncio
     async def test_get_by_id_with_optional_fields(self, repo, collection):
-        doc = make_profile_doc(bio="A bio", location="NYC", avatar_url="https://img.com/a.jpg")
+        doc = make_profile_doc(
+            bio="A bio", location="NYC", avatar_url="https://img.com/a.jpg"
+        )
         collection.find_one = AsyncMock(return_value=doc)
 
         result = await repo.get_by_id("profile-123")

@@ -112,9 +112,9 @@ async def update_programming_language(
                 id=pl.id,
                 name=data.name or pl.name,
                 level=data.level if data.level is not None else pl.level,
-                order_index=data.order_index
-                if data.order_index is not None
-                else pl.order_index,
+                order_index=(
+                    data.order_index if data.order_index is not None else pl.order_index
+                ),
                 created_at=pl.created_at,
                 updated_at=datetime.now(),
             )

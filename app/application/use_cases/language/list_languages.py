@@ -16,19 +16,13 @@ if TYPE_CHECKING:
     from app.domain.entities import Language as LanguageType
 
 
-class ListLanguagesUseCase(
-    IQueryUseCase[ListLanguagesRequest, LanguageListResponse]
-):
+class ListLanguagesUseCase(IQueryUseCase[ListLanguagesRequest, LanguageListResponse]):
     """Use case for listing all languages."""
 
-    def __init__(
-        self, language_repository: IOrderedRepository["LanguageType"]
-    ):
+    def __init__(self, language_repository: IOrderedRepository["LanguageType"]):
         self.repo = language_repository
 
-    async def execute(
-        self, request: ListLanguagesRequest
-    ) -> LanguageListResponse:
+    async def execute(self, request: ListLanguagesRequest) -> LanguageListResponse:
         languages = await self.repo.get_all_ordered(
             profile_id=request.profile_id,
             ascending=request.ascending,

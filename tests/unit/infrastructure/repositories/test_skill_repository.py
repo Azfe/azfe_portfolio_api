@@ -126,7 +126,10 @@ class TestSkillRepositoryOrderedMethods:
 
     @pytest.mark.asyncio
     async def test_get_all_ordered(self, repo, collection):
-        docs = [make_skill_doc(_id="s1", order_index=0), make_skill_doc(_id="s2", order_index=1)]
+        docs = [
+            make_skill_doc(_id="s1", order_index=0),
+            make_skill_doc(_id="s2", order_index=1),
+        ]
         cursor = collection.find.return_value
         cursor.to_list = AsyncMock(return_value=docs)
 
@@ -165,7 +168,9 @@ class TestSkillRepositoryMapperValidation:
         entity = MagicMock()
         entity.id = "s-1"
 
-        with patch.object(repo._mapper, "to_persistence", return_value={"_id": "s-1"}) as mock_mapper:
+        with patch.object(
+            repo._mapper, "to_persistence", return_value={"_id": "s-1"}
+        ) as mock_mapper:
             await repo.add(entity)
             mock_mapper.assert_called_once_with(entity)
 

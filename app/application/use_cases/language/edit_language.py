@@ -17,9 +17,7 @@ if TYPE_CHECKING:
 class EditLanguageUseCase(ICommandUseCase[EditLanguageRequest, LanguageResponse]):
     """Use case for editing a language."""
 
-    def __init__(
-        self, language_repository: IOrderedRepository["LanguageType"]
-    ):
+    def __init__(self, language_repository: IOrderedRepository["LanguageType"]):
         self.repo = language_repository
 
     async def execute(self, request: EditLanguageRequest) -> LanguageResponse:

@@ -54,9 +54,7 @@ class TestProgrammingLanguageCreation:
 
     def test_create_sets_timestamps(self, profile_id):
         """Should set created_at and updated_at."""
-        pl = ProgrammingLanguage.create(
-            profile_id=profile_id, name="Go", order_index=0
-        )
+        pl = ProgrammingLanguage.create(profile_id=profile_id, name="Go", order_index=0)
 
         assert pl.created_at is not None
         assert pl.updated_at is not None
@@ -81,16 +79,12 @@ class TestProgrammingLanguageValidation:
     def test_empty_name_raises_error(self, profile_id):
         """Should raise error for empty name."""
         with pytest.raises((InvalidNameError, InvalidLengthError)):
-            ProgrammingLanguage.create(
-                profile_id=profile_id, name="", order_index=0
-            )
+            ProgrammingLanguage.create(profile_id=profile_id, name="", order_index=0)
 
     def test_whitespace_name_raises_error(self, profile_id):
         """Should raise error for whitespace-only name."""
         with pytest.raises((InvalidNameError, InvalidLengthError)):
-            ProgrammingLanguage.create(
-                profile_id=profile_id, name="   ", order_index=0
-            )
+            ProgrammingLanguage.create(profile_id=profile_id, name="   ", order_index=0)
 
     def test_name_too_long_raises_error(self, profile_id):
         """Should raise error for name > 50 chars."""
@@ -102,9 +96,7 @@ class TestProgrammingLanguageValidation:
     def test_empty_profile_id_raises_error(self):
         """Should raise error for empty profile_id."""
         with pytest.raises(EmptyFieldError):
-            ProgrammingLanguage.create(
-                profile_id="", name="Python", order_index=0
-            )
+            ProgrammingLanguage.create(profile_id="", name="Python", order_index=0)
 
     def test_invalid_level_raises_error(self, profile_id):
         """Should raise error for invalid level."""

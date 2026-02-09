@@ -14,9 +14,7 @@ from app.domain.value_objects.programming_language_level import (
 class TestProgrammingLanguageLevelCreation:
     """Test ProgrammingLanguageLevel creation."""
 
-    @pytest.mark.parametrize(
-        "level", ["basic", "intermediate", "advanced", "expert"]
-    )
+    @pytest.mark.parametrize("level", ["basic", "intermediate", "advanced", "expert"])
     def test_create_valid_levels(self, level):
         """Should create valid levels."""
         pl_level = ProgrammingLanguageLevel.create(level)
@@ -180,7 +178,9 @@ class TestProgrammingLanguageLevelDisplay:
 
     def test_repr(self):
         """Should return debug representation."""
-        assert repr(ProgrammingLanguageLevel.basic()) == "ProgrammingLanguageLevel.basic()"
+        assert (
+            repr(ProgrammingLanguageLevel.basic()) == "ProgrammingLanguageLevel.basic()"
+        )
 
     def test_display_name(self):
         """Should return capitalized name."""
