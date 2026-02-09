@@ -210,20 +210,26 @@ async def get_contact_messages_stats():
     stats: dict[str, Any] = {
         "total": len(MOCK_MESSAGES),
         "today": len(
-            [m for m in dated_messages if m.created_at is not None and m.created_at.date() == today]
+            [
+                m
+                for m in dated_messages
+                if m.created_at is not None and m.created_at.date() == today
+            ]
         ),
         "this_week": len(
             [
                 m
                 for m in dated_messages
-                if m.created_at is not None and m.created_at.date() >= today - timedelta(days=7)
+                if m.created_at is not None
+                and m.created_at.date() >= today - timedelta(days=7)
             ]
         ),
         "this_month": len(
             [
                 m
                 for m in dated_messages
-                if m.created_at is not None and m.created_at.date() >= today - timedelta(days=30)
+                if m.created_at is not None
+                and m.created_at.date() >= today - timedelta(days=30)
             ]
         ),
         "by_day": {},
@@ -233,7 +239,11 @@ async def get_contact_messages_stats():
     for i in range(7):
         day = today - timedelta(days=i)
         count = len(
-            [m for m in dated_messages if m.created_at is not None and m.created_at.date() == day]
+            [
+                m
+                for m in dated_messages
+                if m.created_at is not None and m.created_at.date() == day
+            ]
         )
         stats["by_day"][str(day)] = count
 
