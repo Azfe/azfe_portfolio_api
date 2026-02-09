@@ -18,9 +18,7 @@ if TYPE_CHECKING:
 class DeleteLanguageUseCase(ICommandUseCase[DeleteLanguageRequest, SuccessResponse]):
     """Use case for deleting a language."""
 
-    def __init__(
-        self, language_repository: IOrderedRepository["LanguageType"]
-    ):
+    def __init__(self, language_repository: IOrderedRepository["LanguageType"]):
         self.repo = language_repository
 
     async def execute(self, request: DeleteLanguageRequest) -> SuccessResponse:

@@ -20,9 +20,7 @@ class TestLanguageCreation:
 
     def test_create_with_required_fields(self, profile_id):
         """Should create language with required fields."""
-        lang = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="English", order_index=0)
 
         assert lang.name == "English"
         assert lang.order_index == 0
@@ -54,21 +52,15 @@ class TestLanguageCreation:
 
     def test_create_sets_timestamps(self, profile_id):
         """Should set created_at and updated_at."""
-        lang = Language.create(
-            profile_id=profile_id, name="German", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="German", order_index=0)
 
         assert lang.created_at is not None
         assert lang.updated_at is not None
 
     def test_create_generates_unique_ids(self, profile_id):
         """Should generate unique IDs."""
-        lang1 = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
-        lang2 = Language.create(
-            profile_id=profile_id, name="Spanish", order_index=1
-        )
+        lang1 = Language.create(profile_id=profile_id, name="English", order_index=0)
+        lang2 = Language.create(profile_id=profile_id, name="Spanish", order_index=1)
 
         assert lang1.id != lang2.id
 
@@ -81,30 +73,22 @@ class TestLanguageValidation:
     def test_empty_name_raises_error(self, profile_id):
         """Should raise error for empty name."""
         with pytest.raises((InvalidNameError, InvalidLengthError)):
-            Language.create(
-                profile_id=profile_id, name="", order_index=0
-            )
+            Language.create(profile_id=profile_id, name="", order_index=0)
 
     def test_whitespace_name_raises_error(self, profile_id):
         """Should raise error for whitespace-only name."""
         with pytest.raises((InvalidNameError, InvalidLengthError)):
-            Language.create(
-                profile_id=profile_id, name="   ", order_index=0
-            )
+            Language.create(profile_id=profile_id, name="   ", order_index=0)
 
     def test_name_too_long_raises_error(self, profile_id):
         """Should raise error for name > 50 chars."""
         with pytest.raises(InvalidLengthError):
-            Language.create(
-                profile_id=profile_id, name="x" * 51, order_index=0
-            )
+            Language.create(profile_id=profile_id, name="x" * 51, order_index=0)
 
     def test_empty_profile_id_raises_error(self):
         """Should raise error for empty profile_id."""
         with pytest.raises(EmptyFieldError):
-            Language.create(
-                profile_id="", name="English", order_index=0
-            )
+            Language.create(profile_id="", name="English", order_index=0)
 
     def test_invalid_proficiency_raises_error(self, profile_id):
         """Should raise error for invalid CEFR proficiency."""
@@ -119,9 +103,7 @@ class TestLanguageValidation:
     def test_negative_order_index_raises_error(self, profile_id):
         """Should raise error for negative order index."""
         with pytest.raises(InvalidOrderIndexError):
-            Language.create(
-                profile_id=profile_id, name="English", order_index=-1
-            )
+            Language.create(profile_id=profile_id, name="English", order_index=-1)
 
     def test_empty_proficiency_string_becomes_none(self, profile_id):
         """Should treat empty string proficiency as None."""
@@ -134,9 +116,7 @@ class TestLanguageValidation:
 
         assert lang.proficiency is None
 
-    @pytest.mark.parametrize(
-        "valid_proficiency", ["a1", "a2", "b1", "b2", "c1", "c2"]
-    )
+    @pytest.mark.parametrize("valid_proficiency", ["a1", "a2", "b1", "b2", "c1", "c2"])
     def test_all_valid_proficiencies_accepted(self, profile_id, valid_proficiency):
         """Should accept all valid CEFR levels."""
         lang = Language.create(
@@ -155,9 +135,7 @@ class TestLanguageUpdate:
 
     def test_update_info_name(self, profile_id):
         """Should update name."""
-        lang = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="English", order_index=0)
         old_updated = lang.updated_at
 
         lang.update_info(name="British English")
@@ -167,9 +145,7 @@ class TestLanguageUpdate:
 
     def test_update_info_proficiency(self, profile_id):
         """Should update proficiency."""
-        lang = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="English", order_index=0)
 
         lang.update_info(proficiency="c2")
 
@@ -191,9 +167,7 @@ class TestLanguageUpdate:
 
     def test_update_order(self, profile_id):
         """Should update order index."""
-        lang = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="English", order_index=0)
 
         lang.update_order(3)
 
@@ -214,18 +188,14 @@ class TestLanguageUpdate:
 
     def test_update_with_invalid_name_raises_error(self, profile_id):
         """Should raise error when updating to invalid name."""
-        lang = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="English", order_index=0)
 
         with pytest.raises((InvalidNameError, InvalidLengthError)):
             lang.update_info(name="")
 
     def test_update_with_invalid_proficiency_raises_error(self, profile_id):
         """Should raise error when updating to invalid proficiency."""
-        lang = Language.create(
-            profile_id=profile_id, name="English", order_index=0
-        )
+        lang = Language.create(profile_id=profile_id, name="English", order_index=0)
 
         with pytest.raises(InvalidLanguageProficiencyError):
             lang.update_info(proficiency="fluent")

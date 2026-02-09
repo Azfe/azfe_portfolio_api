@@ -38,7 +38,9 @@ class TestWorkExperienceAdd:
         entity.id = "exp-1"
         expected_doc = {"_id": "exp-1", "role": "Dev"}
 
-        with patch.object(repo._mapper, "to_persistence", return_value=expected_doc) as mock_mapper:
+        with patch.object(
+            repo._mapper, "to_persistence", return_value=expected_doc
+        ) as mock_mapper:
             await repo.add(entity)
             mock_mapper.assert_called_once_with(entity)
             collection.insert_one.assert_called_once_with(expected_doc)
@@ -95,7 +97,10 @@ class TestWorkExperienceDelete:
 class TestWorkExperienceListAll:
     @pytest.mark.asyncio
     async def test_list_all_returns_entities(self, repo, collection):
-        docs = [make_work_experience_doc(_id="e1"), make_work_experience_doc(_id="e2", role="PM")]
+        docs = [
+            make_work_experience_doc(_id="e1"),
+            make_work_experience_doc(_id="e2", role="PM"),
+        ]
         cursor = collection.find.return_value
         cursor.to_list = AsyncMock(return_value=docs)
 

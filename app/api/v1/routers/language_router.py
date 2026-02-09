@@ -101,12 +101,16 @@ async def update_language(language_id: str, data: LanguageUpdate):
             return LanguageResponse(
                 id=lang.id,
                 name=data.name or lang.name,
-                proficiency=data.proficiency
-                if data.proficiency is not None
-                else lang.proficiency,
-                order_index=data.order_index
-                if data.order_index is not None
-                else lang.order_index,
+                proficiency=(
+                    data.proficiency
+                    if data.proficiency is not None
+                    else lang.proficiency
+                ),
+                order_index=(
+                    data.order_index
+                    if data.order_index is not None
+                    else lang.order_index
+                ),
                 created_at=lang.created_at,
                 updated_at=datetime.now(),
             )

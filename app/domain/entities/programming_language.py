@@ -151,4 +151,6 @@ class ProgrammingLanguage:
 
     def __repr__(self) -> str:
         """String representation for debugging."""
-        return f"ProgrammingLanguage(id={self.id}, name={self.name}, level={self.level})"
+        return (
+            f"ProgrammingLanguage(id={self.id}, name={self.name}, level={self.level})"
+        )

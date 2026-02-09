@@ -41,7 +41,12 @@ ORDERED_REPOS = [
         id="certification",
     ),
     pytest.param(
-        (AdditionalTrainingRepository, make_additional_training_doc, "title", "Clean Architecture"),
+        (
+            AdditionalTrainingRepository,
+            make_additional_training_doc,
+            "title",
+            "Clean Architecture",
+        ),
         id="additional_training",
     ),
     pytest.param(
@@ -49,7 +54,12 @@ ORDERED_REPOS = [
         id="project",
     ),
     pytest.param(
-        (ProgrammingLanguageRepository, make_programming_language_doc, "name", "Python"),
+        (
+            ProgrammingLanguageRepository,
+            make_programming_language_doc,
+            "name",
+            "Python",
+        ),
         id="programming_language",
     ),
     pytest.param(
@@ -176,7 +186,10 @@ class TestOrderedRepositoryOrderMethods:
     @pytest.mark.asyncio
     async def test_get_all_ordered(self, repo_setup):
         repo, collection, doc_factory, _, _ = repo_setup
-        docs = [doc_factory(_id="a", order_index=0), doc_factory(_id="b", order_index=1)]
+        docs = [
+            doc_factory(_id="a", order_index=0),
+            doc_factory(_id="b", order_index=1),
+        ]
         cursor = collection.find.return_value
         cursor.to_list = AsyncMock(return_value=docs)
 
