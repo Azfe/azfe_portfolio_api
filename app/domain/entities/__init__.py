@@ -10,7 +10,9 @@ from .certification import Certification
 from .contact_information import ContactInformation
 from .contact_message import ContactMessage
 from .education import Education
+from .language import Language
 from .profile import Profile
+from .programming_language import ProgrammingLanguage
 from .project import Project
 from .skill import Skill
 from .social_network import SocialNetwork
@@ -29,4 +31,6 @@ __all__ = [
     "ContactMessage",
     "SocialNetwork",
     "Tool",
+    "ProgrammingLanguage",
+    "Language",
 ]
