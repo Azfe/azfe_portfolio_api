@@ -6,10 +6,7 @@ Retrieves all languages for a profile.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto.language_dto import (
-    LanguageListResponse,
-    ListLanguagesRequest,
-)
+from app.application.dto.language_dto import LanguageListResponse, ListLanguagesRequest
 from app.shared.interfaces import IOrderedRepository, IQueryUseCase
 
 if TYPE_CHECKING:

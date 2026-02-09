@@ -162,7 +162,14 @@ class ProgrammingLanguageLevel:
         Returns:
             True if this level >= other level
         """
-        return self.level.value >= other.level.value
+        order = {
+            ProgrammingLanguageLevelEnum.BASIC: 1,
+            ProgrammingLanguageLevelEnum.INTERMEDIATE: 2,
+            ProgrammingLanguageLevelEnum.ADVANCED: 3,
+            ProgrammingLanguageLevelEnum.EXPERT: 4,
+        }
+
+        return order[self.level] >= order[other.level]
 
     def to_string(self) -> str:
         """Get the string value of the level."""
