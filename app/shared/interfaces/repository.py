@@ -27,7 +27,9 @@ if TYPE_CHECKING:
         ContactInformation,
         ContactMessage,
         Education,
+        Language,
         Profile,
+        ProgrammingLanguage,
         Project,
         Skill,
         SocialNetwork,
@@ -472,3 +474,5 @@ ContactInformationRepository = IRepository["ContactInformation"]
 ContactMessageRepository = IContactMessageRepository
 SocialNetworkRepository = ISocialNetworkRepository
 ToolRepository = IUniqueNameRepository["Tool"]
+ProgrammingLanguageRepository = IOrderedRepository["ProgrammingLanguage"]
+LanguageRepository = IOrderedRepository["Language"]

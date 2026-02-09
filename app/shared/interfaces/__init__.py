@@ -35,7 +35,9 @@ from .repository import (  # Type aliases
     IRepository,
     ISocialNetworkRepository,
     IUniqueNameRepository,
+    LanguageRepository,
     ProfileRepository,
+    ProgrammingLanguageRepository,
     ProjectRepository,
     SkillRepository,
     SocialNetworkRepository,
@@ -66,6 +68,8 @@ __all__ = [
     "ContactMessageRepository",
     "SocialNetworkRepository",
     "ToolRepository",
+    "ProgrammingLanguageRepository",
+    "LanguageRepository",
     # Use case interfaces
     "IUseCase",
     "IQueryUseCase",

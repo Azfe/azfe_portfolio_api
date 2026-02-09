@@ -20,11 +20,27 @@ from .education_dto import (
     EducationResponse,
     ListEducationRequest,
 )
+from .language_dto import (
+    AddLanguageRequest,
+    DeleteLanguageRequest,
+    EditLanguageRequest,
+    LanguageListResponse,
+    LanguageResponse,
+    ListLanguagesRequest,
+)
 from .profile_dto import (
     CreateProfileRequest,
     GetProfileRequest,
     ProfileResponse,
     UpdateProfileRequest,
+)
+from .programming_language_dto import (
+    AddProgrammingLanguageRequest,
+    DeleteProgrammingLanguageRequest,
+    EditProgrammingLanguageRequest,
+    ListProgrammingLanguagesRequest,
+    ProgrammingLanguageListResponse,
+    ProgrammingLanguageResponse,
 )
 from .skill_dto import (
     AddSkillRequest,
@@ -75,6 +91,20 @@ __all__ = [
     "ListEducationRequest",
     "EducationResponse",
     "EducationListResponse",
+    # ProgrammingLanguage
+    "AddProgrammingLanguageRequest",
+    "EditProgrammingLanguageRequest",
+    "DeleteProgrammingLanguageRequest",
+    "ListProgrammingLanguagesRequest",
+    "ProgrammingLanguageResponse",
+    "ProgrammingLanguageListResponse",
+    # Language
+    "AddLanguageRequest",
+    "EditLanguageRequest",
+    "DeleteLanguageRequest",
+    "ListLanguagesRequest",
+    "LanguageResponse",
+    "LanguageListResponse",
     # CV
     "GetCompleteCVRequest",
     "CompleteCVResponse",

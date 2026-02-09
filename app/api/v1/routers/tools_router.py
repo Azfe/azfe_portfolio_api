@@ -4,11 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, status
 
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.tools_schema import (
-    ToolCreate,
-    ToolResponse,
-    ToolUpdate,
-)
+from app.api.schemas.tools_schema import ToolCreate, ToolResponse, ToolUpdate
 
 router = APIRouter(prefix="/tools", tags=["Tools"])
 
