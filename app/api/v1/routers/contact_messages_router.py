@@ -205,22 +205,25 @@ async def get_contact_messages_stats():
     from datetime import date, timedelta
 
     today = date.today()
+    dated_messages = [m for m in MOCK_MESSAGES if m.created_at is not None]
 
     stats: dict[str, Any] = {
         "total": len(MOCK_MESSAGES),
-        "today": len([m for m in MOCK_MESSAGES if m.created_at.date() == today]),
+        "today": len(
+            [m for m in dated_messages if m.created_at is not None and m.created_at.date() == today]
+        ),
         "this_week": len(
             [
                 m
-                for m in MOCK_MESSAGES
-                if m.created_at.date() >= today - timedelta(days=7)
+                for m in dated_messages
+                if m.created_at is not None and m.created_at.date() >= today - timedelta(days=7)
             ]
         ),
         "this_month": len(
             [
                 m
-                for m in MOCK_MESSAGES
-                if m.created_at.date() >= today - timedelta(days=30)
+                for m in dated_messages
+                if m.created_at is not None and m.created_at.date() >= today - timedelta(days=30)
             ]
         ),
         "by_day": {},
@@ -229,7 +232,9 @@ async def get_contact_messages_stats():
     # Contar por día (últimos 7 días)
     for i in range(7):
         day = today - timedelta(days=i)
-        count = len([m for m in MOCK_MESSAGES if m.created_at.date() == day])
+        count = len(
+            [m for m in dated_messages if m.created_at is not None and m.created_at.date() == day]
+        )
         stats["by_day"][str(day)] = count
 
     return stats
@@ -259,5 +264,9 @@ async def get_recent_contact_messages(limit: int = 10):
     if limit > 50:
         limit = 50
 
-    sorted_messages = sorted(MOCK_MESSAGES, key=lambda x: x.created_at, reverse=True)
+    sorted_messages = sorted(
+        MOCK_MESSAGES,
+        key=lambda x: x.created_at or datetime.min,
+        reverse=True,
+    )
     return sorted_messages[:limit]

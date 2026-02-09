@@ -43,22 +43,13 @@ from .programming_language_schema import (
     ProgrammingLanguageUpdate,
 )
 from .projects_schema import ProjectCreate, ProjectResponse, ProjectUpdate
-from .skill_schema import (
-    SkillCreate,
-    SkillLevel,
-    SkillResponse,
-    SkillUpdate,
-)
+from .skill_schema import SkillCreate, SkillLevel, SkillResponse, SkillUpdate
 from .social_networks_schema import (
     SocialNetworkCreate,
     SocialNetworkResponse,
     SocialNetworkUpdate,
 )
-from .tools_schema import (
-    ToolCreate,
-    ToolResponse,
-    ToolUpdate,
-)
+from .tools_schema import ToolCreate, ToolResponse, ToolUpdate
 from .work_experience_schema import (
     WorkExperienceCreate,
     WorkExperienceResponse,

@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.api.schemas.common_schema import TimestampMixin
 
 # Niveles de dominio permitidos
-SkillLevel = Literal["basic", "intermediate", "advanced", "expert"]
+SkillLevel = Literal["basic", "intermediate", "advanced", "expert", "none"]
 
 
 class SkillBase(BaseModel):
