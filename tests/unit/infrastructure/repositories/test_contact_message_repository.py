@@ -138,7 +138,10 @@ class TestContactMessageSpecialMethods:
 
         assert result is True
         call_args = collection.update_one.call_args
-        assert call_args[0][0] == {"_id": "msg-1", "status": {"$in": ["pending", "read"]}}
+        assert call_args[0][0] == {
+            "_id": "msg-1",
+            "status": {"$in": ["pending", "read"]},
+        }
         update_doc = call_args[0][1]
         assert update_doc["$set"]["status"] == "replied"
         assert "replied_at" in update_doc["$set"]
