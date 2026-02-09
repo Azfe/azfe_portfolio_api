@@ -472,3 +472,5 @@ ContactInformationRepository = IRepository["ContactInformation"]
 ContactMessageRepository = IContactMessageRepository
 SocialNetworkRepository = ISocialNetworkRepository
 ToolRepository = IUniqueNameRepository["Tool"]
+ProgrammingLanguageRepository = IOrderedRepository["ProgrammingLanguage"]
+LanguageRepository = IOrderedRepository["Language"]
