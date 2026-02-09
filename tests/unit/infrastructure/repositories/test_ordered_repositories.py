@@ -15,12 +15,18 @@ from app.infrastructure.repositories.certification_repository import (
     CertificationRepository,
 )
 from app.infrastructure.repositories.education_repository import EducationRepository
+from app.infrastructure.repositories.language_repository import LanguageRepository
+from app.infrastructure.repositories.programming_language_repository import (
+    ProgrammingLanguageRepository,
+)
 from app.infrastructure.repositories.project_repository import ProjectRepository
 
 from .conftest import (
     make_additional_training_doc,
     make_certification_doc,
     make_education_doc,
+    make_language_doc,
+    make_programming_language_doc,
     make_project_doc,
 )
 
@@ -41,6 +47,14 @@ ORDERED_REPOS = [
     pytest.param(
         (ProjectRepository, make_project_doc, "title", "My Project"),
         id="project",
+    ),
+    pytest.param(
+        (ProgrammingLanguageRepository, make_programming_language_doc, "name", "Python"),
+        id="programming_language",
+    ),
+    pytest.param(
+        (LanguageRepository, make_language_doc, "name", "English"),
+        id="language",
     ),
 ]
 

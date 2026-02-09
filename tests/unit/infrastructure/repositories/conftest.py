@@ -204,6 +204,42 @@ def make_additional_training_doc(
     }
 
 
+def make_programming_language_doc(
+    _id="pl-123",
+    profile_id="profile-123",
+    name="Python",
+    order_index=0,
+):
+    """Helper to create a programming language MongoDB document."""
+    doc = {
+        "_id": _id,
+        "profile_id": profile_id,
+        "name": name,
+        "order_index": order_index,
+        "created_at": datetime(2025, 1, 1),
+        "updated_at": datetime(2025, 1, 1),
+    }
+    return doc
+
+
+def make_language_doc(
+    _id="lang-123",
+    profile_id="profile-123",
+    name="English",
+    order_index=0,
+):
+    """Helper to create a language MongoDB document."""
+    doc = {
+        "_id": _id,
+        "profile_id": profile_id,
+        "name": name,
+        "order_index": order_index,
+        "created_at": datetime(2025, 1, 1),
+        "updated_at": datetime(2025, 1, 1),
+    }
+    return doc
+
+
 def make_project_doc(
     _id="proj-123",
     profile_id="profile-123",
