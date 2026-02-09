@@ -23,7 +23,12 @@ Value Objects follow these principles:
 from .contact_info import ContactInfo
 from .date_range import DateRange
 from .email import Email
+from .language_proficiency import LanguageProficiency, LanguageProficiencyEnum
 from .phone import Phone
+from .programming_language_level import (
+    ProgrammingLanguageLevel,
+    ProgrammingLanguageLevelEnum,
+)
 from .skill_level import SkillLevel, SkillLevelEnum
 
 __all__ = [
@@ -32,5 +37,9 @@ __all__ = [
     "Phone",
     "SkillLevel",
     "SkillLevelEnum",
+    "ProgrammingLanguageLevel",
+    "ProgrammingLanguageLevelEnum",
+    "LanguageProficiency",
+    "LanguageProficiencyEnum",
     "ContactInfo",
 ]

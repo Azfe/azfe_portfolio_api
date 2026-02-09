@@ -143,3 +143,17 @@ class DuplicateValueError(DomainError):
     """Raised when a unique constraint is violated."""
 
     pass
+
+
+# --- ProgrammingLanguage-specific ---
+class InvalidProgrammingLanguageLevelError(DomainError):
+    """Raised when a programming language level is invalid."""
+
+    pass
+
+
+# --- Language-specific ---
+class InvalidLanguageProficiencyError(DomainError):
+    """Raised when a language proficiency level is invalid."""
+
+    pass
