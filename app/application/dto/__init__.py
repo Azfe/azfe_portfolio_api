@@ -12,6 +12,14 @@ from .cv_dto import (
     GenerateCVPDFResponse,
     GetCompleteCVRequest,
 )
+from .language_dto import (
+    AddLanguageRequest,
+    DeleteLanguageRequest,
+    EditLanguageRequest,
+    LanguageListResponse,
+    LanguageResponse,
+    ListLanguagesRequest,
+)
 from .education_dto import (
     AddEducationRequest,
     DeleteEducationRequest,
@@ -19,6 +27,14 @@ from .education_dto import (
     EducationListResponse,
     EducationResponse,
     ListEducationRequest,
+)
+from .programming_language_dto import (
+    AddProgrammingLanguageRequest,
+    DeleteProgrammingLanguageRequest,
+    EditProgrammingLanguageRequest,
+    ListProgrammingLanguagesRequest,
+    ProgrammingLanguageListResponse,
+    ProgrammingLanguageResponse,
 )
 from .profile_dto import (
     CreateProfileRequest,
@@ -75,6 +91,20 @@ __all__ = [
     "ListEducationRequest",
     "EducationResponse",
     "EducationListResponse",
+    # ProgrammingLanguage
+    "AddProgrammingLanguageRequest",
+    "EditProgrammingLanguageRequest",
+    "DeleteProgrammingLanguageRequest",
+    "ListProgrammingLanguagesRequest",
+    "ProgrammingLanguageResponse",
+    "ProgrammingLanguageListResponse",
+    # Language
+    "AddLanguageRequest",
+    "EditLanguageRequest",
+    "DeleteLanguageRequest",
+    "ListLanguagesRequest",
+    "LanguageResponse",
+    "LanguageListResponse",
     # CV
     "GetCompleteCVRequest",
     "CompleteCVResponse",
