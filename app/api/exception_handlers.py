@@ -133,9 +133,7 @@ async def application_exception_handler(
 # ==================== DOMAIN EXCEPTION HANDLER ====================
 
 
-async def domain_error_handler(
-    _request: Request, exc: DomainError
-) -> JSONResponse:
+async def domain_error_handler(_request: Request, exc: DomainError) -> JSONResponse:
     """DomainError (any) → 400"""
     return _error_response(
         status_code=status.HTTP_400_BAD_REQUEST,
@@ -168,9 +166,7 @@ async def request_validation_handler(
 # ==================== GENERIC FALLBACK ====================
 
 
-async def generic_exception_handler(
-    _request: Request, exc: Exception
-) -> JSONResponse:
+async def generic_exception_handler(_request: Request, exc: Exception) -> JSONResponse:
     """Catch-all for unexpected exceptions → 500. Logs full traceback."""
     logger.exception("Unhandled exception: %s", exc)
     return _error_response(
