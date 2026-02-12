@@ -12,11 +12,25 @@ Organization:
 - skill/: Skill management use cases
 - education/: Education management use cases
 - cv/: CV aggregation and generation use cases
+- language/: Language management use cases
+- programming_language/: Programming language management use cases
 """
 
 from .cv import GenerateCVPDFUseCase, GetCompleteCVUseCase
 from .education import AddEducationUseCase, DeleteEducationUseCase, EditEducationUseCase
+from .language import (
+    AddLanguageUseCase,
+    DeleteLanguageUseCase,
+    EditLanguageUseCase,
+    ListLanguagesUseCase,
+)
 from .profile import CreateProfileUseCase, GetProfileUseCase, UpdateProfileUseCase
+from .programming_language import (
+    AddProgrammingLanguageUseCase,
+    DeleteProgrammingLanguageUseCase,
+    EditProgrammingLanguageUseCase,
+    ListProgrammingLanguagesUseCase,
+)
 from .skill import (
     AddSkillUseCase,
     DeleteSkillUseCase,
@@ -49,6 +63,16 @@ __all__ = [
     "AddEducationUseCase",
     "EditEducationUseCase",
     "DeleteEducationUseCase",
+    # Language
+    "AddLanguageUseCase",
+    "EditLanguageUseCase",
+    "DeleteLanguageUseCase",
+    "ListLanguagesUseCase",
+    # Programming Language
+    "AddProgrammingLanguageUseCase",
+    "EditProgrammingLanguageUseCase",
+    "DeleteProgrammingLanguageUseCase",
+    "ListProgrammingLanguagesUseCase",
     # CV
     "GetCompleteCVUseCase",
     "GenerateCVPDFUseCase",
