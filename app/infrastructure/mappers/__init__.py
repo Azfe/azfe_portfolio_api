@@ -4,7 +4,9 @@ from .contact_information_mapper import ContactInformationMapper
 from .contact_message_mapper import ContactMessageMapper
 from .education_mapper import EducationMapper
 from .experience_mapper import WorkExperienceMapper
+from .language_mapper import LanguageMapper
 from .profile_mapper import ProfileMapper
+from .programming_language_mapper import ProgrammingLanguageMapper
 from .project_mapper import ProjectMapper
 from .skill_mapper import SkillMapper
 from .social_network_mapper import SocialNetworkMapper
@@ -22,4 +24,6 @@ __all__ = [
     "SkillMapper",
     "SocialNetworkMapper",
     "ToolMapper",
+    "ProgrammingLanguageMapper",
+    "LanguageMapper",
 ]

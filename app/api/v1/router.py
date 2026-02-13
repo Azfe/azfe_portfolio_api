@@ -8,7 +8,9 @@ from app.api.v1.routers import (
     cv_router,
     education_router,
     health_router,
+    language_router,
     profile_router,
+    programming_language_router,
     projects_router,
     skill_router,
     social_networks_router,
@@ -34,6 +36,10 @@ api_v1_router.include_router(projects_router.router)
 # ===== HABILIDADES =====
 api_v1_router.include_router(skill_router.router)
 api_v1_router.include_router(tools_router.router)
+api_v1_router.include_router(programming_language_router.router)
+
+# ===== IDIOMAS =====
+api_v1_router.include_router(language_router.router)
 
 # ===== FORMACIÓN =====
 api_v1_router.include_router(education_router.router)

@@ -412,14 +412,14 @@ async def get_skills_grouped_by_level():
     """
     grouped: dict[str, list[SkillResponse]] = {}
     for skill in MOCK_SKILLS:
-        level = skill.level or "none"
+        level: SkillLevel = skill.level if skill.level is not None else "none"
         if level not in grouped:
             grouped[level] = []
         grouped[level].append(skill)
 
     # Ordenar skills dentro de cada nivel por order_index
-    for level in grouped:
-        grouped[level] = sorted(grouped[level], key=lambda x: x.order_index)
+    for key in grouped:
+        grouped[key] = sorted(grouped[key], key=lambda x: x.order_index)
 
     return grouped
 
@@ -467,7 +467,7 @@ async def get_skills_stats():
 
     # Contar por nivel
     for skill in MOCK_SKILLS:
-        level = skill.level or "none"
+        level: SkillLevel = skill.level if skill.level is not None else "none"
         stats["by_level"][level] = stats["by_level"].get(level, 0) + 1
         stats["by_category"][skill.category] = (
             stats["by_category"].get(skill.category, 0) + 1

@@ -88,9 +88,7 @@ class TestSkillSchema:
         skill = SkillCreate(**data)
         assert skill.category == "programming"
 
-    @pytest.mark.parametrize(
-        "level", ["basic", "intermediate", "advanced", "expert"]
-    )
+    @pytest.mark.parametrize("level", ["basic", "intermediate", "advanced", "expert"])
     def test_skill_all_valid_levels(self, level):
         """Test: SkillCreate acepta todos los niveles válidos"""
         data = {

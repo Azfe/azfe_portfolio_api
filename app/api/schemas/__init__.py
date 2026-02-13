@@ -29,24 +29,27 @@ from .contact_messages_schema import (
 )
 from .cv_schema import CVCompleteResponse
 from .education_schema import EducationCreate, EducationResponse, EducationUpdate
-from .profile_schema import ProfileCreate, ProfileResponse, ProfileUpdate
-from .projects_schema import ProjectCreate, ProjectResponse, ProjectUpdate
-from .skill_schema import (
-    SkillCreate,
-    SkillLevel,
-    SkillResponse,
-    SkillUpdate,
+from .language_schema import (
+    LanguageCreate,
+    LanguageProficiencyLevel,
+    LanguageResponse,
+    LanguageUpdate,
 )
+from .profile_schema import ProfileCreate, ProfileResponse, ProfileUpdate
+from .programming_language_schema import (
+    ProgrammingLanguageCreate,
+    ProgrammingLanguageLevel,
+    ProgrammingLanguageResponse,
+    ProgrammingLanguageUpdate,
+)
+from .projects_schema import ProjectCreate, ProjectResponse, ProjectUpdate
+from .skill_schema import SkillCreate, SkillLevel, SkillResponse, SkillUpdate
 from .social_networks_schema import (
     SocialNetworkCreate,
     SocialNetworkResponse,
     SocialNetworkUpdate,
 )
-from .tools_schema import (
-    ToolCreate,
-    ToolResponse,
-    ToolUpdate,
-)
+from .tools_schema import ToolCreate, ToolResponse, ToolUpdate
 from .work_experience_schema import (
     WorkExperienceCreate,
     WorkExperienceResponse,
@@ -105,6 +108,16 @@ __all__ = [
     "ContactMessageCreate",
     "ContactMessageUpdate",
     "MessageStatus",
+    # Programming Languages
+    "ProgrammingLanguageResponse",
+    "ProgrammingLanguageCreate",
+    "ProgrammingLanguageUpdate",
+    "ProgrammingLanguageLevel",
+    # Languages
+    "LanguageResponse",
+    "LanguageCreate",
+    "LanguageUpdate",
+    "LanguageProficiencyLevel",
     # CV Complete
     "CVCompleteResponse",
 ]
