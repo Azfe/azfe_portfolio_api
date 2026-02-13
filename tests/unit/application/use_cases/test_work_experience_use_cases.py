@@ -101,9 +101,7 @@ class TestDeleteExperienceUseCase:
 
         uc = DeleteExperienceUseCase(repo)
         with pytest.raises(NotFoundException):
-            await uc.execute(
-                DeleteExperienceRequest(experience_id="nonexistent")
-            )
+            await uc.execute(DeleteExperienceRequest(experience_id="nonexistent"))
 
 
 class TestEditExperienceUseCase:
@@ -114,9 +112,7 @@ class TestEditExperienceUseCase:
         repo.update.return_value = exp
 
         uc = EditExperienceUseCase(repo)
-        request = EditExperienceRequest(
-            experience_id="exp-001", role="Senior Dev"
-        )
+        request = EditExperienceRequest(experience_id="exp-001", role="Senior Dev")
         result = await uc.execute(request)
 
         assert result.role == "Senior Dev"
@@ -127,9 +123,7 @@ class TestEditExperienceUseCase:
         repo.get_by_id.return_value = None
 
         uc = EditExperienceUseCase(repo)
-        request = EditExperienceRequest(
-            experience_id="nonexistent", role="Dev"
-        )
+        request = EditExperienceRequest(experience_id="nonexistent", role="Dev")
         with pytest.raises(NotFoundException):
             await uc.execute(request)
 

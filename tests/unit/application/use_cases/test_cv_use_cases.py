@@ -5,10 +5,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.application.dto import (
-    GenerateCVPDFRequest,
-    GetCompleteCVRequest,
-)
+from app.application.dto import GenerateCVPDFRequest, GetCompleteCVRequest
 from app.application.use_cases.cv.generate_cv_pdf import GenerateCVPDFUseCase
 from app.application.use_cases.cv.get_complete_cv import GetCompleteCVUseCase
 from app.domain.entities.education import Education
@@ -124,9 +121,7 @@ class TestGenerateCVPDFUseCase:
         edu_repo = AsyncMock()
         edu_repo.get_all_ordered.return_value = []
 
-        get_cv_uc = GetCompleteCVUseCase(
-            profile_repo, exp_repo, skill_repo, edu_repo
-        )
+        get_cv_uc = GetCompleteCVUseCase(profile_repo, exp_repo, skill_repo, edu_repo)
         uc = GenerateCVPDFUseCase(get_cv_uc)
 
         result = await uc.execute(GenerateCVPDFRequest())

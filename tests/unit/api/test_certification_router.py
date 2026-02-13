@@ -128,7 +128,7 @@ class TestCertificationFilters:
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
-        assert any("cert_001" == c["id"] for c in data)
+        assert any(c["id"] == "cert_001" for c in data)
 
     async def test_by_issuer_no_results(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/by-issuer/NonexistentIssuer")

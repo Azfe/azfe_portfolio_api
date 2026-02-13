@@ -165,9 +165,7 @@ class TestListSkillsUseCase:
         result = await uc.execute(request)
 
         assert result.total == 1
-        repo.find_by.assert_awaited_once_with(
-            profile_id=PROFILE_ID, category="backend"
-        )
+        repo.find_by.assert_awaited_once_with(profile_id=PROFILE_ID, category="backend")
 
     async def test_list_skills_empty(self):
         repo = AsyncMock()

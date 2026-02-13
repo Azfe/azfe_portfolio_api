@@ -50,7 +50,9 @@ class TestCreateEducation:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 201
 
-    async def test_create_education_validation_missing_fields(self, client: AsyncClient):
+    async def test_create_education_validation_missing_fields(
+        self, client: AsyncClient
+    ):
         response = await client.post(PREFIX, json={})
         assert response.status_code == 422
 

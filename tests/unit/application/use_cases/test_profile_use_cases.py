@@ -103,9 +103,7 @@ class TestUpdateProfileUseCase:
         repo.update.return_value = profile
 
         uc = UpdateProfileUseCase(repo)
-        request = UpdateProfileRequest(
-            avatar_url="https://example.com/avatar.png"
-        )
+        request = UpdateProfileRequest(avatar_url="https://example.com/avatar.png")
         await uc.execute(request)
 
         repo.update.assert_awaited_once()

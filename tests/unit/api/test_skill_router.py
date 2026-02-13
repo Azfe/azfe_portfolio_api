@@ -135,9 +135,7 @@ class TestSkillCombinedFilters:
         )
         assert response.status_code == 200
         data = response.json()
-        assert all(
-            s["category"] == "backend" and s["level"] == "expert" for s in data
-        )
+        assert all(s["category"] == "backend" and s["level"] == "expert" for s in data)
 
 
 class TestReorderSkills:

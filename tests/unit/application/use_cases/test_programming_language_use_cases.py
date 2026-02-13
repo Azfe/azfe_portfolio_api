@@ -79,9 +79,7 @@ class TestDeleteProgrammingLanguageUseCase:
         uc = DeleteProgrammingLanguageUseCase(repo)
         with pytest.raises(NotFoundException):
             await uc.execute(
-                DeleteProgrammingLanguageRequest(
-                    programming_language_id="nonexistent"
-                )
+                DeleteProgrammingLanguageRequest(programming_language_id="nonexistent")
             )
 
 
