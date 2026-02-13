@@ -56,6 +56,13 @@ class TestCreateEducation:
 
 
 class TestUpdateEducation:
+    async def test_update_returns_200(self, client: AsyncClient):
+        payload = {"institution": "Updated University"}
+        response = await client.put(f"{PREFIX}/edu_001", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == "edu_001"
+
     async def test_update_education_not_found(self, client: AsyncClient):
         payload = {"institution": "Updated"}
         response = await client.put(f"{PREFIX}/nonexistent", json=payload)
@@ -68,3 +75,13 @@ class TestDeleteEducation:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
+
+
+class TestReorderEducation:
+    async def test_reorder_returns_list(self, client: AsyncClient):
+        payload = [{"id": "edu_001", "orderIndex": 1}]
+        response = await client.patch(f"{PREFIX}/reorder", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) > 0
