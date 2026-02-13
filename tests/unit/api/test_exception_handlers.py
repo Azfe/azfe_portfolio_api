@@ -48,7 +48,9 @@ class TestNotFoundHandler:
         response = await client.get(f"{PREFIX}/languages/nonexistent_id")
         assert response.status_code == 404
 
-    async def test_programming_language_not_found_returns_404(self, client: AsyncClient):
+    async def test_programming_language_not_found_returns_404(
+        self, client: AsyncClient
+    ):
         response = await client.get(f"{PREFIX}/programming-languages/nonexistent_id")
         assert response.status_code == 404
 

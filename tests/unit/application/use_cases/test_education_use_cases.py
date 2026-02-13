@@ -106,9 +106,7 @@ class TestEditEducationUseCase:
         repo.update.return_value = education
 
         uc = EditEducationUseCase(repo)
-        request = EditEducationRequest(
-            education_id="edu-001", institution="Stanford"
-        )
+        request = EditEducationRequest(education_id="edu-001", institution="Stanford")
         result = await uc.execute(request)
 
         assert result.institution == "Stanford"
