@@ -24,6 +24,8 @@ class TestGetCompleteCV:
         assert "tools" in data
         assert "education" in data
         assert "certifications" in data
+        assert "additional_training" in data
+        assert "social_networks" in data
 
     async def test_cv_profile_has_fields(self, client: AsyncClient):
         response = await client.get(PREFIX)
@@ -37,6 +39,18 @@ class TestGetCompleteCV:
         assert isinstance(data["work_experiences"], list)
         assert isinstance(data["skills"], list)
         assert isinstance(data["education"], list)
+        assert isinstance(data["tools"], list)
+        assert isinstance(data["projects"], list)
+        assert isinstance(data["certifications"], list)
+        assert isinstance(data["additional_training"], list)
+        assert isinstance(data["social_networks"], list)
+
+    async def test_cv_lists_have_items(self, client: AsyncClient):
+        response = await client.get(PREFIX)
+        data = response.json()
+        assert len(data["skills"]) > 0
+        assert len(data["work_experiences"]) > 0
+        assert len(data["tools"]) > 0
 
 
 class TestDownloadCVPDF:
