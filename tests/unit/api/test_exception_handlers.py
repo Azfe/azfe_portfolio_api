@@ -52,6 +52,26 @@ class TestNotFoundHandler:
         response = await client.get(f"{PREFIX}/programming-languages/nonexistent_id")
         assert response.status_code == 404
 
+    async def test_education_not_found_returns_404(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/education/nonexistent_id")
+        assert response.status_code == 404
+
+    async def test_work_experience_not_found_returns_404(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/work-experiences/nonexistent_id")
+        assert response.status_code == 404
+
+    async def test_project_not_found_returns_404(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/projects/nonexistent_id")
+        assert response.status_code == 404
+
+    async def test_certification_not_found_returns_404(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/certifications/nonexistent_id")
+        assert response.status_code == 404
+
+    async def test_additional_training_not_found_returns_404(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/additional-training/nonexistent_id")
+        assert response.status_code == 404
+
 
 class TestNotImplementedHandler:
     """501 from CV download endpoint."""
@@ -59,6 +79,19 @@ class TestNotImplementedHandler:
     async def test_cv_download_returns_501(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/cv/download")
         assert response.status_code == 501
+
+    async def test_cv_download_has_detail(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/cv/download")
+        data = response.json()
+        assert "detail" in data
+
+
+class TestMethodNotAllowed:
+    """Incorrect HTTP method returns 405."""
+
+    async def test_get_on_post_only_endpoint(self, client: AsyncClient):
+        response = await client.patch(f"{PREFIX}/skills/skill_001")
+        assert response.status_code == 405
 
 
 class TestRootEndpoint:
@@ -71,3 +104,10 @@ class TestRootEndpoint:
         assert "message" in data
         assert "version" in data
         assert "docs" in data
+
+    async def test_root_has_correct_structure(self, client: AsyncClient):
+        response = await client.get("/")
+        data = response.json()
+        assert isinstance(data["message"], str)
+        assert isinstance(data["version"], str)
+        assert isinstance(data["docs"], str)
