@@ -9,7 +9,7 @@ services:
       dockerfile: docker/development/Dockerfile.dev
     container_name: azfe_portfolio_backend
     ports:
-      - "8000:8000"
+      - "8080:8000"
     volumes:
       # Volumen para hot-reload (código en tiempo real)
       - ../app:/app/app
