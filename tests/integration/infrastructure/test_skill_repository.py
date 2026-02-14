@@ -1,6 +1,5 @@
 """Integration tests for SkillRepository against real MongoDB."""
 
-
 from app.infrastructure.repositories import SkillRepository
 
 from .conftest import PROFILE_ID, make_skill

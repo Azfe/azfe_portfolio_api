@@ -1,6 +1,5 @@
 """Integration tests for ProfileRepository against real MongoDB."""
 
-
 from app.infrastructure.repositories import ProfileRepository
 
 from .conftest import make_profile
