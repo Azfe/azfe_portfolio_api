@@ -4,6 +4,7 @@ Configuración global de pytest.
 Este archivo se ejecuta antes de todos los tests.
 """
 
+import os
 from collections.abc import AsyncGenerator
 from datetime import datetime, timedelta
 
@@ -22,12 +23,13 @@ from app.main import app
 def test_settings() -> Settings:
     """
     Settings de prueba.
-    Usa variables de entorno específicas para testing.
+    Usa la variable de entorno MONGODB_URL si está definida (Docker),
+    con fallback a localhost para ejecución local.
     """
     return Settings(
         ENVIRONMENT="test",
         DEBUG=True,
-        MONGODB_URL="mongodb://localhost:27017",
+        MONGODB_URL=os.getenv("MONGODB_URL", "mongodb://localhost:27017"),
         MONGODB_DB_NAME="portfolio_test_db",
         SECRET_KEY="test-secret-key-never-use-in-production",
     )
@@ -55,11 +57,15 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 # ==================== FIXTURES DE BASE DE DATOS ====================
 
 
-@pytest_asyncio.fixture(scope="session")
+TEST_DB_NAME = "portfolio_test_db"
+
+
+@pytest_asyncio.fixture
 async def mongodb_client(test_settings) -> AsyncIOMotorClient:
     """
     Cliente de MongoDB para tests.
-    Se crea una vez por sesión de tests.
+    Se crea uno por cada test para evitar conflictos de event loop
+    entre fixtures session-scoped y function-scoped.
     """
     client = AsyncIOMotorClient(test_settings.MONGODB_URL)
     yield client
@@ -67,12 +73,13 @@ async def mongodb_client(test_settings) -> AsyncIOMotorClient:
 
 
 @pytest_asyncio.fixture
-async def test_db(mongodb_client, test_settings):
+async def test_db(mongodb_client):
     """
     Base de datos de test limpia.
     Se limpia antes y después de cada test.
+    Usa siempre portfolio_test_db, nunca la BD de producción.
     """
-    db = mongodb_client[test_settings.MONGODB_DB_NAME]
+    db = mongodb_client[TEST_DB_NAME]
 
     # Limpiar antes del test
     await _clean_database(db)
