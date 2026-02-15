@@ -59,6 +59,62 @@ from .work_experience_dto import (
     WorkExperienceResponse,
 )
 
+# New DTOs
+from .additional_training_dto import (
+    AddAdditionalTrainingRequest,
+    AdditionalTrainingListResponse,
+    AdditionalTrainingResponse,
+    DeleteAdditionalTrainingRequest,
+    EditAdditionalTrainingRequest,
+    ListAdditionalTrainingsRequest,
+)
+from .certification_dto import (
+    AddCertificationRequest,
+    CertificationListResponse,
+    CertificationResponse,
+    DeleteCertificationRequest,
+    EditCertificationRequest,
+    ListCertificationsRequest,
+)
+from .contact_information_dto import (
+    ContactInformationResponse,
+    CreateContactInformationRequest,
+    DeleteContactInformationRequest,
+    GetContactInformationRequest,
+    UpdateContactInformationRequest,
+)
+from .contact_message_dto import (
+    ContactMessageListResponse,
+    ContactMessageResponse,
+    CreateContactMessageRequest,
+    DeleteContactMessageRequest,
+    ListContactMessagesRequest,
+)
+from .project_dto import (
+    AddProjectRequest,
+    DeleteProjectRequest,
+    EditProjectRequest,
+    ListProjectsRequest,
+    ProjectListResponse,
+    ProjectResponse,
+)
+from .social_network_dto import (
+    AddSocialNetworkRequest,
+    DeleteSocialNetworkRequest,
+    EditSocialNetworkRequest,
+    ListSocialNetworksRequest,
+    SocialNetworkListResponse,
+    SocialNetworkResponse,
+)
+from .tool_dto import (
+    AddToolRequest,
+    DeleteToolRequest,
+    EditToolRequest,
+    ListToolsRequest,
+    ToolListResponse,
+    ToolResponse,
+)
+
 __all__ = [
     # Base
     "SuccessResponse",
@@ -110,4 +166,51 @@ __all__ = [
     "CompleteCVResponse",
     "GenerateCVPDFRequest",
     "GenerateCVPDFResponse",
+    # Project
+    "AddProjectRequest",
+    "EditProjectRequest",
+    "DeleteProjectRequest",
+    "ListProjectsRequest",
+    "ProjectResponse",
+    "ProjectListResponse",
+    # Certification
+    "AddCertificationRequest",
+    "EditCertificationRequest",
+    "DeleteCertificationRequest",
+    "ListCertificationsRequest",
+    "CertificationResponse",
+    "CertificationListResponse",
+    # AdditionalTraining
+    "AddAdditionalTrainingRequest",
+    "EditAdditionalTrainingRequest",
+    "DeleteAdditionalTrainingRequest",
+    "ListAdditionalTrainingsRequest",
+    "AdditionalTrainingResponse",
+    "AdditionalTrainingListResponse",
+    # ContactInformation
+    "GetContactInformationRequest",
+    "CreateContactInformationRequest",
+    "UpdateContactInformationRequest",
+    "DeleteContactInformationRequest",
+    "ContactInformationResponse",
+    # ContactMessage
+    "CreateContactMessageRequest",
+    "ListContactMessagesRequest",
+    "DeleteContactMessageRequest",
+    "ContactMessageResponse",
+    "ContactMessageListResponse",
+    # Tool
+    "AddToolRequest",
+    "EditToolRequest",
+    "DeleteToolRequest",
+    "ListToolsRequest",
+    "ToolResponse",
+    "ToolListResponse",
+    # SocialNetwork
+    "AddSocialNetworkRequest",
+    "EditSocialNetworkRequest",
+    "DeleteSocialNetworkRequest",
+    "ListSocialNetworksRequest",
+    "SocialNetworkResponse",
+    "SocialNetworkListResponse",
 ]
