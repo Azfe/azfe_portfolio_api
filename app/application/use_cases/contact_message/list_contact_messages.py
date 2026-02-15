@@ -47,9 +47,7 @@ class ListContactMessagesUseCase(
         messages = await self.message_repo.list_all()
 
         # Sort by created_at
-        messages.sort(
-            key=lambda m: m.created_at, reverse=not request.ascending
-        )
+        messages.sort(key=lambda m: m.created_at, reverse=not request.ascending)
 
         # Convert to DTO and return
         return ContactMessageListResponse.from_entities(messages)

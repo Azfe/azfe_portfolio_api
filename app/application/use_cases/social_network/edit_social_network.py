@@ -38,9 +38,7 @@ class EditSocialNetworkUseCase(
         """
         self.social_network_repo = social_network_repository
 
-    async def execute(
-        self, request: EditSocialNetworkRequest
-    ) -> SocialNetworkResponse:
+    async def execute(self, request: EditSocialNetworkRequest) -> SocialNetworkResponse:
         """
         Execute the use case.
 

@@ -15,7 +15,9 @@ if TYPE_CHECKING:
     from app.domain.entities import Certification as CertificationType
 
 
-class AddCertificationUseCase(ICommandUseCase[AddCertificationRequest, CertificationResponse]):
+class AddCertificationUseCase(
+    ICommandUseCase[AddCertificationRequest, CertificationResponse]
+):
     """
     Use case for adding a certification.
 
@@ -28,7 +30,9 @@ class AddCertificationUseCase(ICommandUseCase[AddCertificationRequest, Certifica
     - IOrderedRepository[Certification]: For certification data access
     """
 
-    def __init__(self, certification_repository: IOrderedRepository["CertificationType"]):
+    def __init__(
+        self, certification_repository: IOrderedRepository["CertificationType"]
+    ):
         """
         Initialize use case with dependencies.
 

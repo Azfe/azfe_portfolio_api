@@ -27,7 +27,9 @@ class ListCertificationsUseCase(
     - IOrderedRepository[Certification]: For certification data access
     """
 
-    def __init__(self, certification_repository: IOrderedRepository["CertificationType"]):
+    def __init__(
+        self, certification_repository: IOrderedRepository["CertificationType"]
+    ):
         """
         Initialize use case with dependencies.
 
@@ -54,9 +56,7 @@ class ListCertificationsUseCase(
         )
 
         # Sort by order_index
-        certifications.sort(
-            key=lambda c: c.order_index, reverse=not request.ascending
-        )
+        certifications.sort(key=lambda c: c.order_index, reverse=not request.ascending)
 
         # Convert to DTO and return
         return CertificationListResponse.from_entities(certifications)

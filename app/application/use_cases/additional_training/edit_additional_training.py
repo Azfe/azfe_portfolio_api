@@ -6,7 +6,10 @@ Updates an existing additional training entry.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import AdditionalTrainingResponse, EditAdditionalTrainingRequest
+from app.application.dto import (
+    AdditionalTrainingResponse,
+    EditAdditionalTrainingRequest,
+)
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 from app.shared.shared_exceptions import NotFoundException
 
