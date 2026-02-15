@@ -14,7 +14,9 @@ if TYPE_CHECKING:
     from app.domain.entities import Certification as CertificationType
 
 
-class EditCertificationUseCase(ICommandUseCase[EditCertificationRequest, CertificationResponse]):
+class EditCertificationUseCase(
+    ICommandUseCase[EditCertificationRequest, CertificationResponse]
+):
     """
     Use case for editing a certification.
 
@@ -27,7 +29,9 @@ class EditCertificationUseCase(ICommandUseCase[EditCertificationRequest, Certifi
     - IOrderedRepository[Certification]: For certification data access
     """
 
-    def __init__(self, certification_repository: IOrderedRepository["CertificationType"]):
+    def __init__(
+        self, certification_repository: IOrderedRepository["CertificationType"]
+    ):
         """
         Initialize use case with dependencies.
 
@@ -51,7 +55,9 @@ class EditCertificationUseCase(ICommandUseCase[EditCertificationRequest, Certifi
             DomainError: If validation fails
         """
         # Get existing certification
-        certification = await self.certification_repo.get_by_id(request.certification_id)
+        certification = await self.certification_repo.get_by_id(
+            request.certification_id
+        )
 
         if not certification:
             raise NotFoundException("Certification", request.certification_id)

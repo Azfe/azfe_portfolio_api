@@ -28,7 +28,9 @@ class DeleteCertificationUseCase(
     - IOrderedRepository[Certification]: For certification data access
     """
 
-    def __init__(self, certification_repository: IOrderedRepository["CertificationType"]):
+    def __init__(
+        self, certification_repository: IOrderedRepository["CertificationType"]
+    ):
         """
         Initialize use case with dependencies.
 

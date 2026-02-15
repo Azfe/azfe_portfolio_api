@@ -77,8 +77,7 @@ class UpdateContactInformationUseCase(
 
         # Update social links if any provided
         if any(
-            v is not None
-            for v in [request.linkedin, request.github, request.website]
+            v is not None for v in [request.linkedin, request.github, request.website]
         ):
             contact_info.update_social_links(
                 linkedin=request.linkedin,
