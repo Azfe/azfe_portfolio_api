@@ -30,6 +30,29 @@ from app.application.use_cases import (
     ListSkillsUseCase,
     UpdateProfileUseCase,
 )
+from app.application.use_cases.additional_training import (
+    AddAdditionalTrainingUseCase,
+    DeleteAdditionalTrainingUseCase,
+    EditAdditionalTrainingUseCase,
+    ListAdditionalTrainingsUseCase,
+)
+from app.application.use_cases.certification import (
+    AddCertificationUseCase,
+    DeleteCertificationUseCase,
+    EditCertificationUseCase,
+    ListCertificationsUseCase,
+)
+from app.application.use_cases.contact_information import (
+    CreateContactInformationUseCase,
+    DeleteContactInformationUseCase,
+    GetContactInformationUseCase,
+    UpdateContactInformationUseCase,
+)
+from app.application.use_cases.contact_message import (
+    CreateContactMessageUseCase,
+    DeleteContactMessageUseCase,
+    ListContactMessagesUseCase,
+)
 from app.application.use_cases.language import (
     AddLanguageUseCase,
     DeleteLanguageUseCase,
@@ -41,6 +64,24 @@ from app.application.use_cases.programming_language import (
     DeleteProgrammingLanguageUseCase,
     EditProgrammingLanguageUseCase,
     ListProgrammingLanguagesUseCase,
+)
+from app.application.use_cases.project import (
+    AddProjectUseCase,
+    DeleteProjectUseCase,
+    EditProjectUseCase,
+    ListProjectsUseCase,
+)
+from app.application.use_cases.social_network import (
+    AddSocialNetworkUseCase,
+    DeleteSocialNetworkUseCase,
+    EditSocialNetworkUseCase,
+    ListSocialNetworksUseCase,
+)
+from app.application.use_cases.tool import (
+    AddToolUseCase,
+    DeleteToolUseCase,
+    EditToolUseCase,
+    ListToolsUseCase,
 )
 from app.infrastructure.database.mongo_client import get_database
 
@@ -56,6 +97,8 @@ from app.infrastructure.repositories import (
     ProgrammingLanguageRepository,
     ProjectRepository,
     SkillRepository,
+    SocialNetworkRepository,
+    ToolRepository,
     WorkExperienceRepository,
 )
 
@@ -128,6 +171,18 @@ async def get_language_repository(
     db: AsyncIOMotorDatabase = Depends(get_database),
 ) -> LanguageRepository:
     return LanguageRepository(db)
+
+
+async def get_tool_repository(
+    db: AsyncIOMotorDatabase = Depends(get_database),
+) -> ToolRepository:
+    return ToolRepository(db)
+
+
+async def get_social_network_repository(
+    db: AsyncIOMotorDatabase = Depends(get_database),
+) -> SocialNetworkRepository:
+    return SocialNetworkRepository(db)
 
 
 # =====================================================================
@@ -290,6 +345,203 @@ async def get_list_programming_languages_use_case(
     repo: ProgrammingLanguageRepository = Depends(get_programming_language_repository),
 ) -> ListProgrammingLanguagesUseCase:
     return ListProgrammingLanguagesUseCase(programming_language_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Project
+# =====================================================================
+
+
+async def get_add_project_use_case(
+    repo: ProjectRepository = Depends(get_project_repository),
+) -> AddProjectUseCase:
+    return AddProjectUseCase(project_repository=repo)
+
+
+async def get_edit_project_use_case(
+    repo: ProjectRepository = Depends(get_project_repository),
+) -> EditProjectUseCase:
+    return EditProjectUseCase(project_repository=repo)
+
+
+async def get_delete_project_use_case(
+    repo: ProjectRepository = Depends(get_project_repository),
+) -> DeleteProjectUseCase:
+    return DeleteProjectUseCase(project_repository=repo)
+
+
+async def get_list_projects_use_case(
+    repo: ProjectRepository = Depends(get_project_repository),
+) -> ListProjectsUseCase:
+    return ListProjectsUseCase(project_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Certification
+# =====================================================================
+
+
+async def get_add_certification_use_case(
+    repo: CertificationRepository = Depends(get_certification_repository),
+) -> AddCertificationUseCase:
+    return AddCertificationUseCase(certification_repository=repo)
+
+
+async def get_edit_certification_use_case(
+    repo: CertificationRepository = Depends(get_certification_repository),
+) -> EditCertificationUseCase:
+    return EditCertificationUseCase(certification_repository=repo)
+
+
+async def get_delete_certification_use_case(
+    repo: CertificationRepository = Depends(get_certification_repository),
+) -> DeleteCertificationUseCase:
+    return DeleteCertificationUseCase(certification_repository=repo)
+
+
+async def get_list_certifications_use_case(
+    repo: CertificationRepository = Depends(get_certification_repository),
+) -> ListCertificationsUseCase:
+    return ListCertificationsUseCase(certification_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Additional Training
+# =====================================================================
+
+
+async def get_add_additional_training_use_case(
+    repo: AdditionalTrainingRepository = Depends(get_additional_training_repository),
+) -> AddAdditionalTrainingUseCase:
+    return AddAdditionalTrainingUseCase(additional_training_repository=repo)
+
+
+async def get_edit_additional_training_use_case(
+    repo: AdditionalTrainingRepository = Depends(get_additional_training_repository),
+) -> EditAdditionalTrainingUseCase:
+    return EditAdditionalTrainingUseCase(additional_training_repository=repo)
+
+
+async def get_delete_additional_training_use_case(
+    repo: AdditionalTrainingRepository = Depends(get_additional_training_repository),
+) -> DeleteAdditionalTrainingUseCase:
+    return DeleteAdditionalTrainingUseCase(additional_training_repository=repo)
+
+
+async def get_list_additional_trainings_use_case(
+    repo: AdditionalTrainingRepository = Depends(get_additional_training_repository),
+) -> ListAdditionalTrainingsUseCase:
+    return ListAdditionalTrainingsUseCase(additional_training_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Contact Information
+# =====================================================================
+
+
+async def get_get_contact_information_use_case(
+    repo: ContactInformationRepository = Depends(get_contact_information_repository),
+) -> GetContactInformationUseCase:
+    return GetContactInformationUseCase(contact_information_repository=repo)
+
+
+async def get_create_contact_information_use_case(
+    repo: ContactInformationRepository = Depends(get_contact_information_repository),
+) -> CreateContactInformationUseCase:
+    return CreateContactInformationUseCase(contact_information_repository=repo)
+
+
+async def get_update_contact_information_use_case(
+    repo: ContactInformationRepository = Depends(get_contact_information_repository),
+) -> UpdateContactInformationUseCase:
+    return UpdateContactInformationUseCase(contact_information_repository=repo)
+
+
+async def get_delete_contact_information_use_case(
+    repo: ContactInformationRepository = Depends(get_contact_information_repository),
+) -> DeleteContactInformationUseCase:
+    return DeleteContactInformationUseCase(contact_information_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Contact Message
+# =====================================================================
+
+
+async def get_create_contact_message_use_case(
+    repo: ContactMessageRepository = Depends(get_contact_message_repository),
+) -> CreateContactMessageUseCase:
+    return CreateContactMessageUseCase(contact_message_repository=repo)
+
+
+async def get_list_contact_messages_use_case(
+    repo: ContactMessageRepository = Depends(get_contact_message_repository),
+) -> ListContactMessagesUseCase:
+    return ListContactMessagesUseCase(contact_message_repository=repo)
+
+
+async def get_delete_contact_message_use_case(
+    repo: ContactMessageRepository = Depends(get_contact_message_repository),
+) -> DeleteContactMessageUseCase:
+    return DeleteContactMessageUseCase(contact_message_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Tool
+# =====================================================================
+
+
+async def get_add_tool_use_case(
+    repo: ToolRepository = Depends(get_tool_repository),
+) -> AddToolUseCase:
+    return AddToolUseCase(tool_repository=repo)
+
+
+async def get_edit_tool_use_case(
+    repo: ToolRepository = Depends(get_tool_repository),
+) -> EditToolUseCase:
+    return EditToolUseCase(tool_repository=repo)
+
+
+async def get_delete_tool_use_case(
+    repo: ToolRepository = Depends(get_tool_repository),
+) -> DeleteToolUseCase:
+    return DeleteToolUseCase(tool_repository=repo)
+
+
+async def get_list_tools_use_case(
+    repo: ToolRepository = Depends(get_tool_repository),
+) -> ListToolsUseCase:
+    return ListToolsUseCase(tool_repository=repo)
+
+
+# =====================================================================
+# USE CASE PROVIDERS — Social Network
+# =====================================================================
+
+
+async def get_add_social_network_use_case(
+    repo: SocialNetworkRepository = Depends(get_social_network_repository),
+) -> AddSocialNetworkUseCase:
+    return AddSocialNetworkUseCase(social_network_repository=repo)
+
+
+async def get_edit_social_network_use_case(
+    repo: SocialNetworkRepository = Depends(get_social_network_repository),
+) -> EditSocialNetworkUseCase:
+    return EditSocialNetworkUseCase(social_network_repository=repo)
+
+
+async def get_delete_social_network_use_case(
+    repo: SocialNetworkRepository = Depends(get_social_network_repository),
+) -> DeleteSocialNetworkUseCase:
+    return DeleteSocialNetworkUseCase(social_network_repository=repo)
+
+
+async def get_list_social_networks_use_case(
+    repo: SocialNetworkRepository = Depends(get_social_network_repository),
+) -> ListSocialNetworksUseCase:
+    return ListSocialNetworksUseCase(social_network_repository=repo)
 
 
 # =====================================================================
