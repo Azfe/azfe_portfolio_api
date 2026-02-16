@@ -1,8 +1,14 @@
-from datetime import datetime
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, status
 
+from app.api.dependencies import (
+    get_add_skill_use_case,
+    get_delete_skill_use_case,
+    get_edit_skill_use_case,
+    get_list_skills_use_case,
+    get_skill_repository,
+)
 from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.skill_schema import (
     SkillCreate,
@@ -10,126 +16,25 @@ from app.api.schemas.skill_schema import (
     SkillResponse,
     SkillUpdate,
 )
+from app.application.dto import (
+    AddSkillRequest,
+    DeleteSkillRequest,
+    EditSkillRequest,
+    ListSkillsRequest,
+)
+from app.application.dto import SkillResponse as SkillDTO
+from app.application.use_cases import (
+    AddSkillUseCase,
+    DeleteSkillUseCase,
+    EditSkillUseCase,
+    ListSkillsUseCase,
+)
+from app.infrastructure.repositories import SkillRepository
+from app.shared.shared_exceptions import NotFoundException
 
 router = APIRouter(prefix="/skills", tags=["Skills"])
 
-# Mock data - Habilidades técnicas del perfil único
-MOCK_SKILLS = [
-    # Backend
-    SkillResponse(
-        id="skill_001",
-        name="Python",
-        level="expert",
-        category="backend",
-        order_index=0,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    SkillResponse(
-        id="skill_002",
-        name="FastAPI",
-        level="expert",
-        category="backend",
-        order_index=1,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    SkillResponse(
-        id="skill_003",
-        name="Node.js",
-        level="advanced",
-        category="backend",
-        order_index=2,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    # Frontend
-    SkillResponse(
-        id="skill_004",
-        name="React",
-        level="advanced",
-        category="frontend",
-        order_index=3,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    SkillResponse(
-        id="skill_005",
-        name="TypeScript",
-        level="advanced",
-        category="frontend",
-        order_index=4,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    SkillResponse(
-        id="skill_006",
-        name="Vue.js",
-        level="intermediate",
-        category="frontend",
-        order_index=5,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    # Database
-    SkillResponse(
-        id="skill_007",
-        name="MongoDB",
-        level="advanced",
-        category="database",
-        order_index=6,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    SkillResponse(
-        id="skill_008",
-        name="PostgreSQL",
-        level="advanced",
-        category="database",
-        order_index=7,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    # DevOps
-    SkillResponse(
-        id="skill_009",
-        name="Docker",
-        level="advanced",
-        category="devops",
-        order_index=8,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    SkillResponse(
-        id="skill_010",
-        name="Kubernetes",
-        level="intermediate",
-        category="devops",
-        order_index=9,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    # Cloud
-    SkillResponse(
-        id="skill_011",
-        name="AWS",
-        level="intermediate",
-        category="cloud",
-        order_index=10,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    # Testing
-    SkillResponse(
-        id="skill_012",
-        name="Pytest",
-        level="advanced",
-        category="testing",
-        order_index=11,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-]
+PROFILE_ID = "default_profile"
 
 
 @router.get(
@@ -138,39 +43,18 @@ MOCK_SKILLS = [
     summary="Listar habilidades técnicas",
     description="Obtiene todas las habilidades técnicas del perfil",
 )
-async def get_skills(category: str | None = None, level: SkillLevel | None = None):
-    """
-    Lista todas las habilidades técnicas del perfil único del sistema.
-
-    Puede filtrar por categoría y/o nivel.
-
-    Args:
-        category: Filtrar por categoría (backend, frontend, devops, etc.)
-        level: Filtrar por nivel (basic, intermediate, advanced, expert)
-
-    Returns:
-        List[SkillResponse]: Lista de habilidades ordenadas por order_index
-
-    Relación:
-    - Todas las habilidades pertenecen al Profile único del sistema
-
-    Ejemplos:
-    - GET /skills?category=backend
-    - GET /skills?level=expert
-    - GET /skills?category=frontend&level=advanced
-
-    TODO: Implementar con GetSkillsUseCase
-    TODO: Ordenar por order_index ASC
-    """
-    skills = MOCK_SKILLS
-
-    if category:
-        skills = [s for s in skills if s.category == category]
-
+async def get_skills(
+    category: str | None = None,
+    level: SkillLevel | None = None,
+    use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
+):
+    result = await use_case.execute(
+        ListSkillsRequest(profile_id=PROFILE_ID, category=category)
+    )
+    skills = result.skills
     if level:
         skills = [s for s in skills if s.level == level]
-
-    return sorted(skills, key=lambda x: x.order_index)
+    return skills
 
 
 @router.get(
@@ -179,29 +63,14 @@ async def get_skills(category: str | None = None, level: SkillLevel | None = Non
     summary="Obtener habilidad técnica",
     description="Obtiene una habilidad técnica específica por ID",
 )
-async def get_skill(skill_id: str):
-    """
-    Obtiene una habilidad técnica por su ID.
-
-    Args:
-        skill_id: ID único de la habilidad
-
-    Returns:
-        SkillResponse: Habilidad encontrada
-
-    Raises:
-        HTTPException 404: Si la habilidad no existe
-
-    TODO: Implementar con GetSkillUseCase
-    """
-    for skill in MOCK_SKILLS:
-        if skill.id == skill_id:
-            return skill
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Habilidad con ID '{skill_id}' no encontrada",
-    )
+async def get_skill(
+    skill_id: str,
+    repo: SkillRepository = Depends(get_skill_repository),
+):
+    skill = await repo.get_by_id(skill_id)
+    if not skill:
+        raise NotFoundException("Skill", skill_id)
+    return SkillDTO.from_entity(skill)
 
 
 @router.post(
@@ -211,33 +80,20 @@ async def get_skill(skill_id: str):
     summary="Crear habilidad técnica",
     description="Crea una nueva habilidad técnica asociada al perfil",
 )
-async def create_skill(_skill_data: SkillCreate):
-    """
-    Crea una nueva habilidad técnica y la asocia al perfil único del sistema.
-
-    **Invariantes que se validan automáticamente:**
-    - `name` no puede estar vacío (min_length=1)
-    - `level` debe ser: basic, intermediate, advanced, expert
-    - `category` debe ser un valor válido
-    - `orderIndex` debe ser único dentro del perfil
-
-    Args:
-        skill_data: Datos de la habilidad a crear
-
-    Returns:
-        SkillResponse: Habilidad creada
-
-    Raises:
-        HTTPException 422: Si level o category no son valores permitidos
-        HTTPException 409: Si orderIndex ya está en uso
-        HTTPException 400: Si los datos no cumplen las invariantes
-
-    TODO: Implementar con CreateSkillUseCase
-    TODO: Validar que orderIndex sea único dentro del perfil
-    TODO: Considerar auto-incrementar orderIndex si no se proporciona
-    TODO: Requiere autenticación de admin
-    """
-    return MOCK_SKILLS[0]
+async def create_skill(
+    skill_data: SkillCreate,
+    use_case: AddSkillUseCase = Depends(get_add_skill_use_case),
+):
+    result = await use_case.execute(
+        AddSkillRequest(
+            profile_id=PROFILE_ID,
+            name=skill_data.name,
+            category=skill_data.category,
+            order_index=skill_data.order_index,
+            level=skill_data.level,
+        )
+    )
+    return result
 
 
 @router.put(
@@ -246,40 +102,20 @@ async def create_skill(_skill_data: SkillCreate):
     summary="Actualizar habilidad técnica",
     description="Actualiza una habilidad técnica existente",
 )
-async def update_skill(skill_id: str, _skill_data: SkillUpdate):
-    """
-    Actualiza una habilidad técnica existente.
-
-    **Invariantes:**
-    - Si se actualiza `name`, no puede estar vacío
-    - Si se actualiza `level`, debe ser un valor permitido
-    - Si se actualiza `category`, debe ser un valor permitido
-    - Si se actualiza `orderIndex`, debe ser único dentro del perfil
-
-    Args:
-        skill_id: ID de la habilidad a actualizar
-        skill_data: Datos a actualizar (campos opcionales)
-
-    Returns:
-        SkillResponse: Habilidad actualizada
-
-    Raises:
-        HTTPException 404: Si la habilidad no existe
-        HTTPException 422: Si level o category no son válidos
-        HTTPException 409: Si el nuevo orderIndex ya está en uso
-
-    TODO: Implementar con UpdateSkillUseCase
-    TODO: Validar que orderIndex sea único si se actualiza
-    TODO: Requiere autenticación de admin
-    """
-    for skill in MOCK_SKILLS:
-        if skill.id == skill_id:
-            return skill
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Habilidad con ID '{skill_id}' no encontrada",
+async def update_skill(
+    skill_id: str,
+    skill_data: SkillUpdate,
+    use_case: EditSkillUseCase = Depends(get_edit_skill_use_case),
+):
+    result = await use_case.execute(
+        EditSkillRequest(
+            skill_id=skill_id,
+            name=skill_data.name,
+            category=skill_data.category,
+            level=skill_data.level,
+        )
     )
+    return result
 
 
 @router.delete(
@@ -288,26 +124,11 @@ async def update_skill(skill_id: str, _skill_data: SkillUpdate):
     summary="Eliminar habilidad técnica",
     description="Elimina una habilidad técnica del perfil",
 )
-async def delete_skill(skill_id: str):
-    """
-    Elimina una habilidad técnica del perfil.
-
-    Nota: Al eliminar una habilidad, puede ser necesario reordenar
-    los orderIndex de las habilidades restantes para mantener la coherencia.
-
-    Args:
-        skill_id: ID de la habilidad a eliminar
-
-    Returns:
-        MessageResponse: Confirmación de eliminación
-
-    Raises:
-        HTTPException 404: Si la habilidad no existe
-
-    TODO: Implementar con DeleteSkillUseCase
-    TODO: Considerar reordenamiento automático de orderIndex
-    TODO: Requiere autenticación de admin
-    """
+async def delete_skill(
+    skill_id: str,
+    use_case: DeleteSkillUseCase = Depends(get_delete_skill_use_case),
+):
+    await use_case.execute(DeleteSkillRequest(skill_id=skill_id))
     return MessageResponse(
         success=True, message=f"Habilidad '{skill_id}' eliminada correctamente"
     )
@@ -320,32 +141,8 @@ async def delete_skill(skill_id: str):
     description="Actualiza el orderIndex de múltiples habilidades de una vez",
 )
 async def reorder_skills(_skill_orders: list[dict]):
-    """
-    Reordena múltiples habilidades técnicas de una sola vez.
-
-    Útil para drag & drop en el panel de administración.
-
-    Args:
-        skill_orders: Lista de objetos con {id, orderIndex}
-        Ejemplo: [
-            {"id": "skill_001", "orderIndex": 0},
-            {"id": "skill_002", "orderIndex": 1}
-        ]
-
-    Returns:
-        List[SkillResponse]: Habilidades reordenadas
-
-    Raises:
-        HTTPException 400: Si hay orderIndex duplicados
-        HTTPException 404: Si algún skill_id no existe
-
-    TODO: Implementar con ReorderSkillsUseCase
-    TODO: Validar que todos los orderIndex sean únicos
-    TODO: Validar que todos los skill_id existan
-    TODO: Hacer update en transacción (todo o nada)
-    TODO: Requiere autenticación de admin
-    """
-    return sorted(MOCK_SKILLS, key=lambda x: x.order_index)
+    # TODO: Implement with ReorderSkillsUseCase
+    return []
 
 
 @router.get(
@@ -354,35 +151,13 @@ async def reorder_skills(_skill_orders: list[dict]):
     summary="Agrupar habilidades por categoría",
     description="Obtiene habilidades agrupadas por categoría",
 )
-async def get_skills_grouped_by_category():
-    """
-    Agrupa habilidades técnicas por categoría.
-
-    Útil para mostrar skills organizadas en secciones en el portfolio.
-
-    Returns:
-        dict: Diccionario con categorías como keys y listas de skills como values
-        Ejemplo:
-        {
-            "backend": [skill1, skill2],
-            "frontend": [skill3, skill4],
-            "devops": [skill5]
-        }
-
-    TODO: Implementar con GetSkillsGroupedByCategoryUseCase
-    TODO: Ordenar skills dentro de cada categoría por order_index
-    TODO: Considerar ordenar categorías por prioridad
-    """
-    grouped: dict[str, list[SkillResponse]] = {}
-    for skill in MOCK_SKILLS:
-        if skill.category not in grouped:
-            grouped[skill.category] = []
-        grouped[skill.category].append(skill)
-
-    # Ordenar skills dentro de cada categoría por order_index
-    for category in grouped:
-        grouped[category] = sorted(grouped[category], key=lambda x: x.order_index)
-
+async def get_skills_grouped_by_category(
+    use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
+):
+    result = await use_case.execute(ListSkillsRequest(profile_id=PROFILE_ID))
+    grouped: dict[str, list] = {}
+    for skill in result.skills:
+        grouped.setdefault(skill.category, []).append(skill)
     return grouped
 
 
@@ -392,35 +167,14 @@ async def get_skills_grouped_by_category():
     summary="Agrupar habilidades por nivel",
     description="Obtiene habilidades agrupadas por nivel de dominio",
 )
-async def get_skills_grouped_by_level():
-    """
-    Agrupa habilidades técnicas por nivel de dominio.
-
-    Útil para destacar expertise (mostrar primero las "expert").
-
-    Returns:
-        dict: Diccionario con niveles como keys y listas de skills como values
-        Ejemplo:
-        {
-            "expert": [skill1, skill2],
-            "advanced": [skill3, skill4],
-            "intermediate": [skill5]
-        }
-
-    TODO: Implementar con GetSkillsGroupedByLevelUseCase
-    TODO: Ordenar skills dentro de cada nivel por order_index
-    """
-    grouped: dict[str, list[SkillResponse]] = {}
-    for skill in MOCK_SKILLS:
-        level: SkillLevel = skill.level if skill.level is not None else "none"
-        if level not in grouped:
-            grouped[level] = []
-        grouped[level].append(skill)
-
-    # Ordenar skills dentro de cada nivel por order_index
-    for key in grouped:
-        grouped[key] = sorted(grouped[key], key=lambda x: x.order_index)
-
+async def get_skills_grouped_by_level(
+    use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
+):
+    result = await use_case.execute(ListSkillsRequest(profile_id=PROFILE_ID))
+    grouped: dict[str, list] = {}
+    for skill in result.skills:
+        level = skill.level if skill.level is not None else "none"
+        grouped.setdefault(level, []).append(skill)
     return grouped
 
 
@@ -430,47 +184,19 @@ async def get_skills_grouped_by_level():
     summary="Estadísticas de habilidades",
     description="Obtiene estadísticas sobre las habilidades del perfil",
 )
-async def get_skills_stats():
-    """
-    Calcula estadísticas sobre las habilidades técnicas.
-
-    Útil para mostrar métricas en el portfolio o admin panel.
-
-    Returns:
-        dict: Estadísticas
-        Ejemplo:
-        {
-            "total": 12,
-            "by_level": {
-                "expert": 2,
-                "advanced": 6,
-                "intermediate": 3,
-                "basic": 1
-            },
-            "by_category": {
-                "backend": 3,
-                "frontend": 3,
-                "database": 2,
-                "devops": 2,
-                "cloud": 1,
-                "testing": 1
-            }
-        }
-
-    TODO: Implementar con GetSkillsStatsUseCase
-    """
+async def get_skills_stats(
+    use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
+):
+    result = await use_case.execute(ListSkillsRequest(profile_id=PROFILE_ID))
     stats: dict[str, Any] = {
-        "total": len(MOCK_SKILLS),
+        "total": result.total,
         "by_level": {},
         "by_category": {},
     }
-
-    # Contar por nivel
-    for skill in MOCK_SKILLS:
-        level: SkillLevel = skill.level if skill.level is not None else "none"
+    for skill in result.skills:
+        level = skill.level if skill.level is not None else "none"
         stats["by_level"][level] = stats["by_level"].get(level, 0) + 1
         stats["by_category"][skill.category] = (
             stats["by_category"].get(skill.category, 0) + 1
         )
-
     return stats

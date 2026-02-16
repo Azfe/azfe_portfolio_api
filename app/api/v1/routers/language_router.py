@@ -1,43 +1,37 @@
-from datetime import datetime
+from fastapi import APIRouter, Depends, status
 
-from fastapi import APIRouter, HTTPException, status
-
+from app.api.dependencies import (
+    get_add_language_use_case,
+    get_delete_language_use_case,
+    get_edit_language_use_case,
+    get_language_repository,
+    get_list_languages_use_case,
+)
 from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.language_schema import (
     LanguageCreate,
     LanguageResponse,
     LanguageUpdate,
 )
+from app.application.dto import (
+    AddLanguageRequest,
+    DeleteLanguageRequest,
+    EditLanguageRequest,
+    ListLanguagesRequest,
+)
+from app.application.dto import LanguageResponse as LanguageDTO
+from app.application.use_cases.language import (
+    AddLanguageUseCase,
+    DeleteLanguageUseCase,
+    EditLanguageUseCase,
+    ListLanguagesUseCase,
+)
+from app.infrastructure.repositories import LanguageRepository
+from app.shared.shared_exceptions import NotFoundException
 
 router = APIRouter(prefix="/languages", tags=["Languages"])
 
-# Mock data
-MOCK_LANGUAGES = [
-    LanguageResponse(
-        id="lang_001",
-        name="Español",
-        proficiency="c2",
-        order_index=0,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    LanguageResponse(
-        id="lang_002",
-        name="English",
-        proficiency="c1",
-        order_index=1,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    LanguageResponse(
-        id="lang_003",
-        name="Français",
-        proficiency="b1",
-        order_index=2,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-]
+PROFILE_ID = "default_profile"
 
 
 @router.get(
@@ -47,12 +41,15 @@ MOCK_LANGUAGES = [
 )
 async def list_languages(
     proficiency: str | None = None,
+    use_case: ListLanguagesUseCase = Depends(get_list_languages_use_case),
 ):
-    """Obtener todos los idiomas del perfil."""
-    results = MOCK_LANGUAGES
+    result = await use_case.execute(ListLanguagesRequest(profile_id=PROFILE_ID))
+    languages = result.languages
     if proficiency:
-        results = [lang for lang in results if lang.proficiency == proficiency.lower()]
-    return results
+        languages = [
+            lang for lang in languages if lang.proficiency == proficiency.lower()
+        ]
+    return languages
 
 
 @router.get(
@@ -60,15 +57,14 @@ async def list_languages(
     response_model=LanguageResponse,
     summary="Obtener idioma por ID",
 )
-async def get_language(language_id: str):
-    """Obtener un idioma por su ID."""
-    for lang in MOCK_LANGUAGES:
-        if lang.id == language_id:
-            return lang
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Language {language_id} not found",
-    )
+async def get_language(
+    language_id: str,
+    repo: LanguageRepository = Depends(get_language_repository),
+):
+    entity = await repo.get_by_id(language_id)
+    if not entity:
+        raise NotFoundException("Language", language_id)
+    return LanguageDTO.from_entity(entity)
 
 
 @router.post(
@@ -77,16 +73,19 @@ async def get_language(language_id: str):
     status_code=status.HTTP_201_CREATED,
     summary="Crear idioma",
 )
-async def create_language(data: LanguageCreate):
-    """Crear un nuevo idioma."""
-    return LanguageResponse(
-        id="lang_new",
-        name=data.name,
-        proficiency=data.proficiency,
-        order_index=data.order_index,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
+async def create_language(
+    data: LanguageCreate,
+    use_case: AddLanguageUseCase = Depends(get_add_language_use_case),
+):
+    result = await use_case.execute(
+        AddLanguageRequest(
+            profile_id=PROFILE_ID,
+            name=data.name,
+            order_index=data.order_index,
+            proficiency=data.proficiency,
+        )
     )
+    return result
 
 
 @router.put(
@@ -94,30 +93,19 @@ async def create_language(data: LanguageCreate):
     response_model=LanguageResponse,
     summary="Actualizar idioma",
 )
-async def update_language(language_id: str, data: LanguageUpdate):
-    """Actualizar un idioma existente."""
-    for lang in MOCK_LANGUAGES:
-        if lang.id == language_id:
-            return LanguageResponse(
-                id=lang.id,
-                name=data.name or lang.name,
-                proficiency=(
-                    data.proficiency
-                    if data.proficiency is not None
-                    else lang.proficiency
-                ),
-                order_index=(
-                    data.order_index
-                    if data.order_index is not None
-                    else lang.order_index
-                ),
-                created_at=lang.created_at,
-                updated_at=datetime.now(),
-            )
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Language {language_id} not found",
+async def update_language(
+    language_id: str,
+    data: LanguageUpdate,
+    use_case: EditLanguageUseCase = Depends(get_edit_language_use_case),
+):
+    result = await use_case.execute(
+        EditLanguageRequest(
+            language_id=language_id,
+            name=data.name,
+            proficiency=data.proficiency,
+        )
     )
+    return result
 
 
 @router.delete(
@@ -125,12 +113,11 @@ async def update_language(language_id: str, data: LanguageUpdate):
     response_model=MessageResponse,
     summary="Eliminar idioma",
 )
-async def delete_language(language_id: str):
-    """Eliminar un idioma."""
-    for lang in MOCK_LANGUAGES:
-        if lang.id == language_id:
-            return MessageResponse(message=f"Language {language_id} deleted")
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Language {language_id} not found",
+async def delete_language(
+    language_id: str,
+    use_case: DeleteLanguageUseCase = Depends(get_delete_language_use_case),
+):
+    await use_case.execute(DeleteLanguageRequest(language_id=language_id))
+    return MessageResponse(
+        success=True, message=f"Idioma '{language_id}' eliminado correctamente"
     )
