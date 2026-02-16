@@ -60,12 +60,7 @@ from .social_network import (
     EditSocialNetworkUseCase,
     ListSocialNetworksUseCase,
 )
-from .tool import (
-    AddToolUseCase,
-    DeleteToolUseCase,
-    EditToolUseCase,
-    ListToolsUseCase,
-)
+from .tool import AddToolUseCase, DeleteToolUseCase, EditToolUseCase, ListToolsUseCase
 from .work_experience import (
     AddExperienceUseCase,
     DeleteExperienceUseCase,

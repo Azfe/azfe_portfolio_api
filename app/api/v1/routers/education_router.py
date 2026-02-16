@@ -1,55 +1,34 @@
-from datetime import datetime
+from fastapi import APIRouter, Depends, status
 
-from fastapi import APIRouter, HTTPException, status
-
+from app.api.dependencies import (
+    get_add_education_use_case,
+    get_delete_education_use_case,
+    get_edit_education_use_case,
+    get_education_repository,
+)
 from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.education_schema import (
     EducationCreate,
     EducationResponse,
     EducationUpdate,
 )
+from app.application.dto import (
+    AddEducationRequest,
+    DeleteEducationRequest,
+    EditEducationRequest,
+)
+from app.application.dto import EducationResponse as EducationDTO
+from app.application.use_cases import (
+    AddEducationUseCase,
+    DeleteEducationUseCase,
+    EditEducationUseCase,
+)
+from app.infrastructure.repositories import EducationRepository
+from app.shared.shared_exceptions import NotFoundException
 
 router = APIRouter(prefix="/education", tags=["Education"])
 
-# Mock data - Formación académica del perfil único
-MOCK_EDUCATION = [
-    EducationResponse(
-        id="edu_001",
-        institution="Universidad Politécnica de Valencia",
-        degree="Grado en Ingeniería Informática",
-        field="Ingeniería del Software",
-        start_date=datetime(2015, 9, 1),
-        end_date=datetime(2019, 6, 30),
-        description="Especialización en Ingeniería del Software. Proyecto final: Sistema de gestión hospitalaria con arquitectura microservicios. Nota media: 8.5/10",
-        order_index=1,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    EducationResponse(
-        id="edu_002",
-        institution="IES Valencia",
-        degree="Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Web",
-        field="Desarrollo de Aplicaciones Web",
-        start_date=datetime(2013, 9, 1),
-        end_date=datetime(2015, 6, 30),
-        description="Formación práctica en desarrollo web. Tecnologías: HTML, CSS, JavaScript, PHP, MySQL",
-        order_index=2,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    EducationResponse(
-        id="edu_003",
-        institution="Universidad de Valencia",
-        degree="Máster en Ingeniería del Software",
-        field="Ingeniería del Software",
-        start_date=datetime(2023, 9, 1),
-        end_date=None,  # En curso
-        description="Cursando actualmente. Enfoque en arquitecturas de software, microservicios y DevOps",
-        order_index=0,  # Orden 0 para mostrar primero (en curso)
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-]
+PROFILE_ID = "default_profile"
 
 
 @router.get(
@@ -58,23 +37,12 @@ MOCK_EDUCATION = [
     summary="Listar formación académica",
     description="Obtiene toda la formación académica ordenada por orderIndex",
 )
-async def get_education():
-    """
-    Lista toda la formación académica del perfil único del sistema.
-
-    La formación se retorna ordenada por `order_index` ascendente.
-    Típicamente, la formación más reciente o en curso tiene order_index menor.
-
-    Returns:
-        List[EducationResponse]: Lista de formación académica ordenada
-
-    Relación:
-    - Toda la formación pertenece al Profile único del sistema
-
-    TODO: Implementar con GetEducationListUseCase
-    TODO: Ordenar por order_index ASC (en curso primero, luego más reciente)
-    """
-    return sorted(MOCK_EDUCATION, key=lambda x: x.order_index)
+async def get_education(
+    repo: EducationRepository = Depends(get_education_repository),
+):
+    entities = await repo.find_by(profile_id=PROFILE_ID)
+    entities.sort(key=lambda e: e.order_index)
+    return [EducationDTO.from_entity(e) for e in entities]
 
 
 @router.get(
@@ -83,29 +51,14 @@ async def get_education():
     summary="Obtener formación académica",
     description="Obtiene una formación académica específica por ID",
 )
-async def get_education_by_id(education_id: str):
-    """
-    Obtiene una formación académica por su ID.
-
-    Args:
-        education_id: ID único de la formación
-
-    Returns:
-        EducationResponse: Formación encontrada
-
-    Raises:
-        HTTPException 404: Si la formación no existe
-
-    TODO: Implementar con GetEducationUseCase
-    """
-    for edu in MOCK_EDUCATION:
-        if edu.id == education_id:
-            return edu
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Formación académica con ID '{education_id}' no encontrada",
-    )
+async def get_education_by_id(
+    education_id: str,
+    repo: EducationRepository = Depends(get_education_repository),
+):
+    entity = await repo.get_by_id(education_id)
+    if not entity:
+        raise NotFoundException("Education", education_id)
+    return EducationDTO.from_entity(entity)
 
 
 @router.post(
@@ -115,31 +68,23 @@ async def get_education_by_id(education_id: str):
     summary="Crear formación académica",
     description="Crea una nueva formación académica asociada al perfil",
 )
-async def create_education(_education_data: EducationCreate):
-    """
-    Crea una nueva formación académica y la asocia al perfil único del sistema.
-
-    **Invariantes que se validan automáticamente:**
-    - `institution` no puede estar vacía (min_length=1)
-    - `degree` no puede estar vacío (min_length=1)
-    - `field` no puede estar vacío (min_length=1)
-    - `startDate` es obligatoria
-    - Si `endDate` existe, debe ser posterior a `startDate` (validador Pydantic)
-
-    Args:
-        education_data: Datos de la formación a crear
-
-    Returns:
-        EducationResponse: Formación creada
-
-    Raises:
-        HTTPException 422: Si endDate <= startDate
-        HTTPException 400: Si los datos no cumplen las invariantes
-
-    TODO: Implementar con CreateEducationUseCase
-    TODO: Requiere autenticación de admin
-    """
-    return MOCK_EDUCATION[0]
+async def create_education(
+    education_data: EducationCreate,
+    use_case: AddEducationUseCase = Depends(get_add_education_use_case),
+):
+    result = await use_case.execute(
+        AddEducationRequest(
+            profile_id=PROFILE_ID,
+            institution=education_data.institution,
+            degree=education_data.degree,
+            field=education_data.field,
+            start_date=education_data.start_date,
+            order_index=education_data.order_index,
+            description=education_data.description,
+            end_date=education_data.end_date,
+        )
+    )
+    return result
 
 
 @router.put(
@@ -148,40 +93,23 @@ async def create_education(_education_data: EducationCreate):
     summary="Actualizar formación académica",
     description="Actualiza una formación académica existente",
 )
-async def update_education(education_id: str, _education_data: EducationUpdate):
-    """
-    Actualiza una formación académica existente.
-
-    **Invariantes:**
-    - Si se actualiza `institution`, no puede estar vacía
-    - Si se actualiza `degree`, no puede estar vacío
-    - Si se actualiza `field`, no puede estar vacío
-    - Si se actualiza `endDate`, debe ser posterior a `startDate`
-
-    Args:
-        education_id: ID de la formación a actualizar
-        education_data: Datos a actualizar (campos opcionales)
-
-    Returns:
-        EducationResponse: Formación actualizada
-
-    Raises:
-        HTTPException 404: Si la formación no existe
-        HTTPException 422: Si endDate <= startDate
-        HTTPException 400: Si los datos no cumplen las invariantes
-
-    TODO: Implementar con UpdateEducationUseCase
-    TODO: Validar fechas si se actualizan ambas o una de ellas
-    TODO: Requiere autenticación de admin
-    """
-    for edu in MOCK_EDUCATION:
-        if edu.id == education_id:
-            return edu
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Formación académica con ID '{education_id}' no encontrada",
+async def update_education(
+    education_id: str,
+    education_data: EducationUpdate,
+    use_case: EditEducationUseCase = Depends(get_edit_education_use_case),
+):
+    result = await use_case.execute(
+        EditEducationRequest(
+            education_id=education_id,
+            institution=education_data.institution,
+            degree=education_data.degree,
+            field=education_data.field,
+            description=education_data.description,
+            start_date=education_data.start_date,
+            end_date=education_data.end_date,
+        )
     )
+    return result
 
 
 @router.delete(
@@ -190,26 +118,11 @@ async def update_education(education_id: str, _education_data: EducationUpdate):
     summary="Eliminar formación académica",
     description="Elimina una formación académica del perfil",
 )
-async def delete_education(education_id: str):
-    """
-    Elimina una formación académica del perfil.
-
-    Nota: Al eliminar una formación, puede ser necesario reordenar
-    los orderIndex de la formación restante para mantener la coherencia.
-
-    Args:
-        education_id: ID de la formación a eliminar
-
-    Returns:
-        MessageResponse: Confirmación de eliminación
-
-    Raises:
-        HTTPException 404: Si la formación no existe
-
-    TODO: Implementar con DeleteEducationUseCase
-    TODO: Considerar reordenamiento automático de orderIndex
-    TODO: Requiere autenticación de admin
-    """
+async def delete_education(
+    education_id: str,
+    use_case: DeleteEducationUseCase = Depends(get_delete_education_use_case),
+):
+    await use_case.execute(DeleteEducationRequest(education_id=education_id))
     return MessageResponse(
         success=True,
         message=f"Formación académica '{education_id}' eliminada correctamente",
@@ -223,30 +136,5 @@ async def delete_education(education_id: str):
     description="Actualiza el orderIndex de múltiples formaciones de una vez",
 )
 async def reorder_education(_education_orders: list[dict]):
-    """
-    Reordena múltiples formaciones académicas de una sola vez.
-
-    Útil para drag & drop en el panel de administración.
-
-    Args:
-        education_orders: Lista de objetos con {id, orderIndex}
-        Ejemplo: [
-            {"id": "edu_001", "orderIndex": 2},
-            {"id": "edu_002", "orderIndex": 1},
-            {"id": "edu_003", "orderIndex": 0}
-        ]
-
-    Returns:
-        List[EducationResponse]: Formaciones reordenadas
-
-    Raises:
-        HTTPException 400: Si hay orderIndex duplicados
-        HTTPException 404: Si algún education_id no existe
-
-    TODO: Implementar con ReorderEducationUseCase
-    TODO: Validar que todos los orderIndex sean únicos
-    TODO: Validar que todos los education_id existan
-    TODO: Hacer update en transacción (todo o nada)
-    TODO: Requiere autenticación de admin
-    """
-    return sorted(MOCK_EDUCATION, key=lambda x: x.order_index)
+    # TODO: Implement with ReorderEducationUseCase
+    return []
