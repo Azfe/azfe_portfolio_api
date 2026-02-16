@@ -18,8 +18,8 @@ from app.application.dto import (
     DeleteSocialNetworkRequest,
     EditSocialNetworkRequest,
     ListSocialNetworksRequest,
+    SocialNetworkResponse as SocialNetworkDTO,
 )
-from app.application.dto import SocialNetworkResponse as SocialNetworkDTO
 from app.application.use_cases.social_network import (
     AddSocialNetworkUseCase,
     DeleteSocialNetworkUseCase,

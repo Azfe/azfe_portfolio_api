@@ -13,9 +13,9 @@ from app.api.schemas.additional_training_schema import (
     AdditionalTrainingUpdate,
 )
 from app.api.schemas.common_schema import MessageResponse
-from app.application.dto import AddAdditionalTrainingRequest
-from app.application.dto import AdditionalTrainingResponse as AdditionalTrainingDTO
 from app.application.dto import (
+    AddAdditionalTrainingRequest,
+    AdditionalTrainingResponse as AdditionalTrainingDTO,
     DeleteAdditionalTrainingRequest,
     EditAdditionalTrainingRequest,
     ListAdditionalTrainingsRequest,

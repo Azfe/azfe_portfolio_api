@@ -18,8 +18,8 @@ from app.application.dto import (
     DeleteExperienceRequest,
     EditExperienceRequest,
     ListExperiencesRequest,
+    WorkExperienceResponse as WorkExperienceDTO,
 )
-from app.application.dto import WorkExperienceResponse as WorkExperienceDTO
 from app.application.use_cases import (
     AddExperienceUseCase,
     DeleteExperienceUseCase,

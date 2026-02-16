@@ -18,8 +18,8 @@ from app.application.dto import (
     DeleteProgrammingLanguageRequest,
     EditProgrammingLanguageRequest,
     ListProgrammingLanguagesRequest,
+    ProgrammingLanguageResponse as ProgrammingLanguageDTO,
 )
-from app.application.dto import ProgrammingLanguageResponse as ProgrammingLanguageDTO
 from app.application.use_cases.programming_language import (
     AddProgrammingLanguageUseCase,
     DeleteProgrammingLanguageUseCase,

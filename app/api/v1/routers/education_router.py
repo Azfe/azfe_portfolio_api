@@ -16,8 +16,8 @@ from app.application.dto import (
     AddEducationRequest,
     DeleteEducationRequest,
     EditEducationRequest,
+    EducationResponse as EducationDTO,
 )
-from app.application.dto import EducationResponse as EducationDTO
 from app.application.use_cases import (
     AddEducationUseCase,
     DeleteEducationUseCase,

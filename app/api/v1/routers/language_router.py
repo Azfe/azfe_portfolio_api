@@ -17,9 +17,9 @@ from app.application.dto import (
     AddLanguageRequest,
     DeleteLanguageRequest,
     EditLanguageRequest,
+    LanguageResponse as LanguageDTO,
+    ListLanguagesRequest,
 )
-from app.application.dto import LanguageResponse as LanguageDTO
-from app.application.dto import ListLanguagesRequest
 from app.application.use_cases.language import (
     AddLanguageUseCase,
     DeleteLanguageUseCase,

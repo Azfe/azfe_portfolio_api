@@ -13,8 +13,8 @@ from app.api.schemas.contact_messages_schema import (
     ContactMessageCreate,
     ContactMessageResponse,
 )
-from app.application.dto import ContactMessageResponse as ContactMessageDTO
 from app.application.dto import (
+    ContactMessageResponse as ContactMessageDTO,
     CreateContactMessageRequest,
     DeleteContactMessageRequest,
     ListContactMessagesRequest,

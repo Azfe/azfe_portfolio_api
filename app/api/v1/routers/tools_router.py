@@ -16,8 +16,8 @@ from app.application.dto import (
     DeleteToolRequest,
     EditToolRequest,
     ListToolsRequest,
+    ToolResponse as ToolDTO,
 )
-from app.application.dto import ToolResponse as ToolDTO
 from app.application.use_cases.tool import (
     AddToolUseCase,
     DeleteToolUseCase,
