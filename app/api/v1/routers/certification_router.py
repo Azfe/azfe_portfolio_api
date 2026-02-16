@@ -15,13 +15,13 @@ from app.api.schemas.certification_schema import (
     CertificationUpdate,
 )
 from app.api.schemas.common_schema import MessageResponse
+from app.application.dto import AddCertificationRequest
+from app.application.dto import CertificationResponse as CertificationDTO
 from app.application.dto import (
-    AddCertificationRequest,
     DeleteCertificationRequest,
     EditCertificationRequest,
     ListCertificationsRequest,
 )
-from app.application.dto import CertificationResponse as CertificationDTO
 from app.application.use_cases.certification import (
     AddCertificationUseCase,
     DeleteCertificationUseCase,
