@@ -15,9 +15,9 @@ from app.api.schemas.certification_schema import (
     CertificationUpdate,
 )
 from app.api.schemas.common_schema import MessageResponse
-from app.application.dto import AddCertificationRequest
-from app.application.dto import CertificationResponse as CertificationDTO
 from app.application.dto import (
+    AddCertificationRequest,
+    CertificationResponse as CertificationDTO,
     DeleteCertificationRequest,
     EditCertificationRequest,
     ListCertificationsRequest,

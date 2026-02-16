@@ -67,6 +67,10 @@ ignore = [
     "C901",  # too complex
 ]
 
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+combine-as-imports = true
+
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/*" = ["ARG", "S101"]

@@ -18,8 +18,8 @@ from app.application.dto import (
     DeleteProjectRequest,
     EditProjectRequest,
     ListProjectsRequest,
+    ProjectResponse as ProjectDTO,
 )
-from app.application.dto import ProjectResponse as ProjectDTO
 from app.application.use_cases.project import (
     AddProjectUseCase,
     DeleteProjectUseCase,

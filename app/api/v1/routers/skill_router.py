@@ -21,8 +21,8 @@ from app.application.dto import (
     DeleteSkillRequest,
     EditSkillRequest,
     ListSkillsRequest,
+    SkillResponse as SkillDTO,
 )
-from app.application.dto import SkillResponse as SkillDTO
 from app.application.use_cases import (
     AddSkillUseCase,
     DeleteSkillUseCase,
