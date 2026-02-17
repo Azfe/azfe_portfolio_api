@@ -9,15 +9,12 @@ IMPORTANT: These overrides only affect the test execution. The production
 wiring (routers -> use cases -> repositories -> MongoDB) is NOT modified.
 """
 
-from collections.abc import AsyncGenerator
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock
 
-from httpx import ASGITransport, AsyncClient
 import pytest_asyncio
 
 from app.api.dependencies import (
-    get_additional_training_repository,
     get_add_additional_training_use_case,
     get_add_certification_use_case,
     get_add_education_use_case,
@@ -28,6 +25,7 @@ from app.api.dependencies import (
     get_add_skill_use_case,
     get_add_social_network_use_case,
     get_add_tool_use_case,
+    get_additional_training_repository,
     get_certification_repository,
     get_contact_message_repository,
     get_create_contact_information_use_case,
@@ -134,245 +132,442 @@ MOCK_PROFILE = ProfileDTO(
 # -- Skills --
 MOCK_SKILLS = [
     SkillDTO(
-        id="skill_001", profile_id=PROFILE_ID, name="Python",
-        category="backend", order_index=0, level="expert",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="skill_001",
+        profile_id=PROFILE_ID,
+        name="Python",
+        category="backend",
+        order_index=0,
+        level="expert",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     SkillDTO(
-        id="skill_002", profile_id=PROFILE_ID, name="React",
-        category="frontend", order_index=1, level="advanced",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="skill_002",
+        profile_id=PROFILE_ID,
+        name="React",
+        category="frontend",
+        order_index=1,
+        level="advanced",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     SkillDTO(
-        id="skill_003", profile_id=PROFILE_ID, name="PostgreSQL",
-        category="database", order_index=2, level="intermediate",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="skill_003",
+        profile_id=PROFILE_ID,
+        name="PostgreSQL",
+        category="database",
+        order_index=2,
+        level="intermediate",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     SkillDTO(
-        id="skill_004", profile_id=PROFILE_ID, name="FastAPI",
-        category="backend", order_index=3, level="expert",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="skill_004",
+        profile_id=PROFILE_ID,
+        name="FastAPI",
+        category="backend",
+        order_index=3,
+        level="expert",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
 ]
 
 # -- Education --
 MOCK_EDUCATION = [
     EducationDTO(
-        id="edu_001", profile_id=PROFILE_ID,
-        institution="Universidad Complutense", degree="BSc Computer Science",
-        field="Computer Science", start_date=datetime(2018, 9, 1),
-        end_date=datetime(2022, 6, 30), description=None, order_index=0,
-        created_at=NOW, updated_at=NOW, is_ongoing=False,
+        id="edu_001",
+        profile_id=PROFILE_ID,
+        institution="Universidad Complutense",
+        degree="BSc Computer Science",
+        field="Computer Science",
+        start_date=datetime(2018, 9, 1),
+        end_date=datetime(2022, 6, 30),
+        description=None,
+        order_index=0,
+        created_at=NOW,
+        updated_at=NOW,
+        is_ongoing=False,
     ),
     EducationDTO(
-        id="edu_002", profile_id=PROFILE_ID,
-        institution="Coursera", degree="Machine Learning Specialization",
-        field="AI", start_date=datetime(2023, 1, 1),
-        end_date=None, description=None, order_index=1,
-        created_at=NOW, updated_at=NOW, is_ongoing=True,
+        id="edu_002",
+        profile_id=PROFILE_ID,
+        institution="Coursera",
+        degree="Machine Learning Specialization",
+        field="AI",
+        start_date=datetime(2023, 1, 1),
+        end_date=None,
+        description=None,
+        order_index=1,
+        created_at=NOW,
+        updated_at=NOW,
+        is_ongoing=True,
     ),
 ]
 
 # -- Work Experiences --
 MOCK_EXPERIENCES = [
     WorkExperienceDTO(
-        id="exp_001", profile_id=PROFILE_ID, role="Senior Developer",
-        company="Tech Corp", start_date=datetime(2022, 1, 1), end_date=None,
+        id="exp_001",
+        profile_id=PROFILE_ID,
+        role="Senior Developer",
+        company="Tech Corp",
+        start_date=datetime(2022, 1, 1),
+        end_date=None,
         description="Leading backend development",
-        responsibilities=["Architecture", "Code review"], order_index=0,
-        created_at=NOW, updated_at=NOW, is_current=True,
+        responsibilities=["Architecture", "Code review"],
+        order_index=0,
+        created_at=NOW,
+        updated_at=NOW,
+        is_current=True,
     ),
     WorkExperienceDTO(
-        id="exp_002", profile_id=PROFILE_ID, role="Junior Developer",
-        company="StartUp Inc", start_date=datetime(2020, 6, 1),
-        end_date=datetime(2021, 12, 31), description="Full stack development",
-        responsibilities=["Frontend", "Backend"], order_index=1,
-        created_at=NOW, updated_at=NOW, is_current=False,
+        id="exp_002",
+        profile_id=PROFILE_ID,
+        role="Junior Developer",
+        company="StartUp Inc",
+        start_date=datetime(2020, 6, 1),
+        end_date=datetime(2021, 12, 31),
+        description="Full stack development",
+        responsibilities=["Frontend", "Backend"],
+        order_index=1,
+        created_at=NOW,
+        updated_at=NOW,
+        is_current=False,
     ),
 ]
 
 # -- Projects --
 MOCK_PROJECTS = [
     ProjectDTO(
-        id="proj_001", profile_id=PROFILE_ID, title="Portfolio Website",
+        id="proj_001",
+        profile_id=PROFILE_ID,
+        title="Portfolio Website",
         description="Personal portfolio built with FastAPI and React",
-        start_date=datetime(2024, 1, 1), order_index=0, end_date=None,
+        start_date=datetime(2024, 1, 1),
+        order_index=0,
+        end_date=None,
         live_url="https://example.com",
         repo_url="https://github.com/example/portfolio",
         technologies=["Python", "FastAPI", "React"],
-        created_at=NOW, updated_at=NOW, is_ongoing=True,
+        created_at=NOW,
+        updated_at=NOW,
+        is_ongoing=True,
     ),
     ProjectDTO(
-        id="proj_002", profile_id=PROFILE_ID, title="E-Commerce API",
+        id="proj_002",
+        profile_id=PROFILE_ID,
+        title="E-Commerce API",
         description="REST API for e-commerce platform",
-        start_date=datetime(2023, 6, 1), order_index=1,
-        end_date=datetime(2023, 12, 31), live_url=None, repo_url=None,
+        start_date=datetime(2023, 6, 1),
+        order_index=1,
+        end_date=datetime(2023, 12, 31),
+        live_url=None,
+        repo_url=None,
         technologies=["Python", "Django"],
-        created_at=NOW, updated_at=NOW, is_ongoing=False,
+        created_at=NOW,
+        updated_at=NOW,
+        is_ongoing=False,
     ),
 ]
 
 # -- Certifications --
 MOCK_CERTIFICATIONS = [
     CertificationDTO(
-        id="cert_001", profile_id=PROFILE_ID, title="AWS Solutions Architect",
-        issuer="Amazon", issue_date=datetime(2024, 1, 15), order_index=0,
-        expiry_date=datetime(2027, 1, 15), credential_id="AWS-001",
+        id="cert_001",
+        profile_id=PROFILE_ID,
+        title="AWS Solutions Architect",
+        issuer="Amazon",
+        issue_date=datetime(2024, 1, 15),
+        order_index=0,
+        expiry_date=datetime(2027, 1, 15),
+        credential_id="AWS-001",
         credential_url="https://aws.amazon.com/verify/001",
-        created_at=NOW, updated_at=NOW, is_expired=False,
+        created_at=NOW,
+        updated_at=NOW,
+        is_expired=False,
     ),
     CertificationDTO(
-        id="cert_002", profile_id=PROFILE_ID, title="Python PCEP",
-        issuer="Python Institute", issue_date=datetime(2023, 6, 1),
-        order_index=1, expiry_date=None, credential_id=None,
-        credential_url=None, created_at=NOW, updated_at=NOW, is_expired=False,
+        id="cert_002",
+        profile_id=PROFILE_ID,
+        title="Python PCEP",
+        issuer="Python Institute",
+        issue_date=datetime(2023, 6, 1),
+        order_index=1,
+        expiry_date=None,
+        credential_id=None,
+        credential_url=None,
+        created_at=NOW,
+        updated_at=NOW,
+        is_expired=False,
     ),
     CertificationDTO(
-        id="cert_003", profile_id=PROFILE_ID, title="Scrum Master PSM I",
-        issuer="Scrum.org", issue_date=datetime(2023, 3, 1), order_index=2,
-        expiry_date=None, credential_id=None, credential_url=None,
-        created_at=NOW, updated_at=NOW, is_expired=False,
+        id="cert_003",
+        profile_id=PROFILE_ID,
+        title="Scrum Master PSM I",
+        issuer="Scrum.org",
+        issue_date=datetime(2023, 3, 1),
+        order_index=2,
+        expiry_date=None,
+        credential_id=None,
+        credential_url=None,
+        created_at=NOW,
+        updated_at=NOW,
+        is_expired=False,
     ),
     CertificationDTO(
-        id="cert_004", profile_id=PROFILE_ID, title="MongoDB Developer",
-        issuer="MongoDB Inc", issue_date=datetime(2023, 9, 1), order_index=3,
-        expiry_date=None, credential_id=None, credential_url=None,
-        created_at=NOW, updated_at=NOW, is_expired=False,
+        id="cert_004",
+        profile_id=PROFILE_ID,
+        title="MongoDB Developer",
+        issuer="MongoDB Inc",
+        issue_date=datetime(2023, 9, 1),
+        order_index=3,
+        expiry_date=None,
+        credential_id=None,
+        credential_url=None,
+        created_at=NOW,
+        updated_at=NOW,
+        is_expired=False,
     ),
     CertificationDTO(
-        id="cert_005", profile_id=PROFILE_ID, title="Docker DCA",
-        issuer="Docker", issue_date=datetime(2022, 9, 12), order_index=4,
-        expiry_date=datetime(2023, 9, 12), credential_id=None,
-        credential_url=None, created_at=NOW, updated_at=NOW, is_expired=True,
+        id="cert_005",
+        profile_id=PROFILE_ID,
+        title="Docker DCA",
+        issuer="Docker",
+        issue_date=datetime(2022, 9, 12),
+        order_index=4,
+        expiry_date=datetime(2023, 9, 12),
+        credential_id=None,
+        credential_url=None,
+        created_at=NOW,
+        updated_at=NOW,
+        is_expired=True,
     ),
 ]
 
 # -- Additional Training --
 MOCK_TRAININGS = [
     AdditionalTrainingDTO(
-        id="train_001", profile_id=PROFILE_ID, title="Advanced Python Patterns",
-        provider="Udemy", completion_date=datetime(2024, 1, 15), order_index=0,
-        duration="40h", certificate_url=None, description=None,
-        created_at=NOW, updated_at=NOW,
+        id="train_001",
+        profile_id=PROFILE_ID,
+        title="Advanced Python Patterns",
+        provider="Udemy",
+        completion_date=datetime(2024, 1, 15),
+        order_index=0,
+        duration="40h",
+        certificate_url=None,
+        description=None,
+        created_at=NOW,
+        updated_at=NOW,
     ),
     AdditionalTrainingDTO(
-        id="train_002", profile_id=PROFILE_ID, title="Docker Mastery",
-        provider="Udemy", completion_date=datetime(2023, 8, 1), order_index=1,
-        duration="20h", certificate_url=None, description=None,
-        created_at=NOW, updated_at=NOW,
+        id="train_002",
+        profile_id=PROFILE_ID,
+        title="Docker Mastery",
+        provider="Udemy",
+        completion_date=datetime(2023, 8, 1),
+        order_index=1,
+        duration="20h",
+        certificate_url=None,
+        description=None,
+        created_at=NOW,
+        updated_at=NOW,
     ),
 ]
 
 # -- Contact Information --
 MOCK_CONTACT_INFO = ContactInfoDTO(
-    id="contact_001", profile_id=PROFILE_ID, email="alex@example.com",
-    phone="+34 600 000 000", linkedin="https://linkedin.com/in/alexzapata",
+    id="contact_001",
+    profile_id=PROFILE_ID,
+    email="alex@example.com",
+    phone="+34 600 000 000",
+    linkedin="https://linkedin.com/in/alexzapata",
     github="https://github.com/alexzapata",
-    website="https://alexzapata.dev", created_at=NOW, updated_at=NOW,
+    website="https://alexzapata.dev",
+    created_at=NOW,
+    updated_at=NOW,
 )
 
 # -- Contact Messages --
 MOCK_MESSAGES = [
     ContactMessageDTO(
-        id="msg_001", name="John Doe", email="john@example.com",
-        message="Great portfolio! Let's connect.", status="unread",
-        created_at=NOW, read_at=None, replied_at=None,
+        id="msg_001",
+        name="John Doe",
+        email="john@example.com",
+        message="Great portfolio! Let's connect.",
+        status="pending",
+        created_at=NOW,
+        read_at=None,
+        replied_at=None,
     ),
     ContactMessageDTO(
-        id="msg_002", name="Jane Smith", email="jane@example.com",
-        message="Interested in working together.", status="unread",
-        created_at=YESTERDAY, read_at=None, replied_at=None,
+        id="msg_002",
+        name="Jane Smith",
+        email="jane@example.com",
+        message="Interested in working together.",
+        status="pending",
+        created_at=YESTERDAY,
+        read_at=None,
+        replied_at=None,
     ),
     ContactMessageDTO(
-        id="msg_003", name="Bob Wilson", email="bob@example.com",
-        message="Nice projects! Would love to discuss.", status="read",
-        created_at=LAST_WEEK, read_at=LAST_WEEK, replied_at=None,
+        id="msg_003",
+        name="Bob Wilson",
+        email="bob@example.com",
+        message="Nice projects! Would love to discuss.",
+        status="read",
+        created_at=LAST_WEEK,
+        read_at=LAST_WEEK,
+        replied_at=None,
     ),
 ]
 
 # -- Tools --
 MOCK_TOOLS = [
     ToolDTO(
-        id="tool_001", profile_id=PROFILE_ID, name="VS Code",
-        category="ide", order_index=0, icon_url=None,
-        created_at=NOW, updated_at=NOW,
+        id="tool_001",
+        profile_id=PROFILE_ID,
+        name="VS Code",
+        category="ide",
+        order_index=0,
+        icon_url=None,
+        created_at=NOW,
+        updated_at=NOW,
     ),
     ToolDTO(
-        id="tool_002", profile_id=PROFILE_ID, name="Git",
-        category="version_control", order_index=1, icon_url=None,
-        created_at=NOW, updated_at=NOW,
+        id="tool_002",
+        profile_id=PROFILE_ID,
+        name="Git",
+        category="version_control",
+        order_index=1,
+        icon_url=None,
+        created_at=NOW,
+        updated_at=NOW,
     ),
     ToolDTO(
-        id="tool_003", profile_id=PROFILE_ID, name="Docker",
-        category="devops", order_index=2, icon_url=None,
-        created_at=NOW, updated_at=NOW,
+        id="tool_003",
+        profile_id=PROFILE_ID,
+        name="Docker",
+        category="devops",
+        order_index=2,
+        icon_url=None,
+        created_at=NOW,
+        updated_at=NOW,
     ),
     ToolDTO(
-        id="tool_004", profile_id=PROFILE_ID, name="PyCharm",
-        category="ide", order_index=3, icon_url=None,
-        created_at=NOW, updated_at=NOW,
+        id="tool_004",
+        profile_id=PROFILE_ID,
+        name="PyCharm",
+        category="ide",
+        order_index=3,
+        icon_url=None,
+        created_at=NOW,
+        updated_at=NOW,
     ),
 ]
 
 # -- Social Networks --
 MOCK_SOCIAL_NETWORKS = [
     SocialNetworkDTO(
-        id="social_001", profile_id=PROFILE_ID, platform="github",
-        url="https://github.com/alexzapata", order_index=0,
-        username="alexzapata", created_at=NOW, updated_at=NOW,
+        id="social_001",
+        profile_id=PROFILE_ID,
+        platform="github",
+        url="https://github.com/alexzapata",
+        order_index=0,
+        username="alexzapata",
+        created_at=NOW,
+        updated_at=NOW,
     ),
     SocialNetworkDTO(
-        id="social_002", profile_id=PROFILE_ID, platform="linkedin",
-        url="https://linkedin.com/in/alexzapata", order_index=1,
-        username="alexzapata", created_at=NOW, updated_at=NOW,
+        id="social_002",
+        profile_id=PROFILE_ID,
+        platform="linkedin",
+        url="https://linkedin.com/in/alexzapata",
+        order_index=1,
+        username="alexzapata",
+        created_at=NOW,
+        updated_at=NOW,
     ),
     SocialNetworkDTO(
-        id="social_003", profile_id=PROFILE_ID, platform="twitter",
-        url="https://twitter.com/alexzapata", order_index=2,
-        username="alexzapata", created_at=NOW, updated_at=NOW,
+        id="social_003",
+        profile_id=PROFILE_ID,
+        platform="twitter",
+        url="https://twitter.com/alexzapata",
+        order_index=2,
+        username="alexzapata",
+        created_at=NOW,
+        updated_at=NOW,
     ),
 ]
 
 # -- Languages --
 MOCK_LANGUAGES = [
     LanguageDTO(
-        id="lang_001", profile_id=PROFILE_ID, name="Español",
-        order_index=0, proficiency="c2",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="lang_001",
+        profile_id=PROFILE_ID,
+        name="Español",
+        order_index=0,
+        proficiency="c2",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     LanguageDTO(
-        id="lang_002", profile_id=PROFILE_ID, name="English",
-        order_index=1, proficiency="b2",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="lang_002",
+        profile_id=PROFILE_ID,
+        name="English",
+        order_index=1,
+        proficiency="b2",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     LanguageDTO(
-        id="lang_003", profile_id=PROFILE_ID, name="Français",
-        order_index=2, proficiency="a2",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="lang_003",
+        profile_id=PROFILE_ID,
+        name="Français",
+        order_index=2,
+        proficiency="a2",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
 ]
 
 # -- Programming Languages --
 MOCK_PROGRAMMING_LANGUAGES = [
     ProgrammingLanguageDTO(
-        id="pl_001", profile_id=PROFILE_ID, name="Python",
-        order_index=0, level="expert",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="pl_001",
+        profile_id=PROFILE_ID,
+        name="Python",
+        order_index=0,
+        level="expert",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     ProgrammingLanguageDTO(
-        id="pl_002", profile_id=PROFILE_ID, name="JavaScript",
-        order_index=1, level="advanced",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="pl_002",
+        profile_id=PROFILE_ID,
+        name="JavaScript",
+        order_index=1,
+        level="advanced",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     ProgrammingLanguageDTO(
-        id="pl_003", profile_id=PROFILE_ID, name="TypeScript",
-        order_index=2, level="intermediate",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="pl_003",
+        profile_id=PROFILE_ID,
+        name="TypeScript",
+        order_index=2,
+        level="intermediate",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
     ProgrammingLanguageDTO(
-        id="pl_004", profile_id=PROFILE_ID, name="Go",
-        order_index=3, level="basic",
-        created_at=NOW.isoformat(), updated_at=NOW.isoformat(),
+        id="pl_004",
+        profile_id=PROFILE_ID,
+        name="Go",
+        order_index=3,
+        level="basic",
+        created_at=NOW.isoformat(),
+        updated_at=NOW.isoformat(),
     ),
 ]
 
@@ -663,16 +858,14 @@ async def _apply_dependency_overrides():
     social_list_response = SocialNetworkListResponse(
         social_networks=MOCK_SOCIAL_NETWORKS, total=len(MOCK_SOCIAL_NETWORKS)
     )
-    app.dependency_overrides[get_list_social_networks_use_case] = (
-        lambda: _mock_list_uc(social_list_response)
+    app.dependency_overrides[get_list_social_networks_use_case] = lambda: _mock_list_uc(
+        social_list_response
     )
     app.dependency_overrides[get_add_social_network_use_case] = (
         lambda: _mock_command_uc(return_value=MOCK_SOCIAL_NETWORKS[0])
     )
-    app.dependency_overrides[get_edit_social_network_use_case] = (
-        lambda: _mock_edit_uc(
-            MOCK_SOCIAL_NETWORKS, "social_network_id", MOCK_SOCIAL_NETWORKS[0]
-        )
+    app.dependency_overrides[get_edit_social_network_use_case] = lambda: _mock_edit_uc(
+        MOCK_SOCIAL_NETWORKS, "social_network_id", MOCK_SOCIAL_NETWORKS[0]
     )
     app.dependency_overrides[get_delete_social_network_use_case] = (
         lambda: _mock_command_uc()
@@ -729,9 +922,7 @@ async def _apply_dependency_overrides():
     # PL delete: raises NotFoundException for unknown IDs
     async def pl_delete_execute(request):
         if (
-            _find_by_id(
-                MOCK_PROGRAMMING_LANGUAGES, request.programming_language_id
-            )
+            _find_by_id(MOCK_PROGRAMMING_LANGUAGES, request.programming_language_id)
             is None
         ):
             raise NotFoundException(
