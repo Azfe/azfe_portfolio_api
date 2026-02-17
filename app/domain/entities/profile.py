@@ -12,10 +12,10 @@ Business Rules Applied:
 - RB-P05: avatarUrl is optional, must be valid URL if provided
 """
 
-import re
-import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
+import re
+import uuid
 
 from ..exceptions import EmptyFieldError, InvalidLengthError, InvalidURLError
 

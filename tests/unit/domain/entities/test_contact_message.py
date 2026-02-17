@@ -11,8 +11,8 @@ Tests cover:
 - Append-only nature (no updates after creation)
 """
 
-import uuid
 from datetime import datetime
+import uuid
 
 import pytest
 
