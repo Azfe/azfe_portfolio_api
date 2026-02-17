@@ -1,51 +1,37 @@
-from datetime import datetime
+from fastapi import APIRouter, Depends, status
 
-from fastapi import APIRouter, HTTPException, status
-
+from app.api.dependencies import (
+    get_add_programming_language_use_case,
+    get_delete_programming_language_use_case,
+    get_edit_programming_language_use_case,
+    get_list_programming_languages_use_case,
+    get_programming_language_repository,
+)
 from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.programming_language_schema import (
     ProgrammingLanguageCreate,
     ProgrammingLanguageResponse,
     ProgrammingLanguageUpdate,
 )
+from app.application.dto import (
+    AddProgrammingLanguageRequest,
+    DeleteProgrammingLanguageRequest,
+    EditProgrammingLanguageRequest,
+    ListProgrammingLanguagesRequest,
+    ProgrammingLanguageResponse as ProgrammingLanguageDTO,
+)
+from app.application.use_cases.programming_language import (
+    AddProgrammingLanguageUseCase,
+    DeleteProgrammingLanguageUseCase,
+    EditProgrammingLanguageUseCase,
+    ListProgrammingLanguagesUseCase,
+)
+from app.infrastructure.repositories import ProgrammingLanguageRepository
+from app.shared.shared_exceptions import NotFoundException
 
 router = APIRouter(prefix="/programming-languages", tags=["Programming Languages"])
 
-# Mock data
-MOCK_PROGRAMMING_LANGUAGES = [
-    ProgrammingLanguageResponse(
-        id="pl_001",
-        name="Python",
-        level="expert",
-        order_index=0,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    ProgrammingLanguageResponse(
-        id="pl_002",
-        name="TypeScript",
-        level="advanced",
-        order_index=1,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    ProgrammingLanguageResponse(
-        id="pl_003",
-        name="Rust",
-        level="intermediate",
-        order_index=2,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-    ProgrammingLanguageResponse(
-        id="pl_004",
-        name="Go",
-        level="basic",
-        order_index=3,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-    ),
-]
+PROFILE_ID = "default_profile"
 
 
 @router.get(
@@ -55,12 +41,17 @@ MOCK_PROGRAMMING_LANGUAGES = [
 )
 async def list_programming_languages(
     level: str | None = None,
+    use_case: ListProgrammingLanguagesUseCase = Depends(
+        get_list_programming_languages_use_case
+    ),
 ):
-    """Obtener todos los lenguajes de programación del perfil."""
-    results = MOCK_PROGRAMMING_LANGUAGES
+    result = await use_case.execute(
+        ListProgrammingLanguagesRequest(profile_id=PROFILE_ID)
+    )
+    languages = result.programming_languages
     if level:
-        results = [pl for pl in results if pl.level == level.lower()]
-    return results
+        languages = [pl for pl in languages if pl.level == level.lower()]
+    return languages
 
 
 @router.get(
@@ -68,15 +59,14 @@ async def list_programming_languages(
     response_model=ProgrammingLanguageResponse,
     summary="Obtener lenguaje de programación por ID",
 )
-async def get_programming_language(programming_language_id: str):
-    """Obtener un lenguaje de programación por su ID."""
-    for pl in MOCK_PROGRAMMING_LANGUAGES:
-        if pl.id == programming_language_id:
-            return pl
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Programming language {programming_language_id} not found",
-    )
+async def get_programming_language(
+    programming_language_id: str,
+    repo: ProgrammingLanguageRepository = Depends(get_programming_language_repository),
+):
+    entity = await repo.get_by_id(programming_language_id)
+    if not entity:
+        raise NotFoundException("ProgrammingLanguage", programming_language_id)
+    return ProgrammingLanguageDTO.from_entity(entity)
 
 
 @router.post(
@@ -85,16 +75,21 @@ async def get_programming_language(programming_language_id: str):
     status_code=status.HTTP_201_CREATED,
     summary="Crear lenguaje de programación",
 )
-async def create_programming_language(data: ProgrammingLanguageCreate):
-    """Crear un nuevo lenguaje de programación."""
-    return ProgrammingLanguageResponse(
-        id="pl_new",
-        name=data.name,
-        level=data.level,
-        order_index=data.order_index,
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
+async def create_programming_language(
+    data: ProgrammingLanguageCreate,
+    use_case: AddProgrammingLanguageUseCase = Depends(
+        get_add_programming_language_use_case
+    ),
+):
+    result = await use_case.execute(
+        AddProgrammingLanguageRequest(
+            profile_id=PROFILE_ID,
+            name=data.name,
+            order_index=data.order_index,
+            level=data.level,
+        )
     )
+    return result
 
 
 @router.put(
@@ -103,25 +98,20 @@ async def create_programming_language(data: ProgrammingLanguageCreate):
     summary="Actualizar lenguaje de programación",
 )
 async def update_programming_language(
-    programming_language_id: str, data: ProgrammingLanguageUpdate
+    programming_language_id: str,
+    data: ProgrammingLanguageUpdate,
+    use_case: EditProgrammingLanguageUseCase = Depends(
+        get_edit_programming_language_use_case
+    ),
 ):
-    """Actualizar un lenguaje de programación existente."""
-    for pl in MOCK_PROGRAMMING_LANGUAGES:
-        if pl.id == programming_language_id:
-            return ProgrammingLanguageResponse(
-                id=pl.id,
-                name=data.name or pl.name,
-                level=data.level if data.level is not None else pl.level,
-                order_index=(
-                    data.order_index if data.order_index is not None else pl.order_index
-                ),
-                created_at=pl.created_at,
-                updated_at=datetime.now(),
-            )
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Programming language {programming_language_id} not found",
+    result = await use_case.execute(
+        EditProgrammingLanguageRequest(
+            programming_language_id=programming_language_id,
+            name=data.name,
+            level=data.level,
+        )
     )
+    return result
 
 
 @router.delete(
@@ -129,14 +119,18 @@ async def update_programming_language(
     response_model=MessageResponse,
     summary="Eliminar lenguaje de programación",
 )
-async def delete_programming_language(programming_language_id: str):
-    """Eliminar un lenguaje de programación."""
-    for pl in MOCK_PROGRAMMING_LANGUAGES:
-        if pl.id == programming_language_id:
-            return MessageResponse(
-                message=f"Programming language {programming_language_id} deleted"
-            )
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Programming language {programming_language_id} not found",
+async def delete_programming_language(
+    programming_language_id: str,
+    use_case: DeleteProgrammingLanguageUseCase = Depends(
+        get_delete_programming_language_use_case
+    ),
+):
+    await use_case.execute(
+        DeleteProgrammingLanguageRequest(
+            programming_language_id=programming_language_id
+        )
+    )
+    return MessageResponse(
+        success=True,
+        message=f"Lenguaje de programación '{programming_language_id}' eliminado correctamente",
     )

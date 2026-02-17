@@ -5,7 +5,38 @@ Contains all request and response DTOs for application use cases.
 DTOs are simple data containers without business logic.
 """
 
+# New DTOs
+from .additional_training_dto import (
+    AddAdditionalTrainingRequest,
+    AdditionalTrainingListResponse,
+    AdditionalTrainingResponse,
+    DeleteAdditionalTrainingRequest,
+    EditAdditionalTrainingRequest,
+    ListAdditionalTrainingsRequest,
+)
 from .base_dto import DateRangeDTO, ErrorResponse, PaginationRequest, SuccessResponse
+from .certification_dto import (
+    AddCertificationRequest,
+    CertificationListResponse,
+    CertificationResponse,
+    DeleteCertificationRequest,
+    EditCertificationRequest,
+    ListCertificationsRequest,
+)
+from .contact_information_dto import (
+    ContactInformationResponse,
+    CreateContactInformationRequest,
+    DeleteContactInformationRequest,
+    GetContactInformationRequest,
+    UpdateContactInformationRequest,
+)
+from .contact_message_dto import (
+    ContactMessageListResponse,
+    ContactMessageResponse,
+    CreateContactMessageRequest,
+    DeleteContactMessageRequest,
+    ListContactMessagesRequest,
+)
 from .cv_dto import (
     CompleteCVResponse,
     GenerateCVPDFRequest,
@@ -42,6 +73,14 @@ from .programming_language_dto import (
     ProgrammingLanguageListResponse,
     ProgrammingLanguageResponse,
 )
+from .project_dto import (
+    AddProjectRequest,
+    DeleteProjectRequest,
+    EditProjectRequest,
+    ListProjectsRequest,
+    ProjectListResponse,
+    ProjectResponse,
+)
 from .skill_dto import (
     AddSkillRequest,
     DeleteSkillRequest,
@@ -49,6 +88,22 @@ from .skill_dto import (
     ListSkillsRequest,
     SkillListResponse,
     SkillResponse,
+)
+from .social_network_dto import (
+    AddSocialNetworkRequest,
+    DeleteSocialNetworkRequest,
+    EditSocialNetworkRequest,
+    ListSocialNetworksRequest,
+    SocialNetworkListResponse,
+    SocialNetworkResponse,
+)
+from .tool_dto import (
+    AddToolRequest,
+    DeleteToolRequest,
+    EditToolRequest,
+    ListToolsRequest,
+    ToolListResponse,
+    ToolResponse,
 )
 from .work_experience_dto import (
     AddExperienceRequest,
@@ -110,4 +165,51 @@ __all__ = [
     "CompleteCVResponse",
     "GenerateCVPDFRequest",
     "GenerateCVPDFResponse",
+    # Project
+    "AddProjectRequest",
+    "EditProjectRequest",
+    "DeleteProjectRequest",
+    "ListProjectsRequest",
+    "ProjectResponse",
+    "ProjectListResponse",
+    # Certification
+    "AddCertificationRequest",
+    "EditCertificationRequest",
+    "DeleteCertificationRequest",
+    "ListCertificationsRequest",
+    "CertificationResponse",
+    "CertificationListResponse",
+    # AdditionalTraining
+    "AddAdditionalTrainingRequest",
+    "EditAdditionalTrainingRequest",
+    "DeleteAdditionalTrainingRequest",
+    "ListAdditionalTrainingsRequest",
+    "AdditionalTrainingResponse",
+    "AdditionalTrainingListResponse",
+    # ContactInformation
+    "GetContactInformationRequest",
+    "CreateContactInformationRequest",
+    "UpdateContactInformationRequest",
+    "DeleteContactInformationRequest",
+    "ContactInformationResponse",
+    # ContactMessage
+    "CreateContactMessageRequest",
+    "ListContactMessagesRequest",
+    "DeleteContactMessageRequest",
+    "ContactMessageResponse",
+    "ContactMessageListResponse",
+    # Tool
+    "AddToolRequest",
+    "EditToolRequest",
+    "DeleteToolRequest",
+    "ListToolsRequest",
+    "ToolResponse",
+    "ToolListResponse",
+    # SocialNetwork
+    "AddSocialNetworkRequest",
+    "EditSocialNetworkRequest",
+    "DeleteSocialNetworkRequest",
+    "ListSocialNetworksRequest",
+    "SocialNetworkResponse",
+    "SocialNetworkListResponse",
 ]

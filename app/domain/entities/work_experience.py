@@ -13,9 +13,9 @@ Business Rules Applied:
 - RB-W07: orderIndex is required and must be unique per profile
 """
 
-import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
+import uuid
 
 from ..exceptions import (
     EmptyFieldError,
