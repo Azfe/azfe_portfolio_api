@@ -3,8 +3,8 @@
 Tests unitarios para los schemas de Pydantic.
 """
 
-import pytest
 from pydantic import ValidationError
+import pytest
 
 from app.api.schemas.profile_schema import ProfileCreate
 from app.api.schemas.skill_schema import SkillCreate

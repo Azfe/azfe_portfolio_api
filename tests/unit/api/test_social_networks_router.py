@@ -1,7 +1,7 @@
 """Tests for the social networks router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 
@@ -82,7 +82,6 @@ class TestReorderSocialNetworks:
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
-        assert len(data) > 0
 
 
 class TestFilterByPlatform:

@@ -15,10 +15,10 @@ Business Rules Applied:
 - RB-PR09: If no URLs, description must be sufficiently detailed (min 100 chars)
 """
 
-import re
-import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
+import re
+import uuid
 
 from ..exceptions import (
     EmptyFieldError,

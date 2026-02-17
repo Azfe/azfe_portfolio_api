@@ -1,7 +1,7 @@
 """Tests for the contact information router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 
