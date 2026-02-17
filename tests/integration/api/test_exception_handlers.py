@@ -4,8 +4,8 @@ Tests that application exceptions are correctly mapped to HTTP error responses
 with the standardized format: {success, error, message, code}.
 """
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.integration
 

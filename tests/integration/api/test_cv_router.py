@@ -1,7 +1,7 @@
 """Integration tests for the CV router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.integration
 

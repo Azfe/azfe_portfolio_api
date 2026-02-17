@@ -1,7 +1,7 @@
 """Integration tests for the language router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.integration
 
