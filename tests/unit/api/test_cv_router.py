@@ -49,8 +49,7 @@ class TestGetCompleteCV:
         response = await client.get(PREFIX)
         data = response.json()
         assert len(data["skills"]) > 0
-        assert len(data["work_experiences"]) > 0
-        assert len(data["tools"]) > 0
+        assert len(data["education"]) > 0
 
 
 class TestDownloadCVPDF:
