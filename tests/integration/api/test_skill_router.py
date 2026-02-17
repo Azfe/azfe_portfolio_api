@@ -87,7 +87,9 @@ class TestCreateSkill:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 201
 
-    async def test_create_skill_validation_error_missing_name(self, client: AsyncClient):
+    async def test_create_skill_validation_error_missing_name(
+        self, client: AsyncClient
+    ):
         payload = {
             "category": "backend",
             "order_index": 0,
@@ -104,7 +106,9 @@ class TestCreateSkill:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
-    async def test_create_skill_validation_error_negative_order(self, client: AsyncClient):
+    async def test_create_skill_validation_error_negative_order(
+        self, client: AsyncClient
+    ):
         payload = {
             "name": "Go",
             "category": "backend",
@@ -113,7 +117,9 @@ class TestCreateSkill:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
-    async def test_create_skill_validation_error_invalid_level(self, client: AsyncClient):
+    async def test_create_skill_validation_error_invalid_level(
+        self, client: AsyncClient
+    ):
         payload = {
             "name": "Go",
             "category": "backend",
