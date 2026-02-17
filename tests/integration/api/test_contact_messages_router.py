@@ -82,7 +82,9 @@ class TestCreateContactMessage:
         assert data["success"] is True
         assert "message" in data
 
-    async def test_create_message_validation_error_missing_name(self, client: AsyncClient):
+    async def test_create_message_validation_error_missing_name(
+        self, client: AsyncClient
+    ):
         payload = {
             "email": "test@example.com",
             "message": "Hello, this is a test message for the contact form.",
@@ -90,7 +92,9 @@ class TestCreateContactMessage:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
-    async def test_create_message_validation_error_invalid_email(self, client: AsyncClient):
+    async def test_create_message_validation_error_invalid_email(
+        self, client: AsyncClient
+    ):
         payload = {
             "name": "Test User",
             "email": "not-valid",
@@ -99,7 +103,9 @@ class TestCreateContactMessage:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
-    async def test_create_message_validation_error_short_message(self, client: AsyncClient):
+    async def test_create_message_validation_error_short_message(
+        self, client: AsyncClient
+    ):
         payload = {
             "name": "Test User",
             "email": "test@example.com",

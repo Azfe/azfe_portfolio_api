@@ -49,7 +49,9 @@ class TestCreateProfile:
         data = response.json()
         assert "id" in data
 
-    async def test_create_profile_validation_error_empty_name(self, client: AsyncClient):
+    async def test_create_profile_validation_error_empty_name(
+        self, client: AsyncClient
+    ):
         payload = {
             "name": "",
             "headline": "Test Developer",
@@ -57,7 +59,9 @@ class TestCreateProfile:
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
-    async def test_create_profile_validation_error_missing_fields(self, client: AsyncClient):
+    async def test_create_profile_validation_error_missing_fields(
+        self, client: AsyncClient
+    ):
         payload = {}
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
