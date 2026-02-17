@@ -9,6 +9,8 @@ from .profile_repository import ProfileRepository
 from .programming_language_repository import ProgrammingLanguageRepository
 from .project_repository import ProjectRepository
 from .skill_repository import SkillRepository
+from .social_network_repository import SocialNetworkRepository
+from .tool_repository import ToolRepository
 
 __all__ = [
     "AdditionalTrainingRepository",
@@ -20,6 +22,8 @@ __all__ = [
     "ProfileRepository",
     "ProjectRepository",
     "SkillRepository",
+    "SocialNetworkRepository",
+    "ToolRepository",
     "ProgrammingLanguageRepository",
     "LanguageRepository",
 ]

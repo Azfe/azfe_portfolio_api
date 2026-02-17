@@ -9,9 +9,9 @@ Business Rules Applied:
 - RB-L03: orderIndex is required and must be >= 0
 """
 
-import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
+import uuid
 
 from ..exceptions import (
     EmptyFieldError,

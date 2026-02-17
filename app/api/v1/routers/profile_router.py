@@ -1,23 +1,24 @@
-from datetime import datetime
+from fastapi import APIRouter, Depends, status
 
-from fastapi import APIRouter, status
-
+from app.api.dependencies import (
+    get_create_profile_use_case,
+    get_get_profile_use_case,
+    get_update_profile_use_case,
+)
 from app.api.schemas.common_schema import MessageResponse
 from app.api.schemas.profile_schema import ProfileCreate, ProfileResponse, ProfileUpdate
+from app.application.dto import (
+    CreateProfileRequest,
+    GetProfileRequest,
+    UpdateProfileRequest,
+)
+from app.application.use_cases import (
+    CreateProfileUseCase,
+    GetProfileUseCase,
+    UpdateProfileUseCase,
+)
 
 router = APIRouter(prefix="/profile", tags=["Profile"])
-
-# Mock data - Simula el ÚNICO perfil del sistema
-MOCK_PROFILE = ProfileResponse(
-    id="profile_001",
-    name="Juan Pérez García",
-    headline="Full Stack Developer & Software Engineer",
-    bio="Desarrollador Full Stack apasionado por crear soluciones escalables y maintener código limpio. Especializado en Python, FastAPI, React y arquitecturas limpias. Con más de 5 años de experiencia en desarrollo web y APIs RESTful.",
-    location="Valencia, España (Remoto)",
-    avatar_url="https://example.com/images/profile.jpg",
-    created_at=datetime.now(),
-    updated_at=datetime.now(),
-)
 
 
 @router.get(
@@ -26,18 +27,11 @@ MOCK_PROFILE = ProfileResponse(
     summary="Obtener perfil",
     description="Obtiene el perfil único del sistema",
 )
-async def get_profile():
-    """
-    Obtiene el perfil profesional.
-
-    **Invariante**: Solo existe UN perfil en el sistema.
-
-    Returns:
-        ProfileResponse: El perfil único del usuario
-
-    TODO: Implementar con GetProfileUseCase
-    """
-    return MOCK_PROFILE
+async def get_profile(
+    use_case: GetProfileUseCase = Depends(get_get_profile_use_case),
+):
+    result = await use_case.execute(GetProfileRequest())
+    return result
 
 
 @router.put(
@@ -46,24 +40,20 @@ async def get_profile():
     summary="Actualizar perfil",
     description="Actualiza la información del perfil único",
 )
-async def update_profile(_profile_data: ProfileUpdate):
-    """
-    Actualiza el perfil profesional.
-
-    **Invariantes**:
-    - `full_name` no puede estar vacío
-    - `headline` no puede estar vacío
-
-    Args:
-        profile_data: Datos a actualizar (campos opcionales)
-
-    Returns:
-        ProfileResponse: Perfil actualizado
-
-    TODO: Implementar con UpdateProfileUseCase
-    TODO: Validar que full_name y headline no queden vacíos
-    """
-    return MOCK_PROFILE
+async def update_profile(
+    profile_data: ProfileUpdate,
+    use_case: UpdateProfileUseCase = Depends(get_update_profile_use_case),
+):
+    result = await use_case.execute(
+        UpdateProfileRequest(
+            name=profile_data.name,
+            headline=profile_data.headline,
+            bio=profile_data.bio,
+            location=profile_data.location,
+            avatar_url=profile_data.avatar_url,
+        )
+    )
+    return result
 
 
 @router.post(
@@ -73,34 +63,20 @@ async def update_profile(_profile_data: ProfileUpdate):
     summary="Crear perfil inicial",
     description="Crea el perfil único del sistema (solo si no existe)",
 )
-async def create_profile(_profile_data: ProfileCreate):
-    """
-    Crea el perfil profesional inicial.
-
-    **Invariante crítico**: Solo puede existir UN perfil en el sistema.
-
-    Este endpoint solo debe ejecutarse UNA VEZ en la vida del sistema,
-    durante la configuración inicial.
-
-    Args:
-        profile_data: Datos del perfil a crear
-
-    Returns:
-        ProfileResponse: Perfil creado
-
-    Raises:
-        HTTPException 409: Si ya existe un perfil en el sistema
-
-    TODO: Implementar con CreateProfileUseCase
-    TODO: Validar que NO exista ya un perfil antes de crear
-    """
-    # Mock: Simular que ya existe un perfil
-    # raise HTTPException(
-    #     status_code=status.HTTP_409_CONFLICT,
-    #     detail="Ya existe un perfil en el sistema. Solo puede haber uno."
-    # )
-
-    return MOCK_PROFILE
+async def create_profile(
+    profile_data: ProfileCreate,
+    use_case: CreateProfileUseCase = Depends(get_create_profile_use_case),
+):
+    result = await use_case.execute(
+        CreateProfileRequest(
+            name=profile_data.name,
+            headline=profile_data.headline,
+            bio=profile_data.bio,
+            location=profile_data.location,
+            avatar_url=profile_data.avatar_url,
+        )
+    )
+    return result
 
 
 @router.delete(
@@ -110,29 +86,7 @@ async def create_profile(_profile_data: ProfileCreate):
     description="Elimina el perfil único del sistema",
 )
 async def delete_profile():
-    """
-    Elimina el perfil del sistema.
-
-    ⚠️ **ENDPOINT PELIGROSO**: Esto eliminará TODA la información del perfil.
-
-    Dado que el perfil tiene relaciones con:
-    - Projects
-    - Education
-    - AdditionalTraining
-    - Certification
-    - TechnicalSkill
-    - Tool
-    - ContactInformation
-    - ContactMessage
-    - SocialNetwork
-
-    Se debe decidir la estrategia de cascada (eliminar todo o fallar).
-
-    TODO: Implementar con DeleteProfileUseCase
-    TODO: Decidir estrategia de eliminación en cascada
-    TODO: Requiere autenticación de admin
-    TODO: Considerar soft delete en vez de hard delete
-    """
+    # TODO: Implement with DeleteProfileUseCase when available
     return MessageResponse(
         success=True, message="Perfil eliminado correctamente (y todas sus relaciones)"
     )

@@ -48,7 +48,7 @@ jobs:
           black --check app/ tests/
           echo "::endgroup::"
 
-          echo "::group::Ruff"
+          echo "::group::Ruff (includes import sorting)"
           ruff check app/ tests/
           echo "::endgroup::"
 
@@ -71,6 +71,6 @@ jobs:
           echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| Black | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| Ruff | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ruff (+ imports) | ✅ |" >> $GITHUB_STEP_SUMMARY
           echo "| MyPy | ✅ |" >> $GITHUB_STEP_SUMMARY
           echo "| Security | ℹ️ (non-blocking) |" >> $GITHUB_STEP_SUMMARY
