@@ -10,22 +10,16 @@ Requirements:
 
 Unlike integration tests, NO dependency_overrides are applied here.
 Every request goes through the real DI chain.
-
-This conftest OVERRIDES the global `client` fixture to integrate
-database cleanup directly, guaranteeing execution order.
 """
 
 from collections.abc import AsyncGenerator
 import os
 
-from httpx import ASGITransport, AsyncClient
-from motor.motor_asyncio import AsyncIOMotorClient
+from httpx import AsyncClient
 import pytest
 import pytest_asyncio
 
 pytestmark = pytest.mark.e2e
-
-TEST_DB_NAME = "portfolio_test_db"
 
 # =====================================================================
 # SKIP E2E IF MONGODB IS NOT AVAILABLE
@@ -44,54 +38,32 @@ def pytest_collection_modifyitems(items):
 
 
 # =====================================================================
-# CLIENT FIXTURE WITH INTEGRATED DB CLEANUP
+# DATABASE CLEANUP — USES THE APP'S OWN DB REFERENCE
 # =====================================================================
 
 
-@pytest_asyncio.fixture
-async def client(test_settings, monkeypatch) -> AsyncGenerator[AsyncClient, None]:
-    """
-    HTTP client for E2E tests with integrated database cleanup.
+async def _drop_all_collections(db) -> None:
+    """Drop every collection in the database."""
+    for name in await db.list_collection_names():
+        await db.drop_collection(name)
 
-    Overrides the global client fixture to ensure the database is
-    completely clean BEFORE each test and cleaned up AFTER.
-    All operations happen in a single fixture to guarantee order:
-        1. Drop database (clean slate)
-        2. Monkeypatch settings
-        3. Connect MongoDBClient
-        4. Yield AsyncClient for the test
-        5. Disconnect MongoDBClient
-        6. Drop database (cleanup)
+
+@pytest_asyncio.fixture(autouse=True)
+async def _ensure_clean_db(client: AsyncClient) -> AsyncGenerator[None, None]:
     """
-    from app.config import settings as settings_module
-    from app.infrastructure.database import mongo_client as mongo_module
+    Ensure a completely clean database for every E2E test.
+
+    Depends on ``client`` so it runs AFTER MongoDBClient.connect() has
+    been called by the global client fixture.  Uses the app's own DB
+    reference (MongoDBClient.db) to guarantee we clean the exact same
+    database the app writes to.
+    """
     from app.infrastructure.database.mongo_client import MongoDBClient
-    from app.main import app
 
-    # 1. Drop the test database for a clean slate
-    cleanup_client = AsyncIOMotorClient(test_settings.MONGODB_URL)
-    await cleanup_client.drop_database(TEST_DB_NAME)
+    if MongoDBClient.db is not None:
+        await _drop_all_collections(MongoDBClient.db)
 
-    # 2. Reset MongoDBClient singleton
-    MongoDBClient.client = None
-    MongoDBClient.db = None
+    yield
 
-    # 3. Monkeypatch settings to use test config
-    monkeypatch.setattr(settings_module, "settings", test_settings)
-    monkeypatch.setattr(mongo_module, "settings", test_settings)
-
-    # 4. Connect MongoDBClient to the clean database
-    await MongoDBClient.connect()
-
-    try:
-        async with AsyncClient(
-            transport=ASGITransport(app=app), base_url="http://test"
-        ) as ac:
-            yield ac
-    finally:
-        # 5. Disconnect the app
-        await MongoDBClient.disconnect()
-
-        # 6. Drop database again for cleanup
-        await cleanup_client.drop_database(TEST_DB_NAME)
-        cleanup_client.close()
+    if MongoDBClient.db is not None:
+        await _drop_all_collections(MongoDBClient.db)
