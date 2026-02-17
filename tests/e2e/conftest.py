@@ -15,15 +15,13 @@ This conftest OVERRIDES the global `client` fixture to integrate
 database cleanup directly, guaranteeing execution order.
 """
 
-import os
 from collections.abc import AsyncGenerator
+import os
 
-import pytest
-import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from motor.motor_asyncio import AsyncIOMotorClient
-
-
+import pytest
+import pytest_asyncio
 
 pytestmark = pytest.mark.e2e
 
