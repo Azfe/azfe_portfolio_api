@@ -15,6 +15,7 @@ help:
 	@echo "  make test-cov  - Tests con coverage report HTML"
 	@echo "  make test-unit - Tests solo unitarios"
 	@echo "  make test-integration - Tests solo de integración"
+	@echo "  make test-e2e  - Tests E2E (requiere MongoDB)"
 	@echo "  make test-mark - Tests con marcador específico (ej: make test-mark MARK=slow)"
 	@echo "  make coverage-report - Ver reporte de coverage"
 	@echo "  make seed      - Inicializar base de datos con datos de prueba"
@@ -76,6 +77,10 @@ test-unit:
 # Tests solo de integración
 test-integration:
 	cd deployments && docker compose exec backend pytest tests/integration -v
+
+# Tests solo E2E (requiere MongoDB)
+test-e2e:
+	cd deployments && docker compose exec backend pytest tests/e2e -v
 
 # Tests con marcador específico
 test-mark:
