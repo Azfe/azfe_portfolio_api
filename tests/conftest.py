@@ -63,8 +63,12 @@ async def client(test_settings, monkeypatch) -> AsyncGenerator[AsyncClient, None
     monkeypatch.setattr(settings_module, "settings", test_settings)
     monkeypatch.setattr(mongo_module, "settings", test_settings)
 
-    # Inicializar MongoDBClient con los settings de test
-    await MongoDBClient.connect()
+    # Inicializar MongoDBClient con los settings de test **solo** si
+    # existe la variable de entorno MONGODB_URL. En el job de unit-tests
+    # en CI no está disponible el servicio MongoDB, por lo que evitamos
+    # intentar conectar y causar errores.
+    if os.getenv("MONGODB_URL"):
+        await MongoDBClient.connect()
 
     try:
         async with AsyncClient(
