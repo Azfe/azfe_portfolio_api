@@ -42,7 +42,7 @@ def test_settings() -> Settings:
 async def client(test_settings, monkeypatch) -> AsyncGenerator[AsyncClient, None]:
     """
     Cliente HTTP asíncrono para testear endpoints de FastAPI.
-    
+
     Inicializa MongoDBClient con los settings de test y limpia después.
     El lifespan de la app no se ejecuta con ASGITransport, así que lo hacemos manualmente.
 
@@ -54,18 +54,18 @@ async def client(test_settings, monkeypatch) -> AsyncGenerator[AsyncClient, None
     from app.config import settings as settings_module
     from app.infrastructure.database import mongo_client as mongo_module
     from app.infrastructure.database.mongo_client import MongoDBClient
-    
+
     # Resetear MongoDBClient por si tiene estado anterior
     MongoDBClient.client = None
     MongoDBClient.db = None
-    
+
     # Monkeypatch el singleton global de settings para usar test_settings
     monkeypatch.setattr(settings_module, "settings", test_settings)
     monkeypatch.setattr(mongo_module, "settings", test_settings)
-    
+
     # Inicializar MongoDBClient con los settings de test
     await MongoDBClient.connect()
-    
+
     try:
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
