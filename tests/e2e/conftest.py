@@ -24,11 +24,6 @@ pytestmark = pytest.mark.e2e
 # SKIP E2E IF MONGODB IS NOT AVAILABLE
 # =====================================================================
 
-requires_mongodb = pytest.mark.skipif(
-    not os.getenv("MONGODB_URL"),
-    reason="MONGODB_URL not set — E2E tests require a running MongoDB instance",
-)
-
 
 def pytest_collection_modifyitems(items):
     """Auto-skip all E2E tests when MongoDB is not available."""
@@ -48,30 +43,33 @@ def pytest_collection_modifyitems(items):
 TEST_DB_NAME = "portfolio_test_db"
 
 
-async def _clean_database(db):
-    """Delete all documents from every collection in the test database."""
-    collections = await db.list_collection_names()
-    for collection in collections:
-        await db[collection].delete_many({})
-
-
 @pytest_asyncio.fixture(autouse=True)
 async def _clean_db_for_e2e(test_settings):
     """
     Ensure a clean database for every E2E test.
 
-    Runs automatically before and after each test.
-    Uses a separate motor client to avoid interfering with the app's connection.
+    Drops the entire test database before and after each test to guarantee
+    complete isolation. Uses a separate motor client to avoid interfering
+    with the app's MongoDBClient singleton.
     """
     if not os.getenv("MONGODB_URL"):
         yield
         return
 
-    motor_client = AsyncIOMotorClient(test_settings.MONGODB_URL)
-    db = motor_client[TEST_DB_NAME]
+    from app.infrastructure.database.mongo_client import MongoDBClient
 
-    await _clean_database(db)
+    # Reset the app's MongoDBClient singleton so each test starts fresh
+    MongoDBClient.client = None
+    MongoDBClient.db = None
+
+    motor_client = AsyncIOMotorClient(test_settings.MONGODB_URL)
+
+    # Drop entire database for complete isolation
+    await motor_client.drop_database(TEST_DB_NAME)
+
     yield
-    await _clean_database(db)
+
+    # Drop again after the test
+    await motor_client.drop_database(TEST_DB_NAME)
 
     motor_client.close()
