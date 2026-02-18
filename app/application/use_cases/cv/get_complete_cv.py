@@ -16,9 +16,11 @@ from app.shared.interfaces import (
 from app.shared.shared_exceptions import NotFoundException
 
 if TYPE_CHECKING:
-    from app.domain.entities import Education as EducationType
-    from app.domain.entities import Skill as SkillType
-    from app.domain.entities import WorkExperience as WorkExperienceType
+    from app.domain.entities import (
+        Education as EducationType,
+        Skill as SkillType,
+        WorkExperience as WorkExperienceType,
+    )
 
 
 class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVResponse]):

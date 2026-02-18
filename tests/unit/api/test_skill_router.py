@@ -1,7 +1,7 @@
 """Tests for the skill router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 
@@ -101,6 +101,15 @@ class TestSkillGroupedEndpoints:
         data = response.json()
         assert isinstance(data, dict)
         assert "backend" in data
+        assert "frontend" in data
+        assert "database" in data
+
+    async def test_grouped_by_category_skills_sorted(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/grouped/by-category")
+        data = response.json()
+        for category, skills in data.items():
+            indices = [s["order_index"] for s in skills]
+            assert indices == sorted(indices), f"{category} not sorted"
 
     async def test_grouped_by_level(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/grouped/by-level")
@@ -108,6 +117,34 @@ class TestSkillGroupedEndpoints:
         data = response.json()
         assert isinstance(data, dict)
         assert "expert" in data
+        assert "advanced" in data
+        assert "intermediate" in data
+
+    async def test_grouped_by_level_skills_sorted(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/grouped/by-level")
+        data = response.json()
+        for level, skills in data.items():
+            indices = [s["order_index"] for s in skills]
+            assert indices == sorted(indices), f"{level} not sorted"
+
+
+class TestSkillCombinedFilters:
+    async def test_filter_by_category_and_level(self, client: AsyncClient):
+        response = await client.get(
+            PREFIX, params={"category": "backend", "level": "expert"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert all(s["category"] == "backend" and s["level"] == "expert" for s in data)
+
+
+class TestReorderSkills:
+    async def test_reorder_returns_list(self, client: AsyncClient):
+        payload = [{"id": "skill_001", "orderIndex": 1}]
+        response = await client.patch(f"{PREFIX}/reorder", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
 
 
 class TestSkillStats:
@@ -119,3 +156,22 @@ class TestSkillStats:
         assert "by_level" in data
         assert "by_category" in data
         assert data["total"] > 0
+
+    async def test_stats_total_matches_list(self, client: AsyncClient):
+        list_response = await client.get(PREFIX)
+        stats_response = await client.get(f"{PREFIX}/stats/summary")
+        total_list = len(list_response.json())
+        total_stats = stats_response.json()["total"]
+        assert total_list == total_stats
+
+    async def test_stats_by_level_sums_to_total(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/stats/summary")
+        data = response.json()
+        level_sum = sum(data["by_level"].values())
+        assert level_sum == data["total"]
+
+    async def test_stats_by_category_sums_to_total(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/stats/summary")
+        data = response.json()
+        category_sum = sum(data["by_category"].values())
+        assert category_sum == data["total"]

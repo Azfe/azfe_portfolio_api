@@ -9,8 +9,8 @@ Value Object Principles:
 - Equality by value: Two Emails are equal if addresses match
 """
 
-import re
 from dataclasses import dataclass
+import re
 
 from ..exceptions import EmptyFieldError, InvalidEmailError
 
