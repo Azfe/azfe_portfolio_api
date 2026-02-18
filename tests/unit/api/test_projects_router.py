@@ -1,7 +1,7 @@
 """Tests for the projects router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 
@@ -54,6 +54,13 @@ class TestCreateProject:
 
 
 class TestUpdateProject:
+    async def test_update_returns_200(self, client: AsyncClient):
+        payload = {"title": "Updated Project"}
+        response = await client.put(f"{PREFIX}/proj_001", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == "proj_001"
+
     async def test_update_project_not_found(self, client: AsyncClient):
         payload = {"title": "Updated"}
         response = await client.put(f"{PREFIX}/nonexistent", json=payload)
@@ -66,3 +73,12 @@ class TestDeleteProject:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
+
+
+class TestReorderProjects:
+    async def test_reorder_returns_list(self, client: AsyncClient):
+        payload = [{"id": "proj_001", "orderIndex": 1}]
+        response = await client.patch(f"{PREFIX}/reorder", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)

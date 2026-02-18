@@ -1,7 +1,7 @@
 """Tests for the contact messages router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 
@@ -87,6 +87,34 @@ class TestMessageStats:
         assert "total" in data
         assert data["total"] > 0
 
+    async def test_stats_has_date_fields(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/stats/summary")
+        data = response.json()
+        assert "today" in data
+        assert "this_week" in data
+        assert "this_month" in data
+
+    async def test_stats_has_by_day(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/stats/summary")
+        data = response.json()
+        assert "by_day" in data
+        assert isinstance(data["by_day"], dict)
+        assert len(data["by_day"]) == 7
+
+    async def test_stats_total_matches_list(self, client: AsyncClient):
+        list_response = await client.get(PREFIX)
+        stats_response = await client.get(f"{PREFIX}/stats/summary")
+        total_list = len(list_response.json())
+        total_stats = stats_response.json()["total"]
+        assert total_list == total_stats
+
+    async def test_stats_date_counts_are_non_negative(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/stats/summary")
+        data = response.json()
+        assert data["today"] >= 0
+        assert data["this_week"] >= 0
+        assert data["this_month"] >= 0
+
 
 class TestRecentMessages:
     async def test_recent_returns_list(self, client: AsyncClient):
@@ -95,3 +123,22 @@ class TestRecentMessages:
         data = response.json()
         assert isinstance(data, list)
         assert len(data) <= 5
+
+    async def test_recent_sorted_desc(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/recent/10")
+        data = response.json()
+        dates = [m["created_at"] for m in data if m.get("created_at")]
+        assert dates == sorted(dates, reverse=True)
+
+    async def test_recent_limit_1(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/recent/1")
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) <= 1
+
+    async def test_recent_large_limit_capped(self, client: AsyncClient):
+        response = await client.get(f"{PREFIX}/recent/100")
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        assert len(data) <= 50

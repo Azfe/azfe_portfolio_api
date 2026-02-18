@@ -2,20 +2,31 @@
 Use Cases Module.
 
 Contains all application use cases following Clean Architecture.
-
-Use cases represent the business logic of the application and orchestrate
-the flow between entities, repositories, and external services.
-
-Organization:
-- profile/: Profile management use cases
-- experience/: Work experience use cases
-- skill/: Skill management use cases
-- education/: Education management use cases
-- cv/: CV aggregation and generation use cases
-- language/: Language management use cases
-- programming_language/: Programming language management use cases
 """
 
+from .additional_training import (
+    AddAdditionalTrainingUseCase,
+    DeleteAdditionalTrainingUseCase,
+    EditAdditionalTrainingUseCase,
+    ListAdditionalTrainingsUseCase,
+)
+from .certification import (
+    AddCertificationUseCase,
+    DeleteCertificationUseCase,
+    EditCertificationUseCase,
+    ListCertificationsUseCase,
+)
+from .contact_information import (
+    CreateContactInformationUseCase,
+    DeleteContactInformationUseCase,
+    GetContactInformationUseCase,
+    UpdateContactInformationUseCase,
+)
+from .contact_message import (
+    CreateContactMessageUseCase,
+    DeleteContactMessageUseCase,
+    ListContactMessagesUseCase,
+)
 from .cv import GenerateCVPDFUseCase, GetCompleteCVUseCase
 from .education import AddEducationUseCase, DeleteEducationUseCase, EditEducationUseCase
 from .language import (
@@ -31,12 +42,25 @@ from .programming_language import (
     EditProgrammingLanguageUseCase,
     ListProgrammingLanguagesUseCase,
 )
+from .project import (
+    AddProjectUseCase,
+    DeleteProjectUseCase,
+    EditProjectUseCase,
+    ListProjectsUseCase,
+)
 from .skill import (
     AddSkillUseCase,
     DeleteSkillUseCase,
     EditSkillUseCase,
     ListSkillsUseCase,
 )
+from .social_network import (
+    AddSocialNetworkUseCase,
+    DeleteSocialNetworkUseCase,
+    EditSocialNetworkUseCase,
+    ListSocialNetworksUseCase,
+)
+from .tool import AddToolUseCase, DeleteToolUseCase, EditToolUseCase, ListToolsUseCase
 from .work_experience import (
     AddExperienceUseCase,
     DeleteExperienceUseCase,
@@ -76,4 +100,38 @@ __all__ = [
     # CV
     "GetCompleteCVUseCase",
     "GenerateCVPDFUseCase",
+    # Project
+    "AddProjectUseCase",
+    "EditProjectUseCase",
+    "DeleteProjectUseCase",
+    "ListProjectsUseCase",
+    # Certification
+    "AddCertificationUseCase",
+    "EditCertificationUseCase",
+    "DeleteCertificationUseCase",
+    "ListCertificationsUseCase",
+    # AdditionalTraining
+    "AddAdditionalTrainingUseCase",
+    "EditAdditionalTrainingUseCase",
+    "DeleteAdditionalTrainingUseCase",
+    "ListAdditionalTrainingsUseCase",
+    # ContactInformation
+    "GetContactInformationUseCase",
+    "CreateContactInformationUseCase",
+    "UpdateContactInformationUseCase",
+    "DeleteContactInformationUseCase",
+    # ContactMessage
+    "CreateContactMessageUseCase",
+    "ListContactMessagesUseCase",
+    "DeleteContactMessageUseCase",
+    # Tool
+    "AddToolUseCase",
+    "EditToolUseCase",
+    "DeleteToolUseCase",
+    "ListToolsUseCase",
+    # SocialNetwork
+    "AddSocialNetworkUseCase",
+    "EditSocialNetworkUseCase",
+    "DeleteSocialNetworkUseCase",
+    "ListSocialNetworksUseCase",
 ]
