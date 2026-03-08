@@ -40,7 +40,6 @@ docs/_build/
 .gitignore
 
 # Docker
-Dockerfile
 docker-compose*.yml
 .dockerignore
 
