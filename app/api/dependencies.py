@@ -554,12 +554,24 @@ async def get_get_complete_cv_use_case(
     experience_repo: WorkExperienceRepository = Depends(get_work_experience_repository),
     skill_repo: SkillRepository = Depends(get_skill_repository),
     education_repo: EducationRepository = Depends(get_education_repository),
+    contact_info_repo: ContactInformationRepository = Depends(get_contact_information_repository),
+    social_network_repo: SocialNetworkRepository = Depends(get_social_network_repository),
+    project_repo: ProjectRepository = Depends(get_project_repository),
+    tool_repo: ToolRepository = Depends(get_tool_repository),
+    additional_training_repo: AdditionalTrainingRepository = Depends(get_additional_training_repository),
+    certification_repo: CertificationRepository = Depends(get_certification_repository),
 ) -> GetCompleteCVUseCase:
     return GetCompleteCVUseCase(
         profile_repository=profile_repo,
         experience_repository=experience_repo,
         skill_repository=skill_repo,
         education_repository=education_repo,
+        contact_info_repository=contact_info_repo,
+        social_network_repository=social_network_repo,
+        project_repository=project_repo,
+        tool_repository=tool_repo,
+        additional_training_repository=additional_training_repo,
+        certification_repository=certification_repo,
     )
 
 
