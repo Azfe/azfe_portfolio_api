@@ -119,9 +119,7 @@ class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVRespons
         contact_info = contact_info_results[0] if contact_info_results else None
 
         # Get social networks (ordered by order_index)
-        social_networks = await self.social_network_repo.find_by(
-            profile_id=_PROFILE_ID
-        )
+        social_networks = await self.social_network_repo.find_by(profile_id=_PROFILE_ID)
         social_networks.sort(key=lambda sn: sn.order_index)
 
         # Get experiences (ordered by order_index, newest first)
