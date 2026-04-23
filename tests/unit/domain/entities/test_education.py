@@ -10,15 +10,19 @@ Tests cover:
 - Temporal coherence
 """
 
-import uuid
 from datetime import datetime
+import uuid
 
 import pytest
 
 from app.domain.entities.education import Education
-from app.domain.exceptions import (EmptyFieldError, InvalidDateRangeError,
-                                   InvalidInstitutionError, InvalidLengthError,
-                                   InvalidOrderIndexError)
+from app.domain.exceptions import (
+    EmptyFieldError,
+    InvalidDateRangeError,
+    InvalidInstitutionError,
+    InvalidLengthError,
+    InvalidOrderIndexError,
+)
 
 # ==========================================
 # VALID EDUCATION CREATION TESTS

@@ -4,8 +4,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from app.infrastructure.repositories.contact_message_repository import \
-    ContactMessageRepository
+from app.infrastructure.repositories.contact_message_repository import (
+    ContactMessageRepository,
+)
 
 from .conftest import make_contact_message_doc
 

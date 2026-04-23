@@ -7,14 +7,14 @@ Deletes an existing programming language.
 from typing import TYPE_CHECKING
 
 from app.application.dto import SuccessResponse
-from app.application.dto.programming_language_dto import \
-    DeleteProgrammingLanguageRequest
+from app.application.dto.programming_language_dto import (
+    DeleteProgrammingLanguageRequest,
+)
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 from app.shared.shared_exceptions import NotFoundException
 
 if TYPE_CHECKING:
-    from app.domain.entities import \
-        ProgrammingLanguage as ProgrammingLanguageType
+    from app.domain.entities import ProgrammingLanguage as ProgrammingLanguageType
 
 
 class DeleteProgrammingLanguageUseCase(

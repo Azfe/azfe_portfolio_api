@@ -1,7 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
-from app.api.schemas.additional_training_schema import \
-    AdditionalTrainingResponse
+from app.api.schemas.additional_training_schema import AdditionalTrainingResponse
 from app.api.schemas.certification_schema import CertificationResponse
 from app.api.schemas.contact_info_schema import ContactInformationResponse
 from app.api.schemas.education_schema import EducationResponse

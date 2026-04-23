@@ -4,8 +4,10 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.domain.entities import SocialNetwork
 from app.infrastructure.mappers import SocialNetworkMapper
-from app.shared.interfaces.repository import (IOrderedRepository,
-                                              ISocialNetworkRepository)
+from app.shared.interfaces.repository import (
+    IOrderedRepository,
+    ISocialNetworkRepository,
+)
 
 
 class SocialNetworkRepository(

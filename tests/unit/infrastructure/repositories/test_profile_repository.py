@@ -4,8 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.infrastructure.repositories.profile_repository import \
-    ProfileRepository
+from app.infrastructure.repositories.profile_repository import ProfileRepository
 
 from .conftest import make_profile_doc
 

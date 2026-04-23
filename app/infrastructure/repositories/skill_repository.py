@@ -4,8 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.domain.entities import Skill
 from app.infrastructure.mappers import SkillMapper
-from app.shared.interfaces.repository import (IOrderedRepository,
-                                              IUniqueNameRepository)
+from app.shared.interfaces.repository import IOrderedRepository, IUniqueNameRepository
 
 
 class SkillRepository(IUniqueNameRepository[Skill], IOrderedRepository[Skill]):

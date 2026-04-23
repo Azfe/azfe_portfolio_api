@@ -1,7 +1,7 @@
 """Integration tests for the social networks router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.integration
 

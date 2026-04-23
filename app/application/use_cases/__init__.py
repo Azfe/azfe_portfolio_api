@@ -4,44 +4,69 @@ Use Cases Module.
 Contains all application use cases following Clean Architecture.
 """
 
-from .additional_training import (AddAdditionalTrainingUseCase,
+from .additional_training import (
+                                  AddAdditionalTrainingUseCase,
                                   DeleteAdditionalTrainingUseCase,
                                   EditAdditionalTrainingUseCase,
-                                  ListAdditionalTrainingsUseCase)
-from .certification import (AddCertificationUseCase,
-                            DeleteCertificationUseCase,
-                            EditCertificationUseCase,
-                            ListCertificationsUseCase)
-from .contact_information import (CreateContactInformationUseCase,
+                                  ListAdditionalTrainingsUseCase,
+)
+from .certification import (
+                                  AddCertificationUseCase,
+                                  DeleteCertificationUseCase,
+                                  EditCertificationUseCase,
+                                  ListCertificationsUseCase,
+)
+from .contact_information import (
+                                  CreateContactInformationUseCase,
                                   DeleteContactInformationUseCase,
                                   GetContactInformationUseCase,
-                                  UpdateContactInformationUseCase)
-from .contact_message import (CreateContactMessageUseCase,
-                              DeleteContactMessageUseCase,
-                              ListContactMessagesUseCase)
+                                  UpdateContactInformationUseCase,
+)
+from .contact_message import (
+                                  CreateContactMessageUseCase,
+                                  DeleteContactMessageUseCase,
+                                  ListContactMessagesUseCase,
+)
 from .cv import GenerateCVPDFUseCase, GetCompleteCVUseCase
-from .education import (AddEducationUseCase, DeleteEducationUseCase,
-                        EditEducationUseCase)
-from .language import (AddLanguageUseCase, DeleteLanguageUseCase,
-                       EditLanguageUseCase, ListLanguagesUseCase)
-from .profile import (CreateProfileUseCase, GetProfileUseCase,
-                      UpdateProfileUseCase)
-from .programming_language import (AddProgrammingLanguageUseCase,
-                                   DeleteProgrammingLanguageUseCase,
-                                   EditProgrammingLanguageUseCase,
-                                   ListProgrammingLanguagesUseCase)
-from .project import (AddProjectUseCase, DeleteProjectUseCase,
-                      EditProjectUseCase, ListProjectsUseCase)
-from .skill import (AddSkillUseCase, DeleteSkillUseCase, EditSkillUseCase,
-                    ListSkillsUseCase)
-from .social_network import (AddSocialNetworkUseCase,
-                             DeleteSocialNetworkUseCase,
-                             EditSocialNetworkUseCase,
-                             ListSocialNetworksUseCase)
-from .tool import (AddToolUseCase, DeleteToolUseCase, EditToolUseCase,
-                   ListToolsUseCase)
-from .work_experience import (AddExperienceUseCase, DeleteExperienceUseCase,
-                              EditExperienceUseCase, ListExperiencesUseCase)
+from .education import AddEducationUseCase, DeleteEducationUseCase, EditEducationUseCase
+from .language import (
+                                  AddLanguageUseCase,
+                                  DeleteLanguageUseCase,
+                                  EditLanguageUseCase,
+                                  ListLanguagesUseCase,
+)
+from .profile import CreateProfileUseCase, GetProfileUseCase, UpdateProfileUseCase
+from .programming_language import (
+                                  AddProgrammingLanguageUseCase,
+                                  DeleteProgrammingLanguageUseCase,
+                                  EditProgrammingLanguageUseCase,
+                                  ListProgrammingLanguagesUseCase,
+)
+from .project import (
+                                  AddProjectUseCase,
+                                  DeleteProjectUseCase,
+                                  EditProjectUseCase,
+                                  ListProjectsUseCase,
+)
+from .skill import (
+                                  AddSkillUseCase,
+                                  DeleteSkillUseCase,
+                                  EditSkillUseCase,
+                                  ListSkillsUseCase,
+)
+from .social_network import (
+                                  AddSocialNetworkUseCase,
+                                  DeleteSocialNetworkUseCase,
+                                  EditSocialNetworkUseCase,
+                                  ListSocialNetworksUseCase,
+)
+from .tool import AddToolUseCase, DeleteToolUseCase, EditToolUseCase, ListToolsUseCase
+from .work_experience import (
+                                  AddExperienceUseCase,
+                                  DeleteExperienceUseCase,
+                                  EditExperienceUseCase,
+                                  ListExperiencesUseCase,
+)
 
 __all__ = [
     # Profile

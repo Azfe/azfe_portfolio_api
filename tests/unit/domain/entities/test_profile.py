@@ -5,8 +5,7 @@ Tests for Profile Entity.
 import pytest
 
 from app.domain.entities.profile import Profile
-from app.domain.exceptions import (EmptyFieldError, InvalidLengthError,
-                                   InvalidURLError)
+from app.domain.exceptions import EmptyFieldError, InvalidLengthError, InvalidURLError
 
 
 @pytest.mark.entity

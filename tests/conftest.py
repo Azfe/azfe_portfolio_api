@@ -4,14 +4,14 @@ Configuración global de pytest.
 Este archivo se ejecuta antes de todos los tests.
 """
 
-import os
 from collections.abc import AsyncGenerator
 from datetime import datetime, timedelta
+import os
 
-import pytest
-import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from motor.motor_asyncio import AsyncIOMotorClient
+import pytest
+import pytest_asyncio
 
 from app.config.settings import Settings
 from app.main import app

@@ -16,90 +16,91 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 import pytest_asyncio
 
-from app.api.dependencies import (get_add_additional_training_use_case,
-                                  get_add_certification_use_case,
-                                  get_add_education_use_case,
-                                  get_add_experience_use_case,
-                                  get_add_language_use_case,
-                                  get_add_programming_language_use_case,
-                                  get_add_project_use_case,
-                                  get_add_skill_use_case,
-                                  get_add_social_network_use_case,
-                                  get_add_tool_use_case,
-                                  get_additional_training_repository,
-                                  get_certification_repository,
-                                  get_contact_message_repository,
-                                  get_create_contact_information_use_case,
-                                  get_create_contact_message_use_case,
-                                  get_create_profile_use_case,
-                                  get_delete_additional_training_use_case,
-                                  get_delete_certification_use_case,
-                                  get_delete_contact_information_use_case,
-                                  get_delete_contact_message_use_case,
-                                  get_delete_education_use_case,
-                                  get_delete_experience_use_case,
-                                  get_delete_language_use_case,
-                                  get_delete_programming_language_use_case,
-                                  get_delete_project_use_case,
-                                  get_delete_skill_use_case,
-                                  get_delete_social_network_use_case,
-                                  get_delete_tool_use_case,
-                                  get_edit_additional_training_use_case,
-                                  get_edit_certification_use_case,
-                                  get_edit_education_use_case,
-                                  get_edit_experience_use_case,
-                                  get_edit_language_use_case,
-                                  get_edit_programming_language_use_case,
-                                  get_edit_project_use_case,
-                                  get_edit_skill_use_case,
-                                  get_edit_social_network_use_case,
-                                  get_edit_tool_use_case,
-                                  get_education_repository,
-                                  get_generate_cv_pdf_use_case,
-                                  get_get_complete_cv_use_case,
-                                  get_get_contact_information_use_case,
-                                  get_get_profile_use_case,
-                                  get_language_repository,
-                                  get_list_additional_trainings_use_case,
-                                  get_list_certifications_use_case,
-                                  get_list_contact_messages_use_case,
-                                  get_list_experiences_use_case,
-                                  get_list_languages_use_case,
-                                  get_list_programming_languages_use_case,
-                                  get_list_projects_use_case,
-                                  get_list_skills_use_case,
-                                  get_list_social_networks_use_case,
-                                  get_list_tools_use_case,
-                                  get_programming_language_repository,
-                                  get_project_repository, get_skill_repository,
-                                  get_social_network_repository,
-                                  get_tool_repository,
-                                  get_update_contact_information_use_case,
-                                  get_update_profile_use_case,
-                                  get_work_experience_repository)
-from app.application.dto import \
-    AdditionalTrainingResponse as AdditionalTrainingDTO
-from app.application.dto import CertificationResponse as CertificationDTO
-from app.application.dto import ContactInformationResponse as ContactInfoDTO
-from app.application.dto import ContactMessageResponse as ContactMessageDTO
-from app.application.dto import EducationResponse as EducationDTO
-from app.application.dto import GenerateCVPDFResponse
-from app.application.dto import LanguageResponse as LanguageDTO
-from app.application.dto import ProfileResponse as ProfileDTO
-from app.application.dto import \
-    ProgrammingLanguageResponse as ProgrammingLanguageDTO
-from app.application.dto import ProjectResponse as ProjectDTO
-from app.application.dto import SkillResponse as SkillDTO
-from app.application.dto import SocialNetworkResponse as SocialNetworkDTO
-from app.application.dto import ToolResponse as ToolDTO
-from app.application.dto import WorkExperienceResponse as WorkExperienceDTO
-from app.application.dto.additional_training_dto import \
-    AdditionalTrainingListResponse
+from app.api.dependencies import (
+    get_add_additional_training_use_case,
+    get_add_certification_use_case,
+    get_add_education_use_case,
+    get_add_experience_use_case,
+    get_add_language_use_case,
+    get_add_programming_language_use_case,
+    get_add_project_use_case,
+    get_add_skill_use_case,
+    get_add_social_network_use_case,
+    get_add_tool_use_case,
+    get_additional_training_repository,
+    get_certification_repository,
+    get_contact_message_repository,
+    get_create_contact_information_use_case,
+    get_create_contact_message_use_case,
+    get_create_profile_use_case,
+    get_delete_additional_training_use_case,
+    get_delete_certification_use_case,
+    get_delete_contact_information_use_case,
+    get_delete_contact_message_use_case,
+    get_delete_education_use_case,
+    get_delete_experience_use_case,
+    get_delete_language_use_case,
+    get_delete_programming_language_use_case,
+    get_delete_project_use_case,
+    get_delete_skill_use_case,
+    get_delete_social_network_use_case,
+    get_delete_tool_use_case,
+    get_edit_additional_training_use_case,
+    get_edit_certification_use_case,
+    get_edit_education_use_case,
+    get_edit_experience_use_case,
+    get_edit_language_use_case,
+    get_edit_programming_language_use_case,
+    get_edit_project_use_case,
+    get_edit_skill_use_case,
+    get_edit_social_network_use_case,
+    get_edit_tool_use_case,
+    get_education_repository,
+    get_generate_cv_pdf_use_case,
+    get_get_complete_cv_use_case,
+    get_get_contact_information_use_case,
+    get_get_profile_use_case,
+    get_language_repository,
+    get_list_additional_trainings_use_case,
+    get_list_certifications_use_case,
+    get_list_contact_messages_use_case,
+    get_list_experiences_use_case,
+    get_list_languages_use_case,
+    get_list_programming_languages_use_case,
+    get_list_projects_use_case,
+    get_list_skills_use_case,
+    get_list_social_networks_use_case,
+    get_list_tools_use_case,
+    get_programming_language_repository,
+    get_project_repository,
+    get_skill_repository,
+    get_social_network_repository,
+    get_tool_repository,
+    get_update_contact_information_use_case,
+    get_update_profile_use_case,
+    get_work_experience_repository,
+)
+from app.application.dto import (
+    AdditionalTrainingResponse as AdditionalTrainingDTO,
+    CertificationResponse as CertificationDTO,
+    ContactInformationResponse as ContactInfoDTO,
+    ContactMessageResponse as ContactMessageDTO,
+    EducationResponse as EducationDTO,
+    GenerateCVPDFResponse,
+    LanguageResponse as LanguageDTO,
+    ProfileResponse as ProfileDTO,
+    ProgrammingLanguageResponse as ProgrammingLanguageDTO,
+    ProjectResponse as ProjectDTO,
+    SkillResponse as SkillDTO,
+    SocialNetworkResponse as SocialNetworkDTO,
+    ToolResponse as ToolDTO,
+    WorkExperienceResponse as WorkExperienceDTO,
+)
+from app.application.dto.additional_training_dto import AdditionalTrainingListResponse
 from app.application.dto.certification_dto import CertificationListResponse
 from app.application.dto.contact_message_dto import ContactMessageListResponse
 from app.application.dto.language_dto import LanguageListResponse
-from app.application.dto.programming_language_dto import \
-    ProgrammingLanguageListResponse
+from app.application.dto.programming_language_dto import ProgrammingLanguageListResponse
 from app.application.dto.project_dto import ProjectListResponse
 from app.application.dto.skill_dto import SkillListResponse
 from app.application.dto.social_network_dto import SocialNetworkListResponse

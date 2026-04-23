@@ -5,17 +5,19 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.application.dto import (AddEducationRequest, DeleteEducationRequest,
-                                 EditEducationRequest)
-from app.application.use_cases.education.add_education import \
-    AddEducationUseCase
-from app.application.use_cases.education.delete_education import \
-    DeleteEducationUseCase
-from app.application.use_cases.education.edit_education import \
-    EditEducationUseCase
+from app.application.dto import (
+    AddEducationRequest,
+    DeleteEducationRequest,
+    EditEducationRequest,
+)
+from app.application.use_cases.education.add_education import AddEducationUseCase
+from app.application.use_cases.education.delete_education import DeleteEducationUseCase
+from app.application.use_cases.education.edit_education import EditEducationUseCase
 from app.domain.entities.education import Education
-from app.shared.shared_exceptions import (BusinessRuleViolationException,
-                                          NotFoundException)
+from app.shared.shared_exceptions import (
+    BusinessRuleViolationException,
+    NotFoundException,
+)
 
 pytestmark = pytest.mark.asyncio
 

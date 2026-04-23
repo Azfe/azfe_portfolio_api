@@ -5,9 +5,13 @@ Tests for ProgrammingLanguage Entity.
 import pytest
 
 from app.domain.entities.programming_language import ProgrammingLanguage
-from app.domain.exceptions import (EmptyFieldError, InvalidLengthError,
-                                   InvalidNameError, InvalidOrderIndexError,
-                                   InvalidProgrammingLanguageLevelError)
+from app.domain.exceptions import (
+    EmptyFieldError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+    InvalidProgrammingLanguageLevelError,
+)
 
 
 @pytest.mark.entity

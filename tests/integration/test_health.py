@@ -3,8 +3,8 @@
 Tests de integración para el endpoint de health check.
 """
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 
 @pytest.mark.integration

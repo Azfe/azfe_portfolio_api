@@ -23,10 +23,20 @@ Structure:
 
 # Import interfaces for easy access
 from .interfaces import (  # Repository interfaces; Use case interfaces; Mapper interfaces
-    ICommandUseCase, IContactMessageRepository, IDTOMapper, IMapper,
-    IOrderedRepository, IProfileRepository, IQueryUseCase, IRepository,
-    ISocialNetworkRepository, IUniqueNameRepository, IUseCase, IValidator,
-    IValueObjectMapper)
+    ICommandUseCase,
+    IContactMessageRepository,
+    IDTOMapper,
+    IMapper,
+    IOrderedRepository,
+    IProfileRepository,
+    IQueryUseCase,
+    IRepository,
+    ISocialNetworkRepository,
+    IUniqueNameRepository,
+    IUseCase,
+    IValidator,
+    IValueObjectMapper,
+)
 
 __all__ = [
     # Repository interfaces

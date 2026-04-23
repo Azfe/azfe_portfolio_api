@@ -1,23 +1,31 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (get_add_additional_training_use_case,
-                                  get_additional_training_repository,
-                                  get_delete_additional_training_use_case,
-                                  get_edit_additional_training_use_case,
-                                  get_list_additional_trainings_use_case)
+from app.api.dependencies import (
+    get_add_additional_training_use_case,
+    get_additional_training_repository,
+    get_delete_additional_training_use_case,
+    get_edit_additional_training_use_case,
+    get_list_additional_trainings_use_case,
+)
 from app.api.schemas.additional_training_schema import (
-    AdditionalTrainingCreate, AdditionalTrainingResponse,
-    AdditionalTrainingUpdate)
+    AdditionalTrainingCreate,
+    AdditionalTrainingResponse,
+    AdditionalTrainingUpdate,
+)
 from app.api.schemas.common_schema import MessageResponse
-from app.application.dto import AddAdditionalTrainingRequest
-from app.application.dto import \
-    AdditionalTrainingResponse as AdditionalTrainingDTO
-from app.application.dto import (DeleteAdditionalTrainingRequest,
-                                 EditAdditionalTrainingRequest,
-                                 ListAdditionalTrainingsRequest)
+from app.application.dto import (
+    AddAdditionalTrainingRequest,
+    AdditionalTrainingResponse as AdditionalTrainingDTO,
+    DeleteAdditionalTrainingRequest,
+    EditAdditionalTrainingRequest,
+    ListAdditionalTrainingsRequest,
+)
 from app.application.use_cases.additional_training import (
-    AddAdditionalTrainingUseCase, DeleteAdditionalTrainingUseCase,
-    EditAdditionalTrainingUseCase, ListAdditionalTrainingsUseCase)
+    AddAdditionalTrainingUseCase,
+    DeleteAdditionalTrainingUseCase,
+    EditAdditionalTrainingUseCase,
+    ListAdditionalTrainingsUseCase,
+)
 from app.infrastructure.repositories import AdditionalTrainingRepository
 from app.shared.shared_exceptions import NotFoundException
 

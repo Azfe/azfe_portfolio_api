@@ -4,8 +4,8 @@ Verifies that the centralized error handling produces consistent
 JSON responses following the ErrorResponse schema.
 """
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 

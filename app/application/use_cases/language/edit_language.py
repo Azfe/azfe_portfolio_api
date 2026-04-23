@@ -6,8 +6,7 @@ Updates an existing language.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto.language_dto import (EditLanguageRequest,
-                                              LanguageResponse)
+from app.application.dto.language_dto import EditLanguageRequest, LanguageResponse
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 from app.shared.shared_exceptions import NotFoundException
 

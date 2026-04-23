@@ -1,37 +1,60 @@
 """Schemas de la API - Contratos de entrada/salida"""
 
-from .additional_training_schema import (AdditionalTrainingCreate,
+from .additional_training_schema import (
+                                         AdditionalTrainingCreate,
                                          AdditionalTrainingResponse,
-                                         AdditionalTrainingUpdate)
-from .certification_schema import (CertificationCreate, CertificationResponse,
-                                   CertificationUpdate)
-from .common_schema import (ErrorResponse, MessageResponse, SuccessResponse,
-                            TimestampMixin)
-from .contact_info_schema import (ContactInformationCreate,
-                                  ContactInformationResponse,
-                                  ContactInformationUpdate)
-from .contact_messages_schema import (ContactMessageCreate,
-                                      ContactMessageResponse,
-                                      ContactMessageUpdate, MessageStatus)
+                                         AdditionalTrainingUpdate,
+)
+from .certification_schema import (
+                                         CertificationCreate,
+                                         CertificationResponse,
+                                         CertificationUpdate,
+)
+from .common_schema import (
+                                         ErrorResponse,
+                                         MessageResponse,
+                                         SuccessResponse,
+                                         TimestampMixin,
+)
+from .contact_info_schema import (
+                                         ContactInformationCreate,
+                                         ContactInformationResponse,
+                                         ContactInformationUpdate,
+)
+from .contact_messages_schema import (
+                                         ContactMessageCreate,
+                                         ContactMessageResponse,
+                                         ContactMessageUpdate,
+                                         MessageStatus,
+)
 from .cv_schema import CVCompleteResponse
-from .education_schema import (EducationCreate, EducationResponse,
-                               EducationUpdate)
-from .language_schema import (LanguageCreate, LanguageProficiencyLevel,
-                              LanguageResponse, LanguageUpdate)
+from .education_schema import EducationCreate, EducationResponse, EducationUpdate
+from .language_schema import (
+                                         LanguageCreate,
+                                         LanguageProficiencyLevel,
+                                         LanguageResponse,
+                                         LanguageUpdate,
+)
 from .profile_schema import ProfileCreate, ProfileResponse, ProfileUpdate
-from .programming_language_schema import (ProgrammingLanguageCreate,
-                                          ProgrammingLanguageLevel,
-                                          ProgrammingLanguageResponse,
-                                          ProgrammingLanguageUpdate)
+from .programming_language_schema import (
+                                         ProgrammingLanguageCreate,
+                                         ProgrammingLanguageLevel,
+                                         ProgrammingLanguageResponse,
+                                         ProgrammingLanguageUpdate,
+)
 from .projects_schema import ProjectCreate, ProjectResponse, ProjectUpdate
 from .skill_schema import SkillCreate, SkillLevel, SkillResponse, SkillUpdate
-from .social_networks_schema import (SocialNetworkCreate,
-                                     SocialNetworkResponse,
-                                     SocialNetworkUpdate)
+from .social_networks_schema import (
+                                         SocialNetworkCreate,
+                                         SocialNetworkResponse,
+                                         SocialNetworkUpdate,
+)
 from .tools_schema import ToolCreate, ToolResponse, ToolUpdate
-from .work_experience_schema import (WorkExperienceCreate,
-                                     WorkExperienceResponse,
-                                     WorkExperienceUpdate)
+from .work_experience_schema import (
+                                         WorkExperienceCreate,
+                                         WorkExperienceResponse,
+                                         WorkExperienceUpdate,
+)
 
 __all__ = [
     # Common

@@ -1,19 +1,28 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (get_add_education_use_case,
-                                  get_delete_education_use_case,
-                                  get_edit_education_use_case,
-                                  get_education_repository)
+from app.api.dependencies import (
+    get_add_education_use_case,
+    get_delete_education_use_case,
+    get_edit_education_use_case,
+    get_education_repository,
+)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.education_schema import (EducationCreate,
-                                              EducationResponse,
-                                              EducationUpdate)
-from app.application.dto import (AddEducationRequest, DeleteEducationRequest,
-                                 EditEducationRequest)
-from app.application.dto import EducationResponse as EducationDTO
-from app.application.use_cases import (AddEducationUseCase,
-                                       DeleteEducationUseCase,
-                                       EditEducationUseCase)
+from app.api.schemas.education_schema import (
+    EducationCreate,
+    EducationResponse,
+    EducationUpdate,
+)
+from app.application.dto import (
+    AddEducationRequest,
+    DeleteEducationRequest,
+    EditEducationRequest,
+    EducationResponse as EducationDTO,
+)
+from app.application.use_cases import (
+    AddEducationUseCase,
+    DeleteEducationUseCase,
+    EditEducationUseCase,
+)
 from app.infrastructure.repositories import EducationRepository
 from app.shared.shared_exceptions import NotFoundException
 

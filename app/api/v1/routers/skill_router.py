@@ -2,19 +2,33 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (get_add_skill_use_case,
-                                  get_delete_skill_use_case,
-                                  get_edit_skill_use_case,
-                                  get_list_skills_use_case,
-                                  get_skill_repository)
+from app.api.dependencies import (
+    get_add_skill_use_case,
+    get_delete_skill_use_case,
+    get_edit_skill_use_case,
+    get_list_skills_use_case,
+    get_skill_repository,
+)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.skill_schema import (SkillCreate, SkillLevel,
-                                          SkillResponse, SkillUpdate)
-from app.application.dto import (AddSkillRequest, DeleteSkillRequest,
-                                 EditSkillRequest, ListSkillsRequest)
-from app.application.dto import SkillResponse as SkillDTO
-from app.application.use_cases import (AddSkillUseCase, DeleteSkillUseCase,
-                                       EditSkillUseCase, ListSkillsUseCase)
+from app.api.schemas.skill_schema import (
+    SkillCreate,
+    SkillLevel,
+    SkillResponse,
+    SkillUpdate,
+)
+from app.application.dto import (
+    AddSkillRequest,
+    DeleteSkillRequest,
+    EditSkillRequest,
+    ListSkillsRequest,
+    SkillResponse as SkillDTO,
+)
+from app.application.use_cases import (
+    AddSkillUseCase,
+    DeleteSkillUseCase,
+    EditSkillUseCase,
+    ListSkillsUseCase,
+)
 from app.infrastructure.repositories import SkillRepository
 from app.shared.shared_exceptions import NotFoundException
 

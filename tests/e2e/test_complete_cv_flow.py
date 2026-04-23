@@ -19,8 +19,8 @@ Known limitation:
     they also use the hardcoded PROFILE_ID.
 """
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.e2e
 

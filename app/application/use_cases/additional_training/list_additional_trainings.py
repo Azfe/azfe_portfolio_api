@@ -6,13 +6,14 @@ Retrieves all additional trainings for a profile.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import (AdditionalTrainingListResponse,
-                                 ListAdditionalTrainingsRequest)
+from app.application.dto import (
+    AdditionalTrainingListResponse,
+    ListAdditionalTrainingsRequest,
+)
 from app.shared.interfaces import IOrderedRepository, IQueryUseCase
 
 if TYPE_CHECKING:
-    from app.domain.entities import \
-        AdditionalTraining as AdditionalTrainingType
+    from app.domain.entities import AdditionalTraining as AdditionalTrainingType
 
 
 class ListAdditionalTrainingsUseCase(
