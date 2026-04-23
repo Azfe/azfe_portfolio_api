@@ -107,47 +107,52 @@ class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVRespons
         if not profile:
             raise NotFoundException("Profile", "single")
 
+        # All related entities are stored with this fixed profile_id by convention.
+        # The profile entity itself has a UUID id, but every router in the system
+        # uses "default_profile" as the profile_id for all related documents.
+        _PROFILE_ID = "default_profile"
+
         # Get contact information (optional — None if not set)
         contact_info_results = await self.contact_info_repo.find_by(
-            profile_id=profile.id
+            profile_id=_PROFILE_ID
         )
         contact_info = contact_info_results[0] if contact_info_results else None
 
         # Get social networks (ordered by order_index)
-        social_networks = await self.social_network_repo.find_by(profile_id=profile.id)
+        social_networks = await self.social_network_repo.find_by(profile_id=_PROFILE_ID)
         social_networks.sort(key=lambda sn: sn.order_index)
 
         # Get experiences (ordered by order_index, newest first)
         experiences = await self.experience_repo.get_all_ordered(
-            profile_id=profile.id, ascending=False
+            profile_id=_PROFILE_ID, ascending=False
         )
 
         # Get projects (ordered by order_index, newest first)
         projects = await self.project_repo.get_all_ordered(
-            profile_id=profile.id, ascending=False
+            profile_id=_PROFILE_ID, ascending=False
         )
 
         # Get skills (find all by profile_id, sorted by order_index)
-        skills = await self.skill_repo.find_by(profile_id=profile.id)
+        skills = await self.skill_repo.find_by(profile_id=_PROFILE_ID)
         skills.sort(key=lambda s: s.order_index)
 
         # Get tools (find all by profile_id, sorted by order_index)
-        tools = await self.tool_repo.find_by(profile_id=profile.id)
+        tools = await self.tool_repo.find_by(profile_id=_PROFILE_ID)
         tools.sort(key=lambda t: t.order_index)
 
         # Get education (ordered by order_index, newest first)
         education = await self.education_repo.get_all_ordered(
-            profile_id=profile.id, ascending=False
+            profile_id=_PROFILE_ID, ascending=False
         )
 
         # Get additional training (ordered by order_index, newest first)
         additional_training = await self.additional_training_repo.get_all_ordered(
-            profile_id=profile.id, ascending=False
+            profile_id=_PROFILE_ID, ascending=False
         )
 
         # Get certifications (ordered by order_index, newest first)
         certifications = await self.certification_repo.get_all_ordered(
-            profile_id=profile.id, ascending=False
+            profile_id=_PROFILE_ID, ascending=False
         )
 
         return CompleteCVResponse.create(
