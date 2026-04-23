@@ -3,6 +3,8 @@ from typing import Annotated
 
 from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
 
+from app.api.schemas.common_schema import TimestampMixin
+
 
 def _empty_str_to_none(v: object) -> object:
     if isinstance(v, str) and v.strip() == "":
@@ -11,8 +13,6 @@ def _empty_str_to_none(v: object) -> object:
 
 
 OptionalDatetime = Annotated[datetime | None, BeforeValidator(_empty_str_to_none)]
-
-from app.api.schemas.common_schema import TimestampMixin
 
 
 class CertificationBase(BaseModel):
