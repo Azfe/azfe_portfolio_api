@@ -1,21 +1,21 @@
 from fastapi import APIRouter
 
 from app.api.v1.routers import (
-    additional_training_router,
-    certification_router,
-    contact_info_router,
-    contact_messages_router,
-    cv_router,
-    education_router,
-    health_router,
-    language_router,
-    profile_router,
-    programming_language_router,
-    projects_router,
-    skill_router,
-    social_networks_router,
-    tools_router,
-    work_experience_router,
+                                additional_training_router,
+                                certification_router,
+                                contact_info_router,
+                                contact_messages_router,
+                                cv_router,
+                                education_router,
+                                health_router,
+                                language_router,
+                                profile_router,
+                                programming_language_router,
+                                projects_router,
+                                skill_router,
+                                social_networks_router,
+                                tools_router,
+                                work_experience_router,
 )
 
 # Router principal de la versión 1 de la API

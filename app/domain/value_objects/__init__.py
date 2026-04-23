@@ -26,8 +26,8 @@ from .email import Email
 from .language_proficiency import LanguageProficiency, LanguageProficiencyEnum
 from .phone import Phone
 from .programming_language_level import (
-    ProgrammingLanguageLevel,
-    ProgrammingLanguageLevelEnum,
+                                         ProgrammingLanguageLevel,
+                                         ProgrammingLanguageLevelEnum,
 )
 from .skill_level import SkillLevel, SkillLevelEnum
 
