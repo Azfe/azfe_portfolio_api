@@ -23,8 +23,8 @@ while the infrastructure layer provides concrete implementations.
 from .mapper import IDTOMapper, IMapper, IValueObjectMapper
 
 # Repository interfaces
-from .repository import (  # Type aliases
-    AdditionalTrainingRepository,
+from .repository import (
+    AdditionalTrainingRepository,  # Type aliases
     CertificationRepository,
     ContactInformationRepository,
     ContactMessageRepository,
