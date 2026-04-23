@@ -1,6 +1,16 @@
 from datetime import datetime
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
+
+
+def _empty_str_to_none(v: object) -> object:
+    if isinstance(v, str) and v.strip() == "":
+        return None
+    return v
+
+
+OptionalDatetime = Annotated[datetime | None, BeforeValidator(_empty_str_to_none)]
 
 from app.api.schemas.common_schema import TimestampMixin
 
@@ -27,7 +37,7 @@ class CertificationBase(BaseModel):
     order_index: int = Field(
         ..., ge=0, description="Orden de aparición en el portafolio"
     )
-    expiry_date: datetime | None = Field(
+    expiry_date: OptionalDatetime = Field(
         None, description="Fecha de expiración (opcional, None = no expira)"
     )
     credential_id: str | None = Field(
@@ -62,7 +72,7 @@ class CertificationUpdate(BaseModel):
     title: str | None = Field(None, min_length=1, max_length=100)
     issuer: str | None = Field(None, min_length=1, max_length=100)
     issue_date: datetime | None = None
-    expiry_date: datetime | None = None
+    expiry_date: OptionalDatetime = None
     credential_id: str | None = None
     credential_url: str | None = None
     order_index: int | None = Field(None, ge=0)
