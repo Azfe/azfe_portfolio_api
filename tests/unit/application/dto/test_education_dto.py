@@ -1,6 +1,7 @@
 """Tests for Education DTOs."""
 
-from app.application.dto.education_dto import EducationListResponse, EducationResponse
+from app.application.dto.education_dto import (EducationListResponse,
+                                               EducationResponse)
 
 from .conftest import DT, DT2, DT_END, DT_START, make_entity
 

@@ -5,14 +5,9 @@ from datetime import datetime
 import pytest
 
 from app.domain.entities.work_experience import WorkExperience
-from app.domain.exceptions import (
-    EmptyFieldError,
-    InvalidCompanyError,
-    InvalidDateRangeError,
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidRoleError,
-)
+from app.domain.exceptions import (EmptyFieldError, InvalidCompanyError,
+                                   InvalidDateRangeError, InvalidLengthError,
+                                   InvalidOrderIndexError, InvalidRoleError)
 
 
 @pytest.mark.entity

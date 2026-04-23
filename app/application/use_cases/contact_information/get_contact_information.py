@@ -6,12 +6,14 @@ Retrieves contact information for a profile.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import ContactInformationResponse, GetContactInformationRequest
+from app.application.dto import (ContactInformationResponse,
+                                 GetContactInformationRequest)
 from app.shared.interfaces import IQueryUseCase, IRepository
 from app.shared.shared_exceptions import NotFoundException
 
 if TYPE_CHECKING:
-    from app.domain.entities import ContactInformation as ContactInformationType
+    from app.domain.entities import \
+        ContactInformation as ContactInformationType
 
 
 class GetContactInformationUseCase(

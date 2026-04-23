@@ -5,13 +5,9 @@ from datetime import datetime
 import pytest
 
 from app.domain.entities.additional_training import AdditionalTraining
-from app.domain.exceptions import (
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidProviderError,
-    InvalidTitleError,
-    InvalidURLError,
-)
+from app.domain.exceptions import (InvalidLengthError, InvalidOrderIndexError,
+                                   InvalidProviderError, InvalidTitleError,
+                                   InvalidURLError)
 
 
 @pytest.mark.entity

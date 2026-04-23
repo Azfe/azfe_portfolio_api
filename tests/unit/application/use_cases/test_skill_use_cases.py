@@ -4,12 +4,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.application.dto import (
-    AddSkillRequest,
-    DeleteSkillRequest,
-    EditSkillRequest,
-    ListSkillsRequest,
-)
+from app.application.dto import (AddSkillRequest, DeleteSkillRequest,
+                                 EditSkillRequest, ListSkillsRequest)
 from app.application.use_cases.skill.add_skill import AddSkillUseCase
 from app.application.use_cases.skill.delete_skill import DeleteSkillUseCase
 from app.application.use_cases.skill.edit_skill import EditSkillUseCase

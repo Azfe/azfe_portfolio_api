@@ -4,9 +4,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.infrastructure.repositories.experience_repository import (
-    WorkExperienceRepository,
-)
+from app.infrastructure.repositories.experience_repository import \
+    WorkExperienceRepository
 
 from .conftest import make_work_experience_doc
 

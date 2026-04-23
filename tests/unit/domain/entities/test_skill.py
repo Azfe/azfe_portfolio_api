@@ -5,12 +5,8 @@ Tests for Skill Entity.
 import pytest
 
 from app.domain.entities.skill import Skill
-from app.domain.exceptions import (
-    InvalidCategoryError,
-    InvalidLengthError,
-    InvalidNameError,
-    InvalidSkillLevelError,
-)
+from app.domain.exceptions import (InvalidCategoryError, InvalidLengthError,
+                                   InvalidNameError, InvalidSkillLevelError)
 
 
 @pytest.mark.entity

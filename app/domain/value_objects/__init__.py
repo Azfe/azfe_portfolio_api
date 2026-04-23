@@ -25,10 +25,8 @@ from .date_range import DateRange
 from .email import Email
 from .language_proficiency import LanguageProficiency, LanguageProficiencyEnum
 from .phone import Phone
-from .programming_language_level import (
-    ProgrammingLanguageLevel,
-    ProgrammingLanguageLevelEnum,
-)
+from .programming_language_level import (ProgrammingLanguageLevel,
+                                         ProgrammingLanguageLevelEnum)
 from .skill_level import SkillLevel, SkillLevelEnum
 
 __all__ = [

@@ -1,7 +1,7 @@
 """Integration tests for the education router endpoints."""
 
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 
 pytestmark = pytest.mark.integration
 

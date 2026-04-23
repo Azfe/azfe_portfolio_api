@@ -12,12 +12,12 @@ Unlike integration tests, NO dependency_overrides are applied here.
 Every request goes through the real DI chain.
 """
 
-from collections.abc import AsyncGenerator
 import os
+from collections.abc import AsyncGenerator
 
-from httpx import AsyncClient
 import pytest
 import pytest_asyncio
+from httpx import AsyncClient
 
 pytestmark = pytest.mark.e2e
 

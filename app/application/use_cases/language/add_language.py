@@ -6,7 +6,8 @@ Adds a new language to the profile.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto.language_dto import AddLanguageRequest, LanguageResponse
+from app.application.dto.language_dto import (AddLanguageRequest,
+                                              LanguageResponse)
 from app.domain.entities import Language
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 

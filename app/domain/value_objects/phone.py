@@ -9,8 +9,8 @@ Value Object Principles:
 - Equality by value: Two Phones are equal if numbers match
 """
 
-from dataclasses import dataclass
 import re
+from dataclasses import dataclass
 
 from app.domain.exceptions import EmptyFieldError, InvalidPhoneError
 

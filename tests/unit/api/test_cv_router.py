@@ -1,7 +1,7 @@
 """Tests for the CV router endpoints."""
 
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 
 pytestmark = pytest.mark.asyncio
 

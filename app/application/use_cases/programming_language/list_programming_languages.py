@@ -7,13 +7,12 @@ Retrieves all programming languages for a profile.
 from typing import TYPE_CHECKING
 
 from app.application.dto.programming_language_dto import (
-    ListProgrammingLanguagesRequest,
-    ProgrammingLanguageListResponse,
-)
+    ListProgrammingLanguagesRequest, ProgrammingLanguageListResponse)
 from app.shared.interfaces import IOrderedRepository, IQueryUseCase
 
 if TYPE_CHECKING:
-    from app.domain.entities import ProgrammingLanguage as ProgrammingLanguageType
+    from app.domain.entities import \
+        ProgrammingLanguage as ProgrammingLanguageType
 
 
 class ListProgrammingLanguagesUseCase(

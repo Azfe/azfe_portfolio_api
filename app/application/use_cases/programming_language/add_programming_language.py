@@ -7,14 +7,13 @@ Adds a new programming language to the profile.
 from typing import TYPE_CHECKING
 
 from app.application.dto.programming_language_dto import (
-    AddProgrammingLanguageRequest,
-    ProgrammingLanguageResponse,
-)
+    AddProgrammingLanguageRequest, ProgrammingLanguageResponse)
 from app.domain.entities import ProgrammingLanguage
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 
 if TYPE_CHECKING:
-    from app.domain.entities import ProgrammingLanguage as ProgrammingLanguageType
+    from app.domain.entities import \
+        ProgrammingLanguage as ProgrammingLanguageType
 
 
 class AddProgrammingLanguageUseCase(

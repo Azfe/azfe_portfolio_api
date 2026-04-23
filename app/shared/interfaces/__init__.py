@@ -21,30 +21,17 @@ while the infrastructure layer provides concrete implementations.
 
 # Mapper interfaces
 from .mapper import IDTOMapper, IMapper, IValueObjectMapper
-
 # Repository interfaces
-from .repository import (  # Type aliases
-    AdditionalTrainingRepository,
-    CertificationRepository,
-    ContactInformationRepository,
-    ContactMessageRepository,
-    EducationRepository,
-    IContactMessageRepository,
-    IOrderedRepository,
-    IProfileRepository,
-    IRepository,
-    ISocialNetworkRepository,
-    IUniqueNameRepository,
-    LanguageRepository,
-    ProfileRepository,
-    ProgrammingLanguageRepository,
-    ProjectRepository,
-    SkillRepository,
-    SocialNetworkRepository,
-    ToolRepository,
-    WorkExperienceRepository,
-)
-
+from .repository import (AdditionalTrainingRepository,  # Type aliases
+                         CertificationRepository, ContactInformationRepository,
+                         ContactMessageRepository, EducationRepository,
+                         IContactMessageRepository, IOrderedRepository,
+                         IProfileRepository, IRepository,
+                         ISocialNetworkRepository, IUniqueNameRepository,
+                         LanguageRepository, ProfileRepository,
+                         ProgrammingLanguageRepository, ProjectRepository,
+                         SkillRepository, SocialNetworkRepository,
+                         ToolRepository, WorkExperienceRepository)
 # Use case interfaces
 from .use_case import ICommandUseCase, IQueryUseCase, IUseCase, IValidator
 

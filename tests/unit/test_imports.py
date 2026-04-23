@@ -20,12 +20,8 @@ def test_import_settings():
 
 def test_import_all_routers():
     """Test: Se pueden importar todos los routers"""
-    from app.api.v1.routers import (
-        cv_router,
-        health_router,
-        profile_router,
-        skill_router,
-    )
+    from app.api.v1.routers import (cv_router, health_router, profile_router,
+                                    skill_router)
 
     assert health_router.router is not None
     assert profile_router.router is not None
@@ -35,7 +31,8 @@ def test_import_all_routers():
 
 def test_import_all_schemas():
     """Test: Se pueden importar todos los schemas principales"""
-    from app.api.schemas import CVCompleteResponse, ProfileResponse, SkillResponse
+    from app.api.schemas import (CVCompleteResponse, ProfileResponse,
+                                 SkillResponse)
 
     assert ProfileResponse is not None
     assert SkillResponse is not None

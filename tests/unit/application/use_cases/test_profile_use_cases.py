@@ -4,14 +4,13 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.application.dto import (
-    CreateProfileRequest,
-    GetProfileRequest,
-    UpdateProfileRequest,
-)
-from app.application.use_cases.profile.create_profile import CreateProfileUseCase
+from app.application.dto import (CreateProfileRequest, GetProfileRequest,
+                                 UpdateProfileRequest)
+from app.application.use_cases.profile.create_profile import \
+    CreateProfileUseCase
 from app.application.use_cases.profile.get_profile import GetProfileUseCase
-from app.application.use_cases.profile.update_profile import UpdateProfileUseCase
+from app.application.use_cases.profile.update_profile import \
+    UpdateProfileUseCase
 from app.domain.entities.profile import Profile
 from app.shared.shared_exceptions import DuplicateException, NotFoundException
 

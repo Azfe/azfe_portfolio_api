@@ -6,7 +6,8 @@ Retrieves all work experiences for a profile, ordered by orderIndex.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import ListExperiencesRequest, WorkExperienceListResponse
+from app.application.dto import (ListExperiencesRequest,
+                                 WorkExperienceListResponse)
 from app.shared.interfaces import IOrderedRepository, IQueryUseCase
 
 if TYPE_CHECKING:

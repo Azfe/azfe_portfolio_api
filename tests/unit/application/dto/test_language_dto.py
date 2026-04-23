@@ -1,6 +1,7 @@
 """Tests for Language DTOs."""
 
-from app.application.dto.language_dto import LanguageListResponse, LanguageResponse
+from app.application.dto.language_dto import (LanguageListResponse,
+                                              LanguageResponse)
 
 from .conftest import DT, DT2, make_entity
 

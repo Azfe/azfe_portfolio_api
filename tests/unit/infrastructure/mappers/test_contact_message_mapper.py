@@ -1,7 +1,8 @@
 """Unit tests for ContactMessageMapper."""
 
 from app.domain.entities import ContactMessage
-from app.infrastructure.mappers.contact_message_mapper import ContactMessageMapper
+from app.infrastructure.mappers.contact_message_mapper import \
+    ContactMessageMapper
 
 from .conftest import DT_CREATED, DT_READ, DT_REPLIED
 

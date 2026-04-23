@@ -1,31 +1,22 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (
-    get_add_social_network_use_case,
-    get_delete_social_network_use_case,
-    get_edit_social_network_use_case,
-    get_list_social_networks_use_case,
-    get_social_network_repository,
-)
+from app.api.dependencies import (get_add_social_network_use_case,
+                                  get_delete_social_network_use_case,
+                                  get_edit_social_network_use_case,
+                                  get_list_social_networks_use_case,
+                                  get_social_network_repository)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.social_networks_schema import (
-    SocialNetworkCreate,
-    SocialNetworkResponse,
-    SocialNetworkUpdate,
-)
-from app.application.dto import (
-    AddSocialNetworkRequest,
-    DeleteSocialNetworkRequest,
-    EditSocialNetworkRequest,
-    ListSocialNetworksRequest,
-    SocialNetworkResponse as SocialNetworkDTO,
-)
+from app.api.schemas.social_networks_schema import (SocialNetworkCreate,
+                                                    SocialNetworkResponse,
+                                                    SocialNetworkUpdate)
+from app.application.dto import (AddSocialNetworkRequest,
+                                 DeleteSocialNetworkRequest,
+                                 EditSocialNetworkRequest,
+                                 ListSocialNetworksRequest)
+from app.application.dto import SocialNetworkResponse as SocialNetworkDTO
 from app.application.use_cases.social_network import (
-    AddSocialNetworkUseCase,
-    DeleteSocialNetworkUseCase,
-    EditSocialNetworkUseCase,
-    ListSocialNetworksUseCase,
-)
+    AddSocialNetworkUseCase, DeleteSocialNetworkUseCase,
+    EditSocialNetworkUseCase, ListSocialNetworksUseCase)
 from app.infrastructure.repositories import SocialNetworkRepository
 from app.shared.shared_exceptions import NotFoundException
 

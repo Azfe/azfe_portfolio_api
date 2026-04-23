@@ -7,28 +7,24 @@ Aggregates all CV data from multiple sources.
 from typing import TYPE_CHECKING
 
 from app.application.dto import CompleteCVResponse, GetCompleteCVRequest
-from app.shared.interfaces import (
-    IOrderedRepository,
-    IProfileRepository,
-    IQueryUseCase,
-    IRepository,
-    ISocialNetworkRepository,
-    IUniqueNameRepository,
-)
+from app.shared.interfaces import (IOrderedRepository, IProfileRepository,
+                                   IQueryUseCase, IRepository,
+                                   ISocialNetworkRepository,
+                                   IUniqueNameRepository)
 from app.shared.shared_exceptions import NotFoundException
 
 if TYPE_CHECKING:
-    from app.domain.entities import (
-        AdditionalTraining as AdditionalTrainingType,
-        Certification as CertificationType,
-        ContactInformation as ContactInformationType,
-        Education as EducationType,
-        Project as ProjectType,
-        Skill as SkillType,
-        SocialNetwork as SocialNetworkType,
-        Tool as ToolType,
-        WorkExperience as WorkExperienceType,
-    )
+    from app.domain.entities import \
+        AdditionalTraining as AdditionalTrainingType
+    from app.domain.entities import Certification as CertificationType
+    from app.domain.entities import \
+        ContactInformation as ContactInformationType
+    from app.domain.entities import Education as EducationType
+    from app.domain.entities import Project as ProjectType
+    from app.domain.entities import Skill as SkillType
+    from app.domain.entities import SocialNetwork as SocialNetworkType
+    from app.domain.entities import Tool as ToolType
+    from app.domain.entities import WorkExperience as WorkExperienceType
 
 
 class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVResponse]):
@@ -109,7 +105,9 @@ class GetCompleteCVUseCase(IQueryUseCase[GetCompleteCVRequest, CompleteCVRespons
             raise NotFoundException("Profile", "single")
 
         # Get contact information (optional — None if not set)
-        contact_info_results = await self.contact_info_repo.find_by(profile_id=profile.id)
+        contact_info_results = await self.contact_info_repo.find_by(
+            profile_id=profile.id
+        )
         contact_info = contact_info_results[0] if contact_info_results else None
 
         # Get social networks (ordered by order_index)

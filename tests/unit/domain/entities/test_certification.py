@@ -5,14 +5,9 @@ from datetime import datetime, timedelta
 import pytest
 
 from app.domain.entities.certification import Certification
-from app.domain.exceptions import (
-    InvalidDateRangeError,
-    InvalidIssuerError,
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidTitleError,
-    InvalidURLError,
-)
+from app.domain.exceptions import (InvalidDateRangeError, InvalidIssuerError,
+                                   InvalidLengthError, InvalidOrderIndexError,
+                                   InvalidTitleError, InvalidURLError)
 
 
 @pytest.mark.entity
