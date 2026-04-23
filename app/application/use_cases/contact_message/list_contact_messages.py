@@ -4,7 +4,8 @@ List ContactMessages Use Case.
 Retrieves all contact messages.
 """
 
-from app.application.dto import ContactMessageListResponse, ListContactMessagesRequest
+from app.application.dto import (ContactMessageListResponse,
+                                 ListContactMessagesRequest)
 from app.shared.interfaces import IContactMessageRepository, IQueryUseCase
 
 

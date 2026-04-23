@@ -13,20 +13,15 @@ Business Rules Applied:
 - RB-C07: orderIndex is required and must be unique per profile
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidDateRangeError,
-    InvalidIssuerError,
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidTitleError,
-    InvalidURLError,
-)
+from ..exceptions import (EmptyFieldError, InvalidDateRangeError,
+                          InvalidIssuerError, InvalidLengthError,
+                          InvalidOrderIndexError, InvalidTitleError,
+                          InvalidURLError)
 
 
 @dataclass

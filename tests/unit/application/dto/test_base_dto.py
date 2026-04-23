@@ -2,12 +2,8 @@
 
 from datetime import datetime
 
-from app.application.dto.base_dto import (
-    DateRangeDTO,
-    ErrorResponse,
-    PaginationRequest,
-    SuccessResponse,
-)
+from app.application.dto.base_dto import (DateRangeDTO, ErrorResponse,
+                                          PaginationRequest, SuccessResponse)
 
 
 class TestSuccessResponse:

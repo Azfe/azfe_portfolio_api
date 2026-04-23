@@ -23,21 +23,13 @@ from app.domain.entities.education import Education
 from app.domain.entities.profile import Profile
 from app.domain.entities.skill import Skill
 from app.domain.entities.work_experience import WorkExperience
-from app.domain.exceptions import (
-    EmptyFieldError,
-    InvalidCategoryError,
-    InvalidCompanyError,
-    InvalidDateRangeError,
-    InvalidEmailError,
-    InvalidInstitutionError,
-    InvalidLengthError,
-    InvalidNameError,
-    InvalidOrderIndexError,
-    InvalidPhoneError,
-    InvalidRoleError,
-    InvalidSkillLevelError,
-    InvalidURLError,
-)
+from app.domain.exceptions import (EmptyFieldError, InvalidCategoryError,
+                                   InvalidCompanyError, InvalidDateRangeError,
+                                   InvalidEmailError, InvalidInstitutionError,
+                                   InvalidLengthError, InvalidNameError,
+                                   InvalidOrderIndexError, InvalidPhoneError,
+                                   InvalidRoleError, InvalidSkillLevelError,
+                                   InvalidURLError)
 from app.domain.value_objects.date_range import DateRange
 from app.domain.value_objects.email import Email
 from app.domain.value_objects.phone import Phone

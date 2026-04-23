@@ -3,12 +3,8 @@
 import pytest
 
 from app.domain.entities.contact_information import ContactInformation
-from app.domain.exceptions import (
-    EmptyFieldError,
-    InvalidEmailError,
-    InvalidPhoneError,
-    InvalidURLError,
-)
+from app.domain.exceptions import (EmptyFieldError, InvalidEmailError,
+                                   InvalidPhoneError, InvalidURLError)
 
 
 @pytest.mark.entity

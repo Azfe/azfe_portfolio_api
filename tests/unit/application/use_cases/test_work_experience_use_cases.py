@@ -5,29 +5,19 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.application.dto import (
-    AddExperienceRequest,
-    DeleteExperienceRequest,
-    EditExperienceRequest,
-    ListExperiencesRequest,
-)
-from app.application.use_cases.work_experience.add_experience import (
-    AddExperienceUseCase,
-)
-from app.application.use_cases.work_experience.delete_experience import (
-    DeleteExperienceUseCase,
-)
-from app.application.use_cases.work_experience.edit_experience import (
-    EditExperienceUseCase,
-)
-from app.application.use_cases.work_experience.list_experiences import (
-    ListExperiencesUseCase,
-)
+from app.application.dto import (AddExperienceRequest, DeleteExperienceRequest,
+                                 EditExperienceRequest, ListExperiencesRequest)
+from app.application.use_cases.work_experience.add_experience import \
+    AddExperienceUseCase
+from app.application.use_cases.work_experience.delete_experience import \
+    DeleteExperienceUseCase
+from app.application.use_cases.work_experience.edit_experience import \
+    EditExperienceUseCase
+from app.application.use_cases.work_experience.list_experiences import \
+    ListExperiencesUseCase
 from app.domain.entities.work_experience import WorkExperience
-from app.shared.shared_exceptions import (
-    BusinessRuleViolationException,
-    NotFoundException,
-)
+from app.shared.shared_exceptions import (BusinessRuleViolationException,
+                                          NotFoundException)
 
 pytestmark = pytest.mark.asyncio
 

@@ -1,7 +1,7 @@
 """Integration tests for the health check endpoints."""
 
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 
 pytestmark = pytest.mark.integration
 

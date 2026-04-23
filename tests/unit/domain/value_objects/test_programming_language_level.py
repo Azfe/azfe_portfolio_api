@@ -5,7 +5,8 @@ Tests for ProgrammingLanguageLevel Value Object.
 import pytest
 
 from app.domain.exceptions import InvalidProgrammingLanguageLevelError
-from app.domain.value_objects.programming_language_level import ProgrammingLanguageLevel
+from app.domain.value_objects.programming_language_level import \
+    ProgrammingLanguageLevel
 
 
 @pytest.mark.value_object

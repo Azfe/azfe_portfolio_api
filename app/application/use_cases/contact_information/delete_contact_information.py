@@ -6,12 +6,14 @@ Deletes contact information for a profile.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import DeleteContactInformationRequest, SuccessResponse
+from app.application.dto import (DeleteContactInformationRequest,
+                                 SuccessResponse)
 from app.shared.interfaces import ICommandUseCase, IRepository
 from app.shared.shared_exceptions import NotFoundException
 
 if TYPE_CHECKING:
-    from app.domain.entities import ContactInformation as ContactInformationType
+    from app.domain.entities import \
+        ContactInformation as ContactInformationType
 
 
 class DeleteContactInformationUseCase(

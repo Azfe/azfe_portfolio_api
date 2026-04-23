@@ -9,17 +9,13 @@ Business Rules Applied:
 - RB-L03: orderIndex is required and must be >= 0
 """
 
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-import uuid
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidLanguageProficiencyError,
-    InvalidLengthError,
-    InvalidNameError,
-    InvalidOrderIndexError,
-)
+from ..exceptions import (EmptyFieldError, InvalidLanguageProficiencyError,
+                          InvalidLengthError, InvalidNameError,
+                          InvalidOrderIndexError)
 
 # Valid CEFR proficiency levels
 VALID_PROFICIENCIES = {"a1", "a2", "b1", "b2", "c1", "c2"}

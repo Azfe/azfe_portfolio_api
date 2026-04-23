@@ -13,19 +13,14 @@ Business Rules Applied:
 - RB-AT07: orderIndex is required and must be unique per profile
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidProviderError,
-    InvalidTitleError,
-    InvalidURLError,
-)
+from ..exceptions import (EmptyFieldError, InvalidLengthError,
+                          InvalidOrderIndexError, InvalidProviderError,
+                          InvalidTitleError, InvalidURLError)
 
 
 @dataclass

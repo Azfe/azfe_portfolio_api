@@ -1,9 +1,8 @@
 """Unit tests for ProgrammingLanguageMapper."""
 
 from app.domain.entities import ProgrammingLanguage
-from app.infrastructure.mappers.programming_language_mapper import (
-    ProgrammingLanguageMapper,
-)
+from app.infrastructure.mappers.programming_language_mapper import \
+    ProgrammingLanguageMapper
 
 from .conftest import DT_CREATED, DT_UPDATED
 

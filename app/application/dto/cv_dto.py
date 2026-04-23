@@ -57,15 +57,28 @@ class CompleteCVResponse:
         """Create complete CV response from entities."""
         return cls(
             profile=ProfileResponse.from_entity(profile),
-            work_experiences=[WorkExperienceResponse.from_entity(e) for e in work_experiences],
+            work_experiences=[
+                WorkExperienceResponse.from_entity(e) for e in work_experiences
+            ],
             skills=[SkillResponse.from_entity(s) for s in skills],
             education=[EducationResponse.from_entity(e) for e in education],
-            contact_info=ContactInformationResponse.from_entity(contact_info) if contact_info else None,
-            social_networks=[SocialNetworkResponse.from_entity(sn) for sn in (social_networks or [])],
+            contact_info=(
+                ContactInformationResponse.from_entity(contact_info)
+                if contact_info
+                else None
+            ),
+            social_networks=[
+                SocialNetworkResponse.from_entity(sn) for sn in (social_networks or [])
+            ],
             projects=[ProjectResponse.from_entity(p) for p in (projects or [])],
             tools=[ToolResponse.from_entity(t) for t in (tools or [])],
-            additional_training=[AdditionalTrainingResponse.from_entity(at) for at in (additional_training or [])],
-            certifications=[CertificationResponse.from_entity(c) for c in (certifications or [])],
+            additional_training=[
+                AdditionalTrainingResponse.from_entity(at)
+                for at in (additional_training or [])
+            ],
+            certifications=[
+                CertificationResponse.from_entity(c) for c in (certifications or [])
+            ],
         )
 
 

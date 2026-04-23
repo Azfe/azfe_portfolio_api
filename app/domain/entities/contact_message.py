@@ -12,17 +12,13 @@ Business Rules Applied:
 - RB-CM06: Messages are append-only (no updates after creation)
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidEmailError,
-    InvalidLengthError,
-    InvalidNameError,
-)
+from ..exceptions import (EmptyFieldError, InvalidEmailError,
+                          InvalidLengthError, InvalidNameError)
 
 # Valid message statuses
 VALID_MESSAGE_STATUSES = {"pending", "read", "replied"}

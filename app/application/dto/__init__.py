@@ -6,113 +6,65 @@ DTOs are simple data containers without business logic.
 """
 
 # New DTOs
-from .additional_training_dto import (
-    AddAdditionalTrainingRequest,
-    AdditionalTrainingListResponse,
-    AdditionalTrainingResponse,
-    DeleteAdditionalTrainingRequest,
-    EditAdditionalTrainingRequest,
-    ListAdditionalTrainingsRequest,
-)
-from .base_dto import DateRangeDTO, ErrorResponse, PaginationRequest, SuccessResponse
-from .certification_dto import (
-    AddCertificationRequest,
-    CertificationListResponse,
-    CertificationResponse,
-    DeleteCertificationRequest,
-    EditCertificationRequest,
-    ListCertificationsRequest,
-)
-from .contact_information_dto import (
-    ContactInformationResponse,
-    CreateContactInformationRequest,
-    DeleteContactInformationRequest,
-    GetContactInformationRequest,
-    UpdateContactInformationRequest,
-)
-from .contact_message_dto import (
-    ContactMessageListResponse,
-    ContactMessageResponse,
-    CreateContactMessageRequest,
-    DeleteContactMessageRequest,
-    ListContactMessagesRequest,
-)
-from .cv_dto import (
-    CompleteCVResponse,
-    GenerateCVPDFRequest,
-    GenerateCVPDFResponse,
-    GetCompleteCVRequest,
-)
-from .education_dto import (
-    AddEducationRequest,
-    DeleteEducationRequest,
-    EditEducationRequest,
-    EducationListResponse,
-    EducationResponse,
-    ListEducationRequest,
-)
-from .language_dto import (
-    AddLanguageRequest,
-    DeleteLanguageRequest,
-    EditLanguageRequest,
-    LanguageListResponse,
-    LanguageResponse,
-    ListLanguagesRequest,
-)
-from .profile_dto import (
-    CreateProfileRequest,
-    GetProfileRequest,
-    ProfileResponse,
-    UpdateProfileRequest,
-)
-from .programming_language_dto import (
-    AddProgrammingLanguageRequest,
-    DeleteProgrammingLanguageRequest,
-    EditProgrammingLanguageRequest,
-    ListProgrammingLanguagesRequest,
-    ProgrammingLanguageListResponse,
-    ProgrammingLanguageResponse,
-)
-from .project_dto import (
-    AddProjectRequest,
-    DeleteProjectRequest,
-    EditProjectRequest,
-    ListProjectsRequest,
-    ProjectListResponse,
-    ProjectResponse,
-)
-from .skill_dto import (
-    AddSkillRequest,
-    DeleteSkillRequest,
-    EditSkillRequest,
-    ListSkillsRequest,
-    SkillListResponse,
-    SkillResponse,
-)
-from .social_network_dto import (
-    AddSocialNetworkRequest,
-    DeleteSocialNetworkRequest,
-    EditSocialNetworkRequest,
-    ListSocialNetworksRequest,
-    SocialNetworkListResponse,
-    SocialNetworkResponse,
-)
-from .tool_dto import (
-    AddToolRequest,
-    DeleteToolRequest,
-    EditToolRequest,
-    ListToolsRequest,
-    ToolListResponse,
-    ToolResponse,
-)
-from .work_experience_dto import (
-    AddExperienceRequest,
-    DeleteExperienceRequest,
-    EditExperienceRequest,
-    ListExperiencesRequest,
-    WorkExperienceListResponse,
-    WorkExperienceResponse,
-)
+from .additional_training_dto import (AddAdditionalTrainingRequest,
+                                      AdditionalTrainingListResponse,
+                                      AdditionalTrainingResponse,
+                                      DeleteAdditionalTrainingRequest,
+                                      EditAdditionalTrainingRequest,
+                                      ListAdditionalTrainingsRequest)
+from .base_dto import (DateRangeDTO, ErrorResponse, PaginationRequest,
+                       SuccessResponse)
+from .certification_dto import (AddCertificationRequest,
+                                CertificationListResponse,
+                                CertificationResponse,
+                                DeleteCertificationRequest,
+                                EditCertificationRequest,
+                                ListCertificationsRequest)
+from .contact_information_dto import (ContactInformationResponse,
+                                      CreateContactInformationRequest,
+                                      DeleteContactInformationRequest,
+                                      GetContactInformationRequest,
+                                      UpdateContactInformationRequest)
+from .contact_message_dto import (ContactMessageListResponse,
+                                  ContactMessageResponse,
+                                  CreateContactMessageRequest,
+                                  DeleteContactMessageRequest,
+                                  ListContactMessagesRequest)
+from .cv_dto import (CompleteCVResponse, GenerateCVPDFRequest,
+                     GenerateCVPDFResponse, GetCompleteCVRequest)
+from .education_dto import (AddEducationRequest, DeleteEducationRequest,
+                            EditEducationRequest, EducationListResponse,
+                            EducationResponse, ListEducationRequest)
+from .language_dto import (AddLanguageRequest, DeleteLanguageRequest,
+                           EditLanguageRequest, LanguageListResponse,
+                           LanguageResponse, ListLanguagesRequest)
+from .profile_dto import (CreateProfileRequest, GetProfileRequest,
+                          ProfileResponse, UpdateProfileRequest)
+from .programming_language_dto import (AddProgrammingLanguageRequest,
+                                       DeleteProgrammingLanguageRequest,
+                                       EditProgrammingLanguageRequest,
+                                       ListProgrammingLanguagesRequest,
+                                       ProgrammingLanguageListResponse,
+                                       ProgrammingLanguageResponse)
+from .project_dto import (AddProjectRequest, DeleteProjectRequest,
+                          EditProjectRequest, ListProjectsRequest,
+                          ProjectListResponse, ProjectResponse)
+from .skill_dto import (AddSkillRequest, DeleteSkillRequest, EditSkillRequest,
+                        ListSkillsRequest, SkillListResponse, SkillResponse)
+from .social_network_dto import (AddSocialNetworkRequest,
+                                 DeleteSocialNetworkRequest,
+                                 EditSocialNetworkRequest,
+                                 ListSocialNetworksRequest,
+                                 SocialNetworkListResponse,
+                                 SocialNetworkResponse)
+from .tool_dto import (AddToolRequest, DeleteToolRequest, EditToolRequest,
+                       ListToolsRequest, ToolListResponse, ToolResponse)
+from .work_experience_dto import (AddExperienceRequest,
+                                  DeleteExperienceRequest,
+                                  EditExperienceRequest,
+                                  ListExperiencesRequest,
+                                  WorkExperienceListResponse,
+                                  WorkExperienceResponse)
 
 __all__ = [
     # Base

@@ -5,8 +5,8 @@ Tests the public contact form submission and admin management of messages
 through the full stack (API → Use Cases → Repositories → MongoDB).
 """
 
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 
 pytestmark = pytest.mark.e2e
 

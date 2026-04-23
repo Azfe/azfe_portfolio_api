@@ -4,7 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.domain.entities import Tool
 from app.infrastructure.mappers import ToolMapper
-from app.shared.interfaces.repository import IOrderedRepository, IUniqueNameRepository
+from app.shared.interfaces.repository import (IOrderedRepository,
+                                              IUniqueNameRepository)
 
 
 class ToolRepository(IUniqueNameRepository[Tool], IOrderedRepository[Tool]):

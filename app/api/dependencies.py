@@ -12,95 +12,61 @@ from fastapi import Depends
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 # ── Use cases ────────────────────────────────────────────────────────────
-from app.application.use_cases import (
-    AddEducationUseCase,
-    AddExperienceUseCase,
-    AddSkillUseCase,
-    CreateProfileUseCase,
-    DeleteEducationUseCase,
-    DeleteExperienceUseCase,
-    DeleteSkillUseCase,
-    EditEducationUseCase,
-    EditExperienceUseCase,
-    EditSkillUseCase,
-    GenerateCVPDFUseCase,
-    GetCompleteCVUseCase,
-    GetProfileUseCase,
-    ListExperiencesUseCase,
-    ListSkillsUseCase,
-    UpdateProfileUseCase,
-)
+from app.application.use_cases import (AddEducationUseCase,
+                                       AddExperienceUseCase, AddSkillUseCase,
+                                       CreateProfileUseCase,
+                                       DeleteEducationUseCase,
+                                       DeleteExperienceUseCase,
+                                       DeleteSkillUseCase,
+                                       EditEducationUseCase,
+                                       EditExperienceUseCase, EditSkillUseCase,
+                                       GenerateCVPDFUseCase,
+                                       GetCompleteCVUseCase, GetProfileUseCase,
+                                       ListExperiencesUseCase,
+                                       ListSkillsUseCase, UpdateProfileUseCase)
 from app.application.use_cases.additional_training import (
-    AddAdditionalTrainingUseCase,
-    DeleteAdditionalTrainingUseCase,
-    EditAdditionalTrainingUseCase,
-    ListAdditionalTrainingsUseCase,
-)
+    AddAdditionalTrainingUseCase, DeleteAdditionalTrainingUseCase,
+    EditAdditionalTrainingUseCase, ListAdditionalTrainingsUseCase)
 from app.application.use_cases.certification import (
-    AddCertificationUseCase,
-    DeleteCertificationUseCase,
-    EditCertificationUseCase,
-    ListCertificationsUseCase,
-)
+    AddCertificationUseCase, DeleteCertificationUseCase,
+    EditCertificationUseCase, ListCertificationsUseCase)
 from app.application.use_cases.contact_information import (
-    CreateContactInformationUseCase,
-    DeleteContactInformationUseCase,
-    GetContactInformationUseCase,
-    UpdateContactInformationUseCase,
-)
+    CreateContactInformationUseCase, DeleteContactInformationUseCase,
+    GetContactInformationUseCase, UpdateContactInformationUseCase)
 from app.application.use_cases.contact_message import (
-    CreateContactMessageUseCase,
-    DeleteContactMessageUseCase,
-    ListContactMessagesUseCase,
-)
-from app.application.use_cases.language import (
-    AddLanguageUseCase,
-    DeleteLanguageUseCase,
-    EditLanguageUseCase,
-    ListLanguagesUseCase,
-)
+    CreateContactMessageUseCase, DeleteContactMessageUseCase,
+    ListContactMessagesUseCase)
+from app.application.use_cases.language import (AddLanguageUseCase,
+                                                DeleteLanguageUseCase,
+                                                EditLanguageUseCase,
+                                                ListLanguagesUseCase)
 from app.application.use_cases.programming_language import (
-    AddProgrammingLanguageUseCase,
-    DeleteProgrammingLanguageUseCase,
-    EditProgrammingLanguageUseCase,
-    ListProgrammingLanguagesUseCase,
-)
-from app.application.use_cases.project import (
-    AddProjectUseCase,
-    DeleteProjectUseCase,
-    EditProjectUseCase,
-    ListProjectsUseCase,
-)
+    AddProgrammingLanguageUseCase, DeleteProgrammingLanguageUseCase,
+    EditProgrammingLanguageUseCase, ListProgrammingLanguagesUseCase)
+from app.application.use_cases.project import (AddProjectUseCase,
+                                               DeleteProjectUseCase,
+                                               EditProjectUseCase,
+                                               ListProjectsUseCase)
 from app.application.use_cases.social_network import (
-    AddSocialNetworkUseCase,
-    DeleteSocialNetworkUseCase,
-    EditSocialNetworkUseCase,
-    ListSocialNetworksUseCase,
-)
-from app.application.use_cases.tool import (
-    AddToolUseCase,
-    DeleteToolUseCase,
-    EditToolUseCase,
-    ListToolsUseCase,
-)
+    AddSocialNetworkUseCase, DeleteSocialNetworkUseCase,
+    EditSocialNetworkUseCase, ListSocialNetworksUseCase)
+from app.application.use_cases.tool import (AddToolUseCase, DeleteToolUseCase,
+                                            EditToolUseCase, ListToolsUseCase)
 from app.infrastructure.database.mongo_client import get_database
-
 # ── Repositories ─────────────────────────────────────────────────────────
-from app.infrastructure.repositories import (
-    AdditionalTrainingRepository,
-    CertificationRepository,
-    ContactInformationRepository,
-    ContactMessageRepository,
-    EducationRepository,
-    LanguageRepository,
-    ProfileRepository,
-    ProgrammingLanguageRepository,
-    ProjectRepository,
-    SkillRepository,
-    SocialNetworkRepository,
-    ToolRepository,
-    WorkExperienceRepository,
-)
+from app.infrastructure.repositories import (AdditionalTrainingRepository,
+                                             CertificationRepository,
+                                             ContactInformationRepository,
+                                             ContactMessageRepository,
+                                             EducationRepository,
+                                             LanguageRepository,
+                                             ProfileRepository,
+                                             ProgrammingLanguageRepository,
+                                             ProjectRepository,
+                                             SkillRepository,
+                                             SocialNetworkRepository,
+                                             ToolRepository,
+                                             WorkExperienceRepository)
 
 # =====================================================================
 # REPOSITORY PROVIDERS
@@ -554,11 +520,17 @@ async def get_get_complete_cv_use_case(
     experience_repo: WorkExperienceRepository = Depends(get_work_experience_repository),
     skill_repo: SkillRepository = Depends(get_skill_repository),
     education_repo: EducationRepository = Depends(get_education_repository),
-    contact_info_repo: ContactInformationRepository = Depends(get_contact_information_repository),
-    social_network_repo: SocialNetworkRepository = Depends(get_social_network_repository),
+    contact_info_repo: ContactInformationRepository = Depends(
+        get_contact_information_repository
+    ),
+    social_network_repo: SocialNetworkRepository = Depends(
+        get_social_network_repository
+    ),
     project_repo: ProjectRepository = Depends(get_project_repository),
     tool_repo: ToolRepository = Depends(get_tool_repository),
-    additional_training_repo: AdditionalTrainingRepository = Depends(get_additional_training_repository),
+    additional_training_repo: AdditionalTrainingRepository = Depends(
+        get_additional_training_repository
+    ),
     certification_repo: CertificationRepository = Depends(get_certification_repository),
 ) -> GetCompleteCVUseCase:
     return GetCompleteCVUseCase(

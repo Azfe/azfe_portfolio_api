@@ -4,11 +4,8 @@ Generate CV PDF Use Case.
 Generates the CV as a PDF file (placeholder implementation).
 """
 
-from app.application.dto import (
-    GenerateCVPDFRequest,
-    GenerateCVPDFResponse,
-    GetCompleteCVRequest,
-)
+from app.application.dto import (GenerateCVPDFRequest, GenerateCVPDFResponse,
+                                 GetCompleteCVRequest)
 from app.shared.interfaces import IQueryUseCase
 
 from .get_complete_cv import GetCompleteCVUseCase

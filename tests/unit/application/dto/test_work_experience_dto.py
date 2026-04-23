@@ -1,9 +1,7 @@
 """Tests for WorkExperience DTOs."""
 
 from app.application.dto.work_experience_dto import (
-    WorkExperienceListResponse,
-    WorkExperienceResponse,
-)
+    WorkExperienceListResponse, WorkExperienceResponse)
 
 from .conftest import DT, DT2, DT_END, DT_START, make_entity
 

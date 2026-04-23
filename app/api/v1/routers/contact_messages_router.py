@@ -2,28 +2,20 @@ from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (
-    get_contact_message_repository,
-    get_create_contact_message_use_case,
-    get_delete_contact_message_use_case,
-    get_list_contact_messages_use_case,
-)
+from app.api.dependencies import (get_contact_message_repository,
+                                  get_create_contact_message_use_case,
+                                  get_delete_contact_message_use_case,
+                                  get_list_contact_messages_use_case)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.contact_messages_schema import (
-    ContactMessageCreate,
-    ContactMessageResponse,
-)
-from app.application.dto import (
-    ContactMessageResponse as ContactMessageDTO,
-    CreateContactMessageRequest,
-    DeleteContactMessageRequest,
-    ListContactMessagesRequest,
-)
+from app.api.schemas.contact_messages_schema import (ContactMessageCreate,
+                                                     ContactMessageResponse)
+from app.application.dto import ContactMessageResponse as ContactMessageDTO
+from app.application.dto import (CreateContactMessageRequest,
+                                 DeleteContactMessageRequest,
+                                 ListContactMessagesRequest)
 from app.application.use_cases.contact_message import (
-    CreateContactMessageUseCase,
-    DeleteContactMessageUseCase,
-    ListContactMessagesUseCase,
-)
+    CreateContactMessageUseCase, DeleteContactMessageUseCase,
+    ListContactMessagesUseCase)
 from app.infrastructure.repositories import ContactMessageRepository
 from app.shared.shared_exceptions import NotFoundException
 

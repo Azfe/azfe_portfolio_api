@@ -4,16 +4,17 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.application.dto.language_dto import (
-    AddLanguageRequest,
-    DeleteLanguageRequest,
-    EditLanguageRequest,
-    ListLanguagesRequest,
-)
+from app.application.dto.language_dto import (AddLanguageRequest,
+                                              DeleteLanguageRequest,
+                                              EditLanguageRequest,
+                                              ListLanguagesRequest)
 from app.application.use_cases.language.add_language import AddLanguageUseCase
-from app.application.use_cases.language.delete_language import DeleteLanguageUseCase
-from app.application.use_cases.language.edit_language import EditLanguageUseCase
-from app.application.use_cases.language.list_languages import ListLanguagesUseCase
+from app.application.use_cases.language.delete_language import \
+    DeleteLanguageUseCase
+from app.application.use_cases.language.edit_language import \
+    EditLanguageUseCase
+from app.application.use_cases.language.list_languages import \
+    ListLanguagesUseCase
 from app.domain.entities.language import Language
 from app.shared.shared_exceptions import NotFoundException
 

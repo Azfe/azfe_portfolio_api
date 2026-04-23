@@ -1,7 +1,8 @@
 """Unit tests for SocialNetworkMapper."""
 
 from app.domain.entities import SocialNetwork
-from app.infrastructure.mappers.social_network_mapper import SocialNetworkMapper
+from app.infrastructure.mappers.social_network_mapper import \
+    SocialNetworkMapper
 
 from .conftest import DT_CREATED, DT_UPDATED
 

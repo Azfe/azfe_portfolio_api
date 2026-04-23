@@ -1,7 +1,7 @@
 """Integration tests for the work experience router endpoints."""
 
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
 
 pytestmark = pytest.mark.integration
 

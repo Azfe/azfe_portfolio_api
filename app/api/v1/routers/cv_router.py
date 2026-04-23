@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 
-from app.api.dependencies import (
-    get_generate_cv_pdf_use_case,
-    get_get_complete_cv_use_case,
-)
+from app.api.dependencies import (get_generate_cv_pdf_use_case,
+                                  get_get_complete_cv_use_case)
 from app.api.schemas.cv_schema import CVCompleteResponse
 from app.application.dto import GenerateCVPDFRequest, GetCompleteCVRequest
-from app.application.use_cases import GenerateCVPDFUseCase, GetCompleteCVUseCase
+from app.application.use_cases import (GenerateCVPDFUseCase,
+                                       GetCompleteCVUseCase)
 
 router = APIRouter(prefix="/cv", tags=["CV"])
 

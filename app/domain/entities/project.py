@@ -15,20 +15,15 @@ Business Rules Applied:
 - RB-PR09: If no URLs, description must be sufficiently detailed (min 100 chars)
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidDateRangeError,
-    InvalidDescriptionError,
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidTitleError,
-    InvalidURLError,
-)
+from ..exceptions import (EmptyFieldError, InvalidDateRangeError,
+                          InvalidDescriptionError, InvalidLengthError,
+                          InvalidOrderIndexError, InvalidTitleError,
+                          InvalidURLError)
 
 
 @dataclass

@@ -4,7 +4,8 @@ List SocialNetworks Use Case.
 Retrieves all social networks for a profile.
 """
 
-from app.application.dto import ListSocialNetworksRequest, SocialNetworkListResponse
+from app.application.dto import (ListSocialNetworksRequest,
+                                 SocialNetworkListResponse)
 from app.shared.interfaces import IQueryUseCase, ISocialNetworkRepository
 
 

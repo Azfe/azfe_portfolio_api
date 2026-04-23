@@ -12,17 +12,13 @@ Business Rules Applied:
 - RB-CI06: Only one ContactInformation per Profile
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
 import re
 import uuid
+from dataclasses import dataclass, field
+from datetime import datetime
 
-from ..exceptions import (
-    EmptyFieldError,
-    InvalidEmailError,
-    InvalidPhoneError,
-    InvalidURLError,
-)
+from ..exceptions import (EmptyFieldError, InvalidEmailError,
+                          InvalidPhoneError, InvalidURLError)
 
 
 @dataclass

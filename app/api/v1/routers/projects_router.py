@@ -1,31 +1,20 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (
-    get_add_project_use_case,
-    get_delete_project_use_case,
-    get_edit_project_use_case,
-    get_list_projects_use_case,
-    get_project_repository,
-)
+from app.api.dependencies import (get_add_project_use_case,
+                                  get_delete_project_use_case,
+                                  get_edit_project_use_case,
+                                  get_list_projects_use_case,
+                                  get_project_repository)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.projects_schema import (
-    ProjectCreate,
-    ProjectResponse,
-    ProjectUpdate,
-)
-from app.application.dto import (
-    AddProjectRequest,
-    DeleteProjectRequest,
-    EditProjectRequest,
-    ListProjectsRequest,
-    ProjectResponse as ProjectDTO,
-)
-from app.application.use_cases.project import (
-    AddProjectUseCase,
-    DeleteProjectUseCase,
-    EditProjectUseCase,
-    ListProjectsUseCase,
-)
+from app.api.schemas.projects_schema import (ProjectCreate, ProjectResponse,
+                                             ProjectUpdate)
+from app.application.dto import (AddProjectRequest, DeleteProjectRequest,
+                                 EditProjectRequest, ListProjectsRequest)
+from app.application.dto import ProjectResponse as ProjectDTO
+from app.application.use_cases.project import (AddProjectUseCase,
+                                               DeleteProjectUseCase,
+                                               EditProjectUseCase,
+                                               ListProjectsUseCase)
 from app.infrastructure.repositories import ProjectRepository
 from app.shared.shared_exceptions import NotFoundException
 

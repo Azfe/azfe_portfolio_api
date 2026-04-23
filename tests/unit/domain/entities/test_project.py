@@ -5,15 +5,10 @@ from datetime import datetime
 import pytest
 
 from app.domain.entities.project import Project
-from app.domain.exceptions import (
-    EmptyFieldError,
-    InvalidDateRangeError,
-    InvalidDescriptionError,
-    InvalidLengthError,
-    InvalidOrderIndexError,
-    InvalidTitleError,
-    InvalidURLError,
-)
+from app.domain.exceptions import (EmptyFieldError, InvalidDateRangeError,
+                                   InvalidDescriptionError, InvalidLengthError,
+                                   InvalidOrderIndexError, InvalidTitleError,
+                                   InvalidURLError)
 
 LONG_DESC = "A" * 100  # minimum for description without URLs
 
