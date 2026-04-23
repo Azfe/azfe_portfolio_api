@@ -23,9 +23,18 @@ from typing import TYPE_CHECKING, Any, Generic, TypeVar
 if TYPE_CHECKING:
     from app.domain.entities import (
         AdditionalTraining,  # noqa: F401
+        Certification,  # noqa: F401
+        ContactInformation,  # noqa: F401
         ContactMessage,
+        Education,  # noqa: F401
+        Language,  # noqa: F401
         Profile,
+        ProgrammingLanguage,  # noqa: F401
+        Project,  # noqa: F401
+        Skill,  # noqa: F401
         SocialNetwork,
+        Tool,  # noqa: F401
+        WorkExperience,  # noqa: F401
     )
 
 # Generic type representing any domain entity
