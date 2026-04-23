@@ -74,33 +74,41 @@ class TestCompleteCVResponseCreate:
 
         resp = CompleteCVResponse.create(
             profile=profile,
-            experiences=experiences,
+            work_experiences=experiences,
             skills=skills,
             education=education,
         )
 
         assert resp.profile.id == "p-1"
         assert resp.profile.name == "John"
-        assert len(resp.experiences) == 1
-        assert resp.experiences[0].role == "Dev"
+        assert len(resp.work_experiences) == 1
+        assert resp.work_experiences[0].role == "Dev"
         assert len(resp.skills) == 2
         assert resp.skills[1].name == "FastAPI"
         assert len(resp.education) == 1
         assert resp.education[0].institution == "MIT"
+        assert resp.contact_info is None
+        assert resp.social_networks == []
+        assert resp.projects == []
+        assert resp.tools == []
+        assert resp.additional_training == []
+        assert resp.certifications == []
 
     def test_empty_sections(self):
         profile = _make_profile()
         resp = CompleteCVResponse.create(
             profile=profile,
-            experiences=[],
+            work_experiences=[],
             skills=[],
             education=[],
         )
 
         assert resp.profile.id == "p-1"
-        assert resp.experiences == []
+        assert resp.work_experiences == []
         assert resp.skills == []
         assert resp.education == []
+        assert resp.contact_info is None
+        assert resp.social_networks == []
 
 
 class TestGenerateCVPDFRequest:
