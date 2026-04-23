@@ -11,16 +11,19 @@ Tests cover:
 - Append-only nature (no updates after creation)
 """
 
-import uuid
 from datetime import datetime
+import uuid
 
 import pytest
 
-from app.domain.entities.contact_message import (VALID_MESSAGE_STATUSES,
-                                                 ContactMessage)
-from app.domain.exceptions import (DomainError, EmptyFieldError,
-                                   InvalidEmailError, InvalidLengthError,
-                                   InvalidNameError)
+from app.domain.entities.contact_message import VALID_MESSAGE_STATUSES, ContactMessage
+from app.domain.exceptions import (
+    DomainError,
+    EmptyFieldError,
+    InvalidEmailError,
+    InvalidLengthError,
+    InvalidNameError,
+)
 
 # ==========================================
 # VALID CONTACT MESSAGE CREATION TESTS

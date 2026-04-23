@@ -1,15 +1,22 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (get_create_profile_use_case,
-                                  get_get_profile_use_case,
-                                  get_update_profile_use_case)
+from app.api.dependencies import (
+    get_create_profile_use_case,
+    get_get_profile_use_case,
+    get_update_profile_use_case,
+)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.profile_schema import (ProfileCreate, ProfileResponse,
-                                            ProfileUpdate)
-from app.application.dto import (CreateProfileRequest, GetProfileRequest,
-                                 UpdateProfileRequest)
-from app.application.use_cases import (CreateProfileUseCase, GetProfileUseCase,
-                                       UpdateProfileUseCase)
+from app.api.schemas.profile_schema import ProfileCreate, ProfileResponse, ProfileUpdate
+from app.application.dto import (
+    CreateProfileRequest,
+    GetProfileRequest,
+    UpdateProfileRequest,
+)
+from app.application.use_cases import (
+    CreateProfileUseCase,
+    GetProfileUseCase,
+    UpdateProfileUseCase,
+)
 
 router = APIRouter(prefix="/profile", tags=["Profile"])
 

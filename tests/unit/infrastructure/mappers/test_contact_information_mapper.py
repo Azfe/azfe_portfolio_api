@@ -1,8 +1,9 @@
 """Unit tests for ContactInformationMapper."""
 
 from app.domain.entities import ContactInformation
-from app.infrastructure.mappers.contact_information_mapper import \
-    ContactInformationMapper
+from app.infrastructure.mappers.contact_information_mapper import (
+    ContactInformationMapper,
+)
 
 from .conftest import DT_CREATED, DT_UPDATED
 

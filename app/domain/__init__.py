@@ -14,23 +14,53 @@ For detailed documentation, see README.md in this directory.
 """
 
 # Export entities for easy importing
-from .entities import (AdditionalTraining, Certification, ContactInformation,
-                       ContactMessage, Education, Profile, Project, Skill,
-                       SocialNetwork, Tool, WorkExperience)
+from .entities import (
+                       AdditionalTraining,
+                       Certification,
+                       ContactInformation,
+                       ContactMessage,
+                       Education,
+                       Profile,
+                       Project,
+                       Skill,
+                       SocialNetwork,
+                       Tool,
+                       WorkExperience,
+)
+
 # Export exceptions
-from .exceptions import (DomainError, DuplicateValueError, EmptyFieldError,
-                         InvalidCategoryError, InvalidCompanyError,
-                         InvalidDateRangeError, InvalidDescriptionError,
-                         InvalidEmailError, InvalidInstitutionError,
-                         InvalidIssuerError, InvalidLengthError,
-                         InvalidNameError, InvalidOrderIndexError,
-                         InvalidPhoneError, InvalidPlatformError,
-                         InvalidProviderError, InvalidRoleError,
-                         InvalidSkillLevelError, InvalidTitleError,
-                         InvalidURLError)
+from .exceptions import (
+                       DomainError,
+                       DuplicateValueError,
+                       EmptyFieldError,
+                       InvalidCategoryError,
+                       InvalidCompanyError,
+                       InvalidDateRangeError,
+                       InvalidDescriptionError,
+                       InvalidEmailError,
+                       InvalidInstitutionError,
+                       InvalidIssuerError,
+                       InvalidLengthError,
+                       InvalidNameError,
+                       InvalidOrderIndexError,
+                       InvalidPhoneError,
+                       InvalidPlatformError,
+                       InvalidProviderError,
+                       InvalidRoleError,
+                       InvalidSkillLevelError,
+                       InvalidTitleError,
+                       InvalidURLError,
+)
+
 # Export value objects
-from .value_objects import (ContactInfo, DateRange, Email, Phone, SkillLevel,
-                            SkillLevelEnum)
+from .value_objects import (
+                       ContactInfo,
+                       DateRange,
+                       Email,
+                       Phone,
+                       SkillLevel,
+                       SkillLevelEnum,
+)
 
 __all__ = [
     # Entities

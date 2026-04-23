@@ -4,8 +4,7 @@ Create ContactMessage Use Case.
 Creates a new contact message from a visitor.
 """
 
-from app.application.dto import (ContactMessageResponse,
-                                 CreateContactMessageRequest)
+from app.application.dto import ContactMessageResponse, CreateContactMessageRequest
 from app.domain.entities import ContactMessage
 from app.shared.interfaces import ICommandUseCase, IContactMessageRepository
 

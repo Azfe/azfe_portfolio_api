@@ -3,9 +3,14 @@
 import pytest
 
 from app.domain.entities.tool import Tool
-from app.domain.exceptions import (EmptyFieldError, InvalidCategoryError,
-                                   InvalidLengthError, InvalidNameError,
-                                   InvalidOrderIndexError, InvalidURLError)
+from app.domain.exceptions import (
+    EmptyFieldError,
+    InvalidCategoryError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+    InvalidURLError,
+)
 
 
 @pytest.mark.entity

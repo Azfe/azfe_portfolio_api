@@ -12,13 +12,15 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.domain.exceptions.domain_errors import DomainError
-from app.shared.shared_exceptions import (ApplicationException,
-                                          BusinessRuleViolationException,
-                                          DuplicateException,
-                                          ForbiddenException,
-                                          NotFoundException,
-                                          UnauthorizedException,
-                                          ValidationException)
+from app.shared.shared_exceptions import (
+    ApplicationException,
+    BusinessRuleViolationException,
+    DuplicateException,
+    ForbiddenException,
+    NotFoundException,
+    UnauthorizedException,
+    ValidationException,
+)
 
 logger = logging.getLogger(__name__)
 

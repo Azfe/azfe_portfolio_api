@@ -9,13 +9,17 @@ Business Rules Applied:
 - RB-PL03: orderIndex is required and must be >= 0
 """
 
-import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
+import uuid
 
-from ..exceptions import (EmptyFieldError, InvalidLengthError,
-                          InvalidNameError, InvalidOrderIndexError,
-                          InvalidProgrammingLanguageLevelError)
+from ..exceptions import (
+    EmptyFieldError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+    InvalidProgrammingLanguageLevelError,
+)
 
 # Valid programming language levels
 VALID_PROGRAMMING_LANGUAGE_LEVELS = {"basic", "intermediate", "advanced", "expert"}

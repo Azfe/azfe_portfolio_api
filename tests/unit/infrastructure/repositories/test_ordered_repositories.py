@@ -8,22 +8,27 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from app.infrastructure.repositories.additional_training_repository import \
-    AdditionalTrainingRepository
-from app.infrastructure.repositories.certification_repository import \
-    CertificationRepository
-from app.infrastructure.repositories.education_repository import \
-    EducationRepository
-from app.infrastructure.repositories.language_repository import \
-    LanguageRepository
-from app.infrastructure.repositories.programming_language_repository import \
-    ProgrammingLanguageRepository
-from app.infrastructure.repositories.project_repository import \
-    ProjectRepository
+from app.infrastructure.repositories.additional_training_repository import (
+    AdditionalTrainingRepository,
+)
+from app.infrastructure.repositories.certification_repository import (
+    CertificationRepository,
+)
+from app.infrastructure.repositories.education_repository import EducationRepository
+from app.infrastructure.repositories.language_repository import LanguageRepository
+from app.infrastructure.repositories.programming_language_repository import (
+    ProgrammingLanguageRepository,
+)
+from app.infrastructure.repositories.project_repository import ProjectRepository
 
-from .conftest import (make_additional_training_doc, make_certification_doc,
-                       make_education_doc, make_language_doc,
-                       make_programming_language_doc, make_project_doc)
+from .conftest import (
+    make_additional_training_doc,
+    make_certification_doc,
+    make_education_doc,
+    make_language_doc,
+    make_programming_language_doc,
+    make_project_doc,
+)
 
 # Parametrize: (RepositoryClass, doc_factory, entity_name_field, expected_value)
 ORDERED_REPOS = [

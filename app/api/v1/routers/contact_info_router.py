@@ -1,20 +1,29 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (get_create_contact_information_use_case,
-                                  get_delete_contact_information_use_case,
-                                  get_get_contact_information_use_case,
-                                  get_update_contact_information_use_case)
+from app.api.dependencies import (
+    get_create_contact_information_use_case,
+    get_delete_contact_information_use_case,
+    get_get_contact_information_use_case,
+    get_update_contact_information_use_case,
+)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.contact_info_schema import (ContactInformationCreate,
-                                                 ContactInformationResponse,
-                                                 ContactInformationUpdate)
-from app.application.dto import (CreateContactInformationRequest,
-                                 DeleteContactInformationRequest,
-                                 GetContactInformationRequest,
-                                 UpdateContactInformationRequest)
+from app.api.schemas.contact_info_schema import (
+    ContactInformationCreate,
+    ContactInformationResponse,
+    ContactInformationUpdate,
+)
+from app.application.dto import (
+    CreateContactInformationRequest,
+    DeleteContactInformationRequest,
+    GetContactInformationRequest,
+    UpdateContactInformationRequest,
+)
 from app.application.use_cases.contact_information import (
-    CreateContactInformationUseCase, DeleteContactInformationUseCase,
-    GetContactInformationUseCase, UpdateContactInformationUseCase)
+    CreateContactInformationUseCase,
+    DeleteContactInformationUseCase,
+    GetContactInformationUseCase,
+    UpdateContactInformationUseCase,
+)
 
 router = APIRouter(prefix="/contact-information", tags=["Contact Information"])
 

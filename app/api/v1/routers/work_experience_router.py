@@ -1,21 +1,31 @@
 from fastapi import APIRouter, Depends, status
 
-from app.api.dependencies import (get_add_experience_use_case,
-                                  get_delete_experience_use_case,
-                                  get_edit_experience_use_case,
-                                  get_list_experiences_use_case,
-                                  get_work_experience_repository)
+from app.api.dependencies import (
+    get_add_experience_use_case,
+    get_delete_experience_use_case,
+    get_edit_experience_use_case,
+    get_list_experiences_use_case,
+    get_work_experience_repository,
+)
 from app.api.schemas.common_schema import MessageResponse
-from app.api.schemas.work_experience_schema import (WorkExperienceCreate,
-                                                    WorkExperienceResponse,
-                                                    WorkExperienceUpdate)
-from app.application.dto import (AddExperienceRequest, DeleteExperienceRequest,
-                                 EditExperienceRequest, ListExperiencesRequest)
-from app.application.dto import WorkExperienceResponse as WorkExperienceDTO
-from app.application.use_cases import (AddExperienceUseCase,
-                                       DeleteExperienceUseCase,
-                                       EditExperienceUseCase,
-                                       ListExperiencesUseCase)
+from app.api.schemas.work_experience_schema import (
+    WorkExperienceCreate,
+    WorkExperienceResponse,
+    WorkExperienceUpdate,
+)
+from app.application.dto import (
+    AddExperienceRequest,
+    DeleteExperienceRequest,
+    EditExperienceRequest,
+    ListExperiencesRequest,
+    WorkExperienceResponse as WorkExperienceDTO,
+)
+from app.application.use_cases import (
+    AddExperienceUseCase,
+    DeleteExperienceUseCase,
+    EditExperienceUseCase,
+    ListExperiencesUseCase,
+)
 from app.infrastructure.repositories import WorkExperienceRepository
 from app.shared.shared_exceptions import NotFoundException
 

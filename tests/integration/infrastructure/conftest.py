@@ -9,21 +9,32 @@ from datetime import datetime
 
 import pytest_asyncio
 
-from app.domain.entities import (AdditionalTraining, Certification,
-                                 ContactInformation, ContactMessage, Education,
-                                 Language, Profile, ProgrammingLanguage,
-                                 Project, Skill, WorkExperience)
-from app.infrastructure.repositories import (AdditionalTrainingRepository,
-                                             CertificationRepository,
-                                             ContactInformationRepository,
-                                             ContactMessageRepository,
-                                             EducationRepository,
-                                             LanguageRepository,
-                                             ProfileRepository,
-                                             ProgrammingLanguageRepository,
-                                             ProjectRepository,
-                                             SkillRepository,
-                                             WorkExperienceRepository)
+from app.domain.entities import (
+    AdditionalTraining,
+    Certification,
+    ContactInformation,
+    ContactMessage,
+    Education,
+    Language,
+    Profile,
+    ProgrammingLanguage,
+    Project,
+    Skill,
+    WorkExperience,
+)
+from app.infrastructure.repositories import (
+    AdditionalTrainingRepository,
+    CertificationRepository,
+    ContactInformationRepository,
+    ContactMessageRepository,
+    EducationRepository,
+    LanguageRepository,
+    ProfileRepository,
+    ProgrammingLanguageRepository,
+    ProjectRepository,
+    SkillRepository,
+    WorkExperienceRepository,
+)
 
 # ==================== CONSTANTS ====================
 

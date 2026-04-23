@@ -1,7 +1,9 @@
 """Tests for ProgrammingLanguage DTOs."""
 
 from app.application.dto.programming_language_dto import (
-    ProgrammingLanguageListResponse, ProgrammingLanguageResponse)
+    ProgrammingLanguageListResponse,
+    ProgrammingLanguageResponse,
+)
 
 from .conftest import DT, DT2, make_entity
 

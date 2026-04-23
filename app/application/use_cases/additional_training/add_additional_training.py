@@ -6,15 +6,13 @@ Adds a new additional training entry to the profile.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import (AddAdditionalTrainingRequest,
-                                 AdditionalTrainingResponse)
+from app.application.dto import AddAdditionalTrainingRequest, AdditionalTrainingResponse
 from app.domain.entities import AdditionalTraining
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 from app.shared.shared_exceptions import BusinessRuleViolationException
 
 if TYPE_CHECKING:
-    from app.domain.entities import \
-        AdditionalTraining as AdditionalTrainingType
+    from app.domain.entities import AdditionalTraining as AdditionalTrainingType
 
 
 class AddAdditionalTrainingUseCase(

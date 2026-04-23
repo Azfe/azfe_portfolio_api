@@ -6,14 +6,12 @@ Deletes an existing additional training entry.
 
 from typing import TYPE_CHECKING
 
-from app.application.dto import (DeleteAdditionalTrainingRequest,
-                                 SuccessResponse)
+from app.application.dto import DeleteAdditionalTrainingRequest, SuccessResponse
 from app.shared.interfaces import ICommandUseCase, IOrderedRepository
 from app.shared.shared_exceptions import NotFoundException
 
 if TYPE_CHECKING:
-    from app.domain.entities import \
-        AdditionalTraining as AdditionalTrainingType
+    from app.domain.entities import AdditionalTraining as AdditionalTrainingType
 
 
 class DeleteAdditionalTrainingUseCase(

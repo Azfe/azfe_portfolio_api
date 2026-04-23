@@ -1,8 +1,9 @@
 """Unit tests for AdditionalTrainingMapper."""
 
 from app.domain.entities import AdditionalTraining
-from app.infrastructure.mappers.additional_training_mapper import \
-    AdditionalTrainingMapper
+from app.infrastructure.mappers.additional_training_mapper import (
+    AdditionalTrainingMapper,
+)
 
 from .conftest import DT_COMPLETION, DT_CREATED, DT_UPDATED
 

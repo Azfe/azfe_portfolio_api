@@ -5,10 +5,13 @@ Tests for Language Entity.
 import pytest
 
 from app.domain.entities.language import Language
-from app.domain.exceptions import (EmptyFieldError,
-                                   InvalidLanguageProficiencyError,
-                                   InvalidLengthError, InvalidNameError,
-                                   InvalidOrderIndexError)
+from app.domain.exceptions import (
+    EmptyFieldError,
+    InvalidLanguageProficiencyError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+)
 
 
 @pytest.mark.entity

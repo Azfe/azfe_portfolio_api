@@ -1,7 +1,7 @@
 """Tests for the tools router endpoints."""
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.asyncio
 

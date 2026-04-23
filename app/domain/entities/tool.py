@@ -11,14 +11,19 @@ Business Rules Applied:
 - RB-T05: orderIndex is required for display ordering
 """
 
-import re
-import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
+import re
+import uuid
 
-from ..exceptions import (EmptyFieldError, InvalidCategoryError,
-                          InvalidLengthError, InvalidNameError,
-                          InvalidOrderIndexError, InvalidURLError)
+from ..exceptions import (
+    EmptyFieldError,
+    InvalidCategoryError,
+    InvalidLengthError,
+    InvalidNameError,
+    InvalidOrderIndexError,
+    InvalidURLError,
+)
 
 
 @dataclass

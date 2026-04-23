@@ -8,8 +8,7 @@ Skips noisy paths like /docs, /openapi.json and /health to keep logs clean.
 import logging
 import time
 
-from starlette.middleware.base import (BaseHTTPMiddleware,
-                                       RequestResponseEndpoint)
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
 

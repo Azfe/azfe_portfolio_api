@@ -4,8 +4,8 @@ Tests that middlewares (ProcessTime, Logging, CORS) work correctly
 through the full HTTP stack.
 """
 
-import pytest
 from httpx import AsyncClient
+import pytest
 
 pytestmark = pytest.mark.integration
 

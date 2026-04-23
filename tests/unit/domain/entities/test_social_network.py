@@ -3,9 +3,13 @@
 import pytest
 
 from app.domain.entities.social_network import SocialNetwork
-from app.domain.exceptions import (EmptyFieldError, InvalidLengthError,
-                                   InvalidOrderIndexError,
-                                   InvalidPlatformError, InvalidURLError)
+from app.domain.exceptions import (
+    EmptyFieldError,
+    InvalidLengthError,
+    InvalidOrderIndexError,
+    InvalidPlatformError,
+    InvalidURLError,
+)
 
 
 @pytest.mark.entity
