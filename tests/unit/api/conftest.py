@@ -941,9 +941,15 @@ async def _apply_dependency_overrides():
     # -- CV --
     cv_response = CompleteCVResponse(
         profile=MOCK_PROFILE,
-        experiences=MOCK_EXPERIENCES,
+        work_experiences=MOCK_EXPERIENCES,
         skills=MOCK_SKILLS,
         education=MOCK_EDUCATION,
+        contact_info=MOCK_CONTACT_INFO,
+        social_networks=MOCK_SOCIAL_NETWORKS,
+        projects=MOCK_PROJECTS,
+        tools=MOCK_TOOLS,
+        additional_training=MOCK_TRAININGS,
+        certifications=MOCK_CERTIFICATIONS,
     )
     app.dependency_overrides[get_get_complete_cv_use_case] = lambda: _mock_command_uc(
         return_value=cv_response
