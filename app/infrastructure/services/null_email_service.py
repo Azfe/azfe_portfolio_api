@@ -7,4 +7,6 @@ logger = logging.getLogger(__name__)
 
 class NullEmailService(IEmailService):
     async def send(self, message: EmailMessage) -> None:
-        logger.debug("NullEmailService: email not sent (email disabled) to=%s", message.to)
+        logger.debug(
+            "NullEmailService: email not sent (email disabled) to=%s", message.to
+        )
