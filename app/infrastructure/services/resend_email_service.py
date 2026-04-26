@@ -29,4 +29,6 @@ class ResendEmailService(IEmailService):
             "text": message.body_text,
         }
         response = resend.Emails.send(params)
-        logger.debug("ResendEmailService: email sent id=%s to=%s", response["id"], message.to)
+        logger.debug(
+            "ResendEmailService: email sent id=%s to=%s", response["id"], message.to
+        )
