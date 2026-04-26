@@ -70,10 +70,12 @@ class TestSmtpEmailService:
         service = SmtpEmailService(settings)
         message = _make_message()
 
-        with patch(
-            "app.infrastructure.services.smtp_email_service.aiosmtplib.send",
-            new_callable=AsyncMock,
-            side_effect=ConnectionRefusedError("SMTP connection refused"),
+        with (
+            patch(
+                "app.infrastructure.services.smtp_email_service.aiosmtplib.send",
+                new_callable=AsyncMock,
+                side_effect=ConnectionRefusedError("SMTP connection refused"),
+            ),
+            pytest.raises(ConnectionRefusedError),
         ):
-            with pytest.raises(ConnectionRefusedError):
-                await service.send(message)
+            await service.send(message)

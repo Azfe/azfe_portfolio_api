@@ -85,9 +85,6 @@ from app.application.use_cases.tool import (
 )
 from app.config.settings import settings
 from app.infrastructure.database.mongo_client import get_database
-from app.infrastructure.services.null_email_service import NullEmailService
-from app.infrastructure.services.smtp_email_service import SmtpEmailService
-from app.shared.interfaces.email_service import IEmailService
 
 # ── Repositories ─────────────────────────────────────────────────────────
 from app.infrastructure.repositories import (
@@ -105,6 +102,9 @@ from app.infrastructure.repositories import (
     ToolRepository,
     WorkExperienceRepository,
 )
+from app.infrastructure.services.null_email_service import NullEmailService
+from app.infrastructure.services.smtp_email_service import SmtpEmailService
+from app.shared.interfaces.email_service import IEmailService
 
 # =====================================================================
 # REPOSITORY PROVIDERS
