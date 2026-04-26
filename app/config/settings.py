@@ -56,6 +56,16 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
+    # Email / Notifications
+    EMAIL_ENABLED: bool = Field(default=False)
+    SMTP_HOST: str = Field(default="smtp.gmail.com")
+    SMTP_PORT: int = Field(default=587)
+    SMTP_USER: str = Field(default="")
+    SMTP_PASSWORD: str = Field(default="")
+    SMTP_FROM: str = Field(default="")
+    SMTP_USE_TLS: bool = Field(default=True)
+    NOTIFICATION_EMAIL_TO: str = Field(default="alexzapata1984@gmail.com")
+
     model_config = SettingsConfigDict(
         env_file=".env.development.local",
         env_file_encoding="utf-8",
