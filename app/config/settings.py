@@ -58,13 +58,16 @@ class Settings(BaseSettings):
 
     # Email / Notifications
     EMAIL_ENABLED: bool = Field(default=False)
+    SENDGRID_API_KEY: str = Field(default="")
+    SMTP_FROM: str = Field(default="")
+    NOTIFICATION_EMAIL_TO: str = Field(default="alexzapata1984@gmail.com")
+
+    # Deprecated SMTP settings — kept for backward compatibility
     SMTP_HOST: str = Field(default="smtp.gmail.com")
     SMTP_PORT: int = Field(default=587)
     SMTP_USER: str = Field(default="")
     SMTP_PASSWORD: str = Field(default="")
-    SMTP_FROM: str = Field(default="")
     SMTP_USE_TLS: bool = Field(default=True)
-    NOTIFICATION_EMAIL_TO: str = Field(default="alexzapata1984@gmail.com")
 
     model_config = SettingsConfigDict(
         env_file=".env.development.local",
