@@ -83,6 +83,7 @@ from app.application.use_cases.tool import (
     EditToolUseCase,
     ListToolsUseCase,
 )
+from app.config.settings import settings
 from app.infrastructure.database.mongo_client import get_database
 
 # ── Repositories ─────────────────────────────────────────────────────────
@@ -101,6 +102,9 @@ from app.infrastructure.repositories import (
     ToolRepository,
     WorkExperienceRepository,
 )
+from app.infrastructure.services.null_email_service import NullEmailService
+from app.infrastructure.services.smtp_email_service import SmtpEmailService
+from app.shared.interfaces.email_service import IEmailService
 
 # =====================================================================
 # REPOSITORY PROVIDERS
@@ -468,10 +472,20 @@ async def get_delete_contact_information_use_case(
 # =====================================================================
 
 
+def get_email_service() -> IEmailService:
+    if settings.EMAIL_ENABLED:
+        return SmtpEmailService(settings)
+    return NullEmailService()
+
+
 async def get_create_contact_message_use_case(
     repo: ContactMessageRepository = Depends(get_contact_message_repository),
+    email_service: IEmailService = Depends(get_email_service),
 ) -> CreateContactMessageUseCase:
-    return CreateContactMessageUseCase(contact_message_repository=repo)
+    return CreateContactMessageUseCase(
+        contact_message_repository=repo,
+        email_service=email_service,
+    )
 
 
 async def get_list_contact_messages_use_case(
