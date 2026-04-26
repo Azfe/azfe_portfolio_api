@@ -103,7 +103,7 @@ from app.infrastructure.repositories import (
     WorkExperienceRepository,
 )
 from app.infrastructure.services.null_email_service import NullEmailService
-from app.infrastructure.services.sendgrid_email_service import SendGridEmailService
+from app.infrastructure.services.resend_email_service import ResendEmailService
 from app.shared.interfaces.email_service import IEmailService
 
 # =====================================================================
@@ -474,7 +474,10 @@ async def get_delete_contact_information_use_case(
 
 def get_email_service() -> IEmailService:
     if settings.EMAIL_ENABLED:
-        return SendGridEmailService(settings)
+        return ResendEmailService(
+            api_key=settings.RESEND_API_KEY,
+            from_address=settings.RESEND_FROM,
+        )
     return NullEmailService()
 
 
