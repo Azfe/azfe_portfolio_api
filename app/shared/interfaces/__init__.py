@@ -19,6 +19,9 @@ The domain and application layers depend on these interfaces,
 while the infrastructure layer provides concrete implementations.
 """
 
+# Email service interface
+from .email_service import EmailMessage, IEmailService
+
 # Mapper interfaces
 from .mapper import IDTOMapper, IMapper, IValueObjectMapper
 
@@ -49,6 +52,9 @@ from .repository import (
 from .use_case import ICommandUseCase, IQueryUseCase, IUseCase, IValidator
 
 __all__ = [
+    # Email service interface
+    "IEmailService",
+    "EmailMessage",
     # Repository interfaces
     "IRepository",
     "IProfileRepository",
