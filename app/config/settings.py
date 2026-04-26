@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -68,6 +68,19 @@ class Settings(BaseSettings):
     SMTP_USER: str = Field(default="")
     SMTP_PASSWORD: str = Field(default="")
     SMTP_USE_TLS: bool = Field(default=True)
+
+    @model_validator(mode="after")
+    def validate_email_settings(self) -> "Settings":
+        if self.EMAIL_ENABLED:
+            if not self.SENDGRID_API_KEY:
+                raise ValueError(
+                    "SENDGRID_API_KEY must not be empty when EMAIL_ENABLED=true"
+                )
+            if not self.SMTP_FROM:
+                raise ValueError(
+                    "SMTP_FROM must not be empty when EMAIL_ENABLED=true"
+                )
+        return self
 
     model_config = SettingsConfigDict(
         env_file=".env.development.local",
