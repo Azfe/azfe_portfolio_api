@@ -51,7 +51,10 @@ class TestSmtpEmailService:
         service = SmtpEmailService(settings)
         message = _make_message()
 
-        with patch("app.infrastructure.services.smtp_email_service.aiosmtplib.send", new_callable=AsyncMock) as mock_send:
+        with patch(
+            "app.infrastructure.services.smtp_email_service.aiosmtplib.send",
+            new_callable=AsyncMock,
+        ) as mock_send:
             await service.send(message)
 
         mock_send.assert_awaited_once()

@@ -19,7 +19,9 @@ class CreateContactMessageUseCase(
         email_service: IEmailService | None = None,
     ):
         self.message_repo = contact_message_repository
-        self.email_service = email_service if email_service is not None else NullEmailService()
+        self.email_service = (
+            email_service if email_service is not None else NullEmailService()
+        )
 
     async def execute(
         self, request: CreateContactMessageRequest
