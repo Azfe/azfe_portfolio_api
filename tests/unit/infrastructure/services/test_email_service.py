@@ -1,12 +1,15 @@
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
 from app.infrastructure.services.null_email_service import NullEmailService
-from app.infrastructure.services.smtp_email_service import SmtpEmailService
+from app.infrastructure.services.resend_email_service import ResendEmailService
 from app.shared.interfaces.email_service import EmailMessage
 
 pytestmark = [pytest.mark.unit, pytest.mark.asyncio]
+
+_API_KEY = "re_test_key"
+_FROM_ADDRESS = "sender@example.com"
 
 
 def _make_message(**overrides):
@@ -18,19 +21,6 @@ def _make_message(**overrides):
     }
     defaults.update(overrides)
     return EmailMessage(**defaults)
-
-
-def _make_settings(**overrides):
-    settings = MagicMock()
-    settings.SMTP_HOST = "smtp.gmail.com"
-    settings.SMTP_PORT = 587
-    settings.SMTP_USER = "user@example.com"
-    settings.SMTP_PASSWORD = "secret"
-    settings.SMTP_FROM = "sender@example.com"
-    settings.SMTP_USE_TLS = True
-    for key, value in overrides.items():
-        setattr(settings, key, value)
-    return settings
 
 
 class TestNullEmailService:
@@ -45,37 +35,43 @@ class TestNullEmailService:
         assert result is None
 
 
-class TestSmtpEmailService:
-    async def test_send_calls_aiosmtplib_with_correct_params(self):
-        settings = _make_settings()
-        service = SmtpEmailService(settings)
+class TestResendEmailService:
+    async def test_send_calls_resend_sdk_with_correct_params(self):
+        service = ResendEmailService(api_key=_API_KEY, from_address=_FROM_ADDRESS)
         message = _make_message()
 
+        mock_response = {"id": "email-id-123"}
+
         with patch(
-            "app.infrastructure.services.smtp_email_service.aiosmtplib.send",
-            new_callable=AsyncMock,
+            "app.infrastructure.services.resend_email_service.resend.Emails.send",
+            return_value=mock_response,
         ) as mock_send:
             await service.send(message)
 
-        mock_send.assert_awaited_once()
-        _, kwargs = mock_send.call_args
-        assert kwargs["hostname"] == settings.SMTP_HOST
-        assert kwargs["port"] == settings.SMTP_PORT
-        assert kwargs["username"] == settings.SMTP_USER
-        assert kwargs["password"] == settings.SMTP_PASSWORD
-        assert kwargs["start_tls"] == settings.SMTP_USE_TLS
+        mock_send.assert_called_once()
+        (params,), _ = mock_send.call_args
+        assert params["from"] == _FROM_ADDRESS
+        assert params["to"] == [message.to]
+        assert params["subject"] == message.subject
+        assert params["html"] == message.body_html
+        assert params["text"] == message.body_text
 
-    async def test_send_reraises_exception_on_failure(self):
-        settings = _make_settings()
-        service = SmtpEmailService(settings)
+    async def test_send_sets_api_key_on_construction(self):
+        import resend as resend_module
+
+        ResendEmailService(api_key=_API_KEY, from_address=_FROM_ADDRESS)
+
+        assert resend_module.api_key == _API_KEY
+
+    async def test_send_reraises_exception_on_sdk_failure(self):
+        service = ResendEmailService(api_key=_API_KEY, from_address=_FROM_ADDRESS)
         message = _make_message()
 
         with (
             patch(
-                "app.infrastructure.services.smtp_email_service.aiosmtplib.send",
-                new_callable=AsyncMock,
-                side_effect=ConnectionRefusedError("SMTP connection refused"),
+                "app.infrastructure.services.resend_email_service.resend.Emails.send",
+                side_effect=Exception("Resend API error"),
             ),
-            pytest.raises(ConnectionRefusedError),
+            pytest.raises(Exception, match="Resend API error"),
         ):
             await service.send(message)

@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -56,15 +56,21 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    # Email / Notifications
+    # Email / Notifications (Resend)
     EMAIL_ENABLED: bool = Field(default=False)
-    SMTP_HOST: str = Field(default="smtp.gmail.com")
-    SMTP_PORT: int = Field(default=587)
-    SMTP_USER: str = Field(default="")
-    SMTP_PASSWORD: str = Field(default="")
-    SMTP_FROM: str = Field(default="")
-    SMTP_USE_TLS: bool = Field(default=True)
+    RESEND_API_KEY: str = Field(default="")
+    RESEND_FROM: str = Field(default="Portfolio <noreply@azfe.dev>")
     NOTIFICATION_EMAIL_TO: str = Field(default="alexzapata1984@gmail.com")
+
+    @model_validator(mode="after")
+    def _validate_email_config(self) -> "Settings":
+        """Fail fast at startup if email is enabled but Resend is not configured."""
+        if self.EMAIL_ENABLED and not self.RESEND_API_KEY:
+            raise ValueError(
+                "EMAIL_ENABLED is True but RESEND_API_KEY is not set. "
+                "Provide the key or set EMAIL_ENABLED=False."
+            )
+        return self
 
     model_config = SettingsConfigDict(
         env_file=".env.development.local",
