@@ -121,6 +121,10 @@ YESTERDAY = NOW - timedelta(days=1)
 LAST_WEEK = NOW - timedelta(days=7)
 PROFILE_ID = "default_profile"
 
+_EXP_001_START = datetime(2022, 1, 1)
+_EXP_002_START = datetime(2020, 6, 1)
+_EXP_002_END = datetime(2021, 12, 31)
+
 # -- Profile --
 MOCK_PROFILE = ProfileDTO(
     id="profile_001",
@@ -216,7 +220,7 @@ MOCK_EXPERIENCES = [
         profile_id=PROFILE_ID,
         role="Senior Developer",
         company="Tech Corp",
-        start_date=datetime(2022, 1, 1),
+        start_date=_EXP_001_START,
         end_date=None,
         description="Leading backend development",
         responsibilities=["Architecture", "Code review"],
@@ -224,20 +228,24 @@ MOCK_EXPERIENCES = [
         created_at=NOW,
         updated_at=NOW,
         is_current=True,
+        duration_months=(NOW.year - _EXP_001_START.year) * 12
+        + (NOW.month - _EXP_001_START.month),
     ),
     WorkExperienceDTO(
         id="exp_002",
         profile_id=PROFILE_ID,
         role="Junior Developer",
         company="StartUp Inc",
-        start_date=datetime(2020, 6, 1),
-        end_date=datetime(2021, 12, 31),
+        start_date=_EXP_002_START,
+        end_date=_EXP_002_END,
         description="Full stack development",
         responsibilities=["Frontend", "Backend"],
         order_index=1,
         created_at=NOW,
         updated_at=NOW,
         is_current=False,
+        duration_months=(_EXP_002_END.year - _EXP_002_START.year) * 12
+        + (_EXP_002_END.month - _EXP_002_START.month),
     ),
 ]
 
