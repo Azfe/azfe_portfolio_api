@@ -114,5 +114,9 @@ class WorkExperienceResponse(WorkExperienceBase, TimestampMixin):
     """
 
     id: str
+    is_current: bool = Field(
+        ..., description="True si es la posición actual (sin fecha de fin)"
+    )
+    duration_months: int = Field(..., ge=0, description="Duración en meses completos")
 
     model_config = ConfigDict(from_attributes=True)

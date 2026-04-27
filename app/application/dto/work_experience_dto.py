@@ -66,10 +66,15 @@ class WorkExperienceResponse:
     created_at: datetime
     updated_at: datetime
     is_current: bool
+    duration_months: int
 
     @classmethod
     def from_entity(cls, entity) -> "WorkExperienceResponse":
         """Create DTO from domain entity."""
+        start = entity.start_date
+        end = entity.end_date if entity.end_date is not None else datetime.utcnow()
+        duration_months = (end.year - start.year) * 12 + (end.month - start.month)
+
         return cls(
             id=entity.id,
             profile_id=entity.profile_id,
@@ -83,6 +88,7 @@ class WorkExperienceResponse:
             created_at=entity.created_at,
             updated_at=entity.updated_at,
             is_current=entity.is_current_position(),
+            duration_months=duration_months,
         )
 
 

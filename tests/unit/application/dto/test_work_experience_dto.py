@@ -1,5 +1,9 @@
 """Tests for WorkExperience DTOs."""
 
+from datetime import datetime
+
+import pytest
+
 from app.application.dto.work_experience_dto import (
     WorkExperienceListResponse,
     WorkExperienceResponse,
@@ -69,6 +73,72 @@ class TestWorkExperienceResponseFromEntity:
         entity = _make_experience_entity(responsibilities=[])
         resp = WorkExperienceResponse.from_entity(entity)
         assert resp.responsibilities == []
+
+
+class TestWorkExperienceResponseDurationMonths:
+    """Tests for duration_months calculation in WorkExperienceResponse.from_entity()."""
+
+    def test_closed_position_exact_months(self):
+        """Closed position with a fixed date range returns exact month count."""
+        start = datetime(2023, 1, 1)
+        end = datetime(2023, 7, 1)  # 6 months
+        entity = _make_experience_entity(start_date=start, end_date=end)
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.duration_months == 6
+
+    def test_closed_position_exactly_one_month(self):
+        """Closed position spanning exactly one calendar month."""
+        start = datetime(2023, 3, 1)
+        end = datetime(2023, 4, 1)  # 1 month
+        entity = _make_experience_entity(start_date=start, end_date=end)
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.duration_months == 1
+
+    def test_closed_position_exactly_twelve_months(self):
+        """Closed position spanning exactly 12 months (one year)."""
+        start = datetime(2022, 1, 1)
+        end = datetime(2023, 1, 1)  # 12 months
+        entity = _make_experience_entity(start_date=start, end_date=end)
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.duration_months == 12
+
+    @pytest.mark.unit
+    def test_current_position_duration_greater_than_zero(self):
+        """Active position (end_date=None) computes duration up to today, which is > 0."""
+        # A start date far in the past guarantees duration > 0 regardless of test date.
+        start = datetime(2020, 1, 1)
+        entity = _make_experience_entity(
+            start_date=start, end_date=None, _is_current=True
+        )
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.duration_months > 0
+
+    @pytest.mark.unit
+    def test_current_position_duration_reflects_months_to_now(self):
+        """Active position duration equals months from start_date to the current month."""
+        start = datetime(2020, 6, 1)
+        entity = _make_experience_entity(
+            start_date=start, end_date=None, _is_current=True
+        )
+        resp = WorkExperienceResponse.from_entity(entity)
+
+        now = datetime.utcnow()
+        expected = (now.year - start.year) * 12 + (now.month - start.month)
+        assert resp.duration_months == expected
+
+    @pytest.mark.unit
+    def test_is_current_true_when_no_end_date(self):
+        """is_current is True when end_date is None."""
+        entity = _make_experience_entity(end_date=None, _is_current=True)
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.is_current is True
+
+    @pytest.mark.unit
+    def test_is_current_false_when_has_end_date(self):
+        """is_current is False when end_date is set."""
+        entity = _make_experience_entity(end_date=DT_END, _is_current=False)
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.is_current is False
 
 
 class TestWorkExperienceListResponseFromEntities:
