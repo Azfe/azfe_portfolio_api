@@ -21,6 +21,7 @@ def _make_experience_entity(**overrides):
         "start_date": DT_START,
         "end_date": DT_END,
         "description": "Full-stack dev",
+        "location": None,
         "responsibilities": ["Code", "Review"],
         "order_index": 0,
     }
@@ -64,10 +65,21 @@ class TestWorkExperienceResponseFromEntity:
         assert resp.is_current is False
 
     def test_none_optional_fields(self):
-        entity = _make_experience_entity(end_date=None, description=None)
+        entity = _make_experience_entity(end_date=None, description=None, location=None)
         resp = WorkExperienceResponse.from_entity(entity)
         assert resp.end_date is None
         assert resp.description is None
+        assert resp.location is None
+
+    def test_location_is_mapped(self):
+        entity = _make_experience_entity(location="Madrid, Spain")
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.location == "Madrid, Spain"
+
+    def test_location_none_by_default(self):
+        entity = _make_experience_entity()
+        resp = WorkExperienceResponse.from_entity(entity)
+        assert resp.location is None
 
     def test_empty_responsibilities(self):
         entity = _make_experience_entity(responsibilities=[])

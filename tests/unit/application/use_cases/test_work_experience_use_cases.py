@@ -67,6 +67,26 @@ class TestAddExperienceUseCase:
         assert result.company == "Acme"
         repo.add.assert_awaited_once()
 
+    async def test_add_experience_with_location(self):
+        repo = AsyncMock()
+        exp = _make_experience(location="Remote")
+        repo.get_by_order_index.return_value = None
+        repo.add.return_value = exp
+
+        uc = AddExperienceUseCase(repo)
+        request = AddExperienceRequest(
+            profile_id=PROFILE_ID,
+            role="Backend Dev",
+            company="Acme",
+            start_date=datetime(2022, 1, 1),
+            order_index=0,
+            location="Remote",
+        )
+        result = await uc.execute(request)
+
+        assert result.location == "Remote"
+        repo.add.assert_awaited_once()
+
     async def test_add_experience_duplicate_order_raises(self):
         repo = AsyncMock()
         repo.get_by_order_index.return_value = _make_experience()
@@ -140,6 +160,22 @@ class TestEditExperienceUseCase:
         )
         await uc.execute(request)
 
+        repo.update.assert_awaited_once()
+
+    async def test_edit_experience_with_location(self):
+        repo = AsyncMock()
+        exp = _make_experience(location="Barcelona, Spain")
+        repo.get_by_id.return_value = exp
+        repo.update.return_value = exp
+
+        uc = EditExperienceUseCase(repo)
+        request = EditExperienceRequest(
+            experience_id="exp-001",
+            location="Barcelona, Spain",
+        )
+        result = await uc.execute(request)
+
+        assert result.location == "Barcelona, Spain"
         repo.update.assert_awaited_once()
 
 

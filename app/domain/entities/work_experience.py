@@ -11,6 +11,7 @@ Business Rules Applied:
 - RB-W05: endDate is optional (must be after startDate if provided)
 - RB-W06: responsibilities is optional array (max 20 items, each max 500 chars)
 - RB-W07: orderIndex is required and must be unique per profile
+- RB-W08: location is optional (max 100 chars)
 """
 
 from dataclasses import dataclass, field
@@ -43,6 +44,7 @@ class WorkExperience:
     order_index: int
     description: str | None = None
     end_date: datetime | None = None
+    location: str | None = None
     responsibilities: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
@@ -51,6 +53,7 @@ class WorkExperience:
     MAX_ROLE_LENGTH = 100
     MAX_COMPANY_LENGTH = 100
     MAX_DESCRIPTION_LENGTH = 2000
+    MAX_LOCATION_LENGTH = 100
     MAX_RESPONSIBILITIES = 20
     MAX_RESPONSIBILITY_LENGTH = 500
 
@@ -60,6 +63,7 @@ class WorkExperience:
         self._validate_role()
         self._validate_company()
         self._validate_description()
+        self._validate_location()
         self._validate_dates()
         self._validate_responsibilities()
         self._validate_order_index()
@@ -73,6 +77,7 @@ class WorkExperience:
         order_index: int,
         description: str | None = None,
         end_date: datetime | None = None,
+        location: str | None = None,
         responsibilities: list[str] | None = None,
     ) -> "WorkExperience":
         """
@@ -86,6 +91,7 @@ class WorkExperience:
             order_index: Position in the ordered list
             description: Optional job description
             end_date: When the role ended (None if current)
+            location: Optional office/city location (max 100 chars)
             responsibilities: Optional list of responsibilities
 
         Returns:
@@ -100,6 +106,7 @@ class WorkExperience:
             order_index=order_index,
             description=description,
             end_date=end_date,
+            location=location,
             responsibilities=responsibilities or [],
         )
 
@@ -110,6 +117,7 @@ class WorkExperience:
         description: str | None = None,
         start_date: datetime | None = None,
         end_date: datetime | None = None,
+        location: str | None = None,
     ) -> None:
         """
         Update work experience information.
@@ -120,6 +128,7 @@ class WorkExperience:
             description: New description (optional)
             start_date: New start date (optional)
             end_date: New end date (optional)
+            location: New office/city location (optional, max 100 chars)
         """
         if role is not None:
             self.role = role
@@ -132,6 +141,10 @@ class WorkExperience:
         if description is not None:
             self.description = description
             self._validate_description()
+
+        if location is not None:
+            self.location = location
+            self._validate_location()
 
         if start_date is not None:
             self.start_date = start_date
@@ -221,6 +234,11 @@ class WorkExperience:
                 raise InvalidLengthError(
                     "description", max_length=self.MAX_DESCRIPTION_LENGTH
                 )
+
+    def _validate_location(self) -> None:
+        """Validate location field."""
+        if self.location is not None and len(self.location) > self.MAX_LOCATION_LENGTH:
+            raise InvalidLengthError("location", max_length=self.MAX_LOCATION_LENGTH)
 
     def _validate_dates(self) -> None:
         """Validate date range coherence."""

@@ -30,6 +30,7 @@ class TestWorkExperienceMapperToDomain:
         assert entity.responsibilities == ["Code"]
         assert entity.description is None
         assert entity.end_date is None
+        assert entity.location is None
 
     def test_all_fields(self):
         doc = {
@@ -39,6 +40,7 @@ class TestWorkExperienceMapperToDomain:
             "company": "Acme",
             "start_date": DT_START,
             "order_index": 0,
+            "location": "Madrid, Spain",
             "description": "Full-stack dev",
             "end_date": DT_END,
             "responsibilities": ["Code", "Review"],
@@ -47,8 +49,23 @@ class TestWorkExperienceMapperToDomain:
         }
         entity = self.mapper.to_domain(doc)
 
+        assert entity.location == "Madrid, Spain"
         assert entity.description == "Full-stack dev"
         assert entity.end_date == DT_END
+
+    def test_missing_location_defaults_to_none(self):
+        doc = {
+            "_id": "w-1",
+            "profile_id": "p-1",
+            "role": "Dev",
+            "company": "Acme",
+            "start_date": DT_START,
+            "order_index": 0,
+            "created_at": DT_CREATED,
+            "updated_at": DT_UPDATED,
+        }
+        entity = self.mapper.to_domain(doc)
+        assert entity.location is None
 
     def test_missing_responsibilities_defaults_to_empty(self):
         doc = {
@@ -82,6 +99,7 @@ class TestWorkExperienceMapperToPersistence:
         )
         doc = self.mapper.to_persistence(entity)
 
+        assert "location" not in doc
         assert "description" not in doc
         assert "end_date" not in doc
         assert doc["responsibilities"] == []
@@ -94,6 +112,7 @@ class TestWorkExperienceMapperToPersistence:
             company="Acme",
             start_date=DT_START,
             order_index=0,
+            location="Madrid, Spain",
             description="Full-stack",
             end_date=DT_END,
             responsibilities=["Code"],
@@ -102,6 +121,7 @@ class TestWorkExperienceMapperToPersistence:
         )
         doc = self.mapper.to_persistence(entity)
 
+        assert doc["location"] == "Madrid, Spain"
         assert doc["description"] == "Full-stack"
         assert doc["end_date"] == DT_END
 
@@ -113,6 +133,7 @@ class TestWorkExperienceMapperToPersistence:
             "company": "Acme",
             "start_date": DT_START,
             "order_index": 0,
+            "location": "Madrid, Spain",
             "description": "Full-stack",
             "end_date": DT_END,
             "responsibilities": ["Code"],
@@ -121,4 +142,21 @@ class TestWorkExperienceMapperToPersistence:
         }
         entity = self.mapper.to_domain(doc)
         result = self.mapper.to_persistence(entity)
+        assert result == doc
+
+    def test_round_trip_without_location(self):
+        doc = {
+            "_id": "w-1",
+            "profile_id": "p-1",
+            "role": "Dev",
+            "company": "Acme",
+            "start_date": DT_START,
+            "order_index": 0,
+            "responsibilities": [],
+            "created_at": DT_CREATED,
+            "updated_at": DT_UPDATED,
+        }
+        entity = self.mapper.to_domain(doc)
+        result = self.mapper.to_persistence(entity)
+        assert "location" not in result
         assert result == doc

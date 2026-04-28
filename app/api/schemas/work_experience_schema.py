@@ -29,6 +29,11 @@ class WorkExperienceBase(BaseModel):
         ge=0,
         description="Orden de aparición en el CV (debe ser único dentro del perfil)",
     )
+    location: str | None = Field(
+        None,
+        max_length=100,
+        description="Ciudad o región donde se desempeñó el cargo (opcional)",
+    )
     description: str | None = Field(
         None,
         max_length=2000,
@@ -81,6 +86,7 @@ class WorkExperienceUpdate(BaseModel):
 
     role: str | None = Field(None, min_length=1, max_length=100)
     company: str | None = Field(None, min_length=1, max_length=100)
+    location: str | None = Field(None, max_length=100)
     start_date: datetime | None = None
     end_date: datetime | None = None
     description: str | None = Field(None, max_length=2000)
