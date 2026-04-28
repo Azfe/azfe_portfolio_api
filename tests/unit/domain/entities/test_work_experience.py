@@ -183,6 +183,18 @@ class TestWorkExperienceValidation:
         )
         assert len(we.location) == 100
 
+    def test_location_whitespace_only_is_preserved_as_is(self, profile_id):
+        """location does not normalize whitespace to None (unlike description)."""
+        we = WorkExperience.create(
+            profile_id=profile_id,
+            role="Dev",
+            company="Acme",
+            start_date=datetime(2023, 1, 1),
+            order_index=0,
+            location="   ",
+        )
+        assert we.location == "   "
+
     def test_too_many_responsibilities_raises_error(self, profile_id):
         with pytest.raises(InvalidLengthError):
             WorkExperience.create(
