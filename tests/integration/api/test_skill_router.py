@@ -40,7 +40,6 @@ class TestListSkills:
         assert all(s["level"] == "expert" for s in data)
 
 
-
 class TestGetSkill:
     async def test_get_skill_returns_200(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/skill_001")

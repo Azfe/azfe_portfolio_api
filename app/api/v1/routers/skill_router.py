@@ -47,9 +47,7 @@ async def get_skills(
     level: SkillLevel | None = None,
     use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
 ):
-    result = await use_case.execute(
-        ListSkillsRequest(profile_id=PROFILE_ID)
-    )
+    result = await use_case.execute(ListSkillsRequest(profile_id=PROFILE_ID))
     skills = result.skills
     if level:
         skills = [s for s in skills if s.level == level]

@@ -196,16 +196,12 @@ class TestSkillBusinessRules:
     def test_rb_s01_name_is_required(self, profile_id):
         """RB-S01: Skill name is required."""
         with pytest.raises((EmptyFieldError, InvalidNameError)):
-            Skill.create(
-                profile_id=profile_id, name="", order_index=0
-            )
+            Skill.create(profile_id=profile_id, name="", order_index=0)
 
     def test_rb_s01_name_not_whitespace_only(self, profile_id):
         """RB-S01: Skill name cannot be whitespace only."""
         with pytest.raises((EmptyFieldError, InvalidNameError)):
-            Skill.create(
-                profile_id=profile_id, name="   ", order_index=0
-            )
+            Skill.create(profile_id=profile_id, name="   ", order_index=0)
 
     def test_rb_s03_level_must_be_valid(self, profile_id):
         """RB-S03: Skill level must be one of: basic, intermediate, advanced, expert."""
@@ -569,9 +565,7 @@ class TestCrossCuttingBusinessRules:
     def test_order_index_cannot_be_negative_skill(self, profile_id):
         """Order index must be non-negative for Skill."""
         with pytest.raises(InvalidOrderIndexError):
-            Skill.create(
-                profile_id=profile_id, name="Python", order_index=-1
-            )
+            Skill.create(profile_id=profile_id, name="Python", order_index=-1)
 
     def test_order_index_cannot_be_negative_education(self, profile_id, today):
         """Order index must be non-negative for Education."""
@@ -598,9 +592,7 @@ class TestCrossCuttingBusinessRules:
 
     def test_order_index_zero_is_valid(self, profile_id):
         """Order index of 0 should be valid (first position)."""
-        skill = Skill.create(
-            profile_id=profile_id, name="Python", order_index=0
-        )
+        skill = Skill.create(profile_id=profile_id, name="Python", order_index=0)
 
         assert skill.order_index == 0
 

@@ -64,12 +64,8 @@ class TestSkillRepositoryCRUD:
         assert await skill_repo.exists("nonexistent") is False
 
     async def test_find_by(self, skill_repo: SkillRepository):
-        await skill_repo.add(
-            make_skill(id="s1", name="Python", order_index=0)
-        )
-        await skill_repo.add(
-            make_skill(id="s2", name="React", order_index=1)
-        )
+        await skill_repo.add(make_skill(id="s1", name="Python", order_index=0))
+        await skill_repo.add(make_skill(id="s2", name="React", order_index=1))
 
         result = await skill_repo.find_by(profile_id=PROFILE_ID)
         assert len(result) == 2
