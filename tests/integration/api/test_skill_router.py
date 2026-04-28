@@ -24,7 +24,6 @@ class TestListSkills:
         skill = response.json()[0]
         assert "id" in skill
         assert "name" in skill
-        assert "category" in skill
         assert "order_index" in skill
         assert "created_at" in skill
 
@@ -34,29 +33,12 @@ class TestListSkills:
         indices = [s["order_index"] for s in data]
         assert indices == sorted(indices)
 
-    async def test_filter_skills_by_category(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}?category=backend")
-        assert response.status_code == 200
-        data = response.json()
-        assert all(s["category"] == "backend" for s in data)
-
     async def test_filter_skills_by_level(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}?level=expert")
         assert response.status_code == 200
         data = response.json()
         assert all(s["level"] == "expert" for s in data)
 
-    async def test_filter_skills_by_category_and_level(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}?category=backend&level=expert")
-        assert response.status_code == 200
-        data = response.json()
-        assert all(s["category"] == "backend" and s["level"] == "expert" for s in data)
-
-    async def test_filter_nonexistent_category_returns_empty(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}?category=nonexistent")
-        assert response.status_code == 200
-        data = response.json()
-        assert data == []
 
 
 class TestGetSkill:
@@ -69,7 +51,6 @@ class TestGetSkill:
         data = response.json()
         assert data["id"] == "skill_001"
         assert "name" in data
-        assert "category" in data
 
     async def test_get_nonexistent_skill_returns_404(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/nonexistent")
@@ -80,7 +61,6 @@ class TestCreateSkill:
     async def test_create_skill_returns_201(self, client: AsyncClient):
         payload = {
             "name": "Go",
-            "category": "backend",
             "level": "basic",
             "order_index": 99,
         }
@@ -91,7 +71,6 @@ class TestCreateSkill:
         self, client: AsyncClient
     ):
         payload = {
-            "category": "backend",
             "order_index": 0,
         }
         response = await client.post(PREFIX, json=payload)
@@ -100,7 +79,6 @@ class TestCreateSkill:
     async def test_create_skill_validation_error_empty_name(self, client: AsyncClient):
         payload = {
             "name": "",
-            "category": "backend",
             "order_index": 0,
         }
         response = await client.post(PREFIX, json=payload)
@@ -111,7 +89,6 @@ class TestCreateSkill:
     ):
         payload = {
             "name": "Go",
-            "category": "backend",
             "order_index": -1,
         }
         response = await client.post(PREFIX, json=payload)
@@ -122,7 +99,6 @@ class TestCreateSkill:
     ):
         payload = {
             "name": "Go",
-            "category": "backend",
             "level": "master",
             "order_index": 0,
         }
@@ -170,24 +146,6 @@ class TestReorderSkills:
         assert isinstance(data, list)
 
 
-class TestSkillsGroupedByCategory:
-    async def test_grouped_by_category_returns_200(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}/grouped/by-category")
-        assert response.status_code == 200
-
-    async def test_grouped_by_category_is_dict(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}/grouped/by-category")
-        data = response.json()
-        assert isinstance(data, dict)
-        assert len(data) > 0
-
-    async def test_grouped_by_category_has_backend(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}/grouped/by-category")
-        data = response.json()
-        assert "backend" in data
-        assert isinstance(data["backend"], list)
-
-
 class TestSkillsGroupedByLevel:
     async def test_grouped_by_level_returns_200(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/grouped/by-level")
@@ -210,6 +168,5 @@ class TestSkillsStats:
         data = response.json()
         assert "total" in data
         assert "by_level" in data
-        assert "by_category" in data
         assert isinstance(data["total"], int)
         assert data["total"] > 0

@@ -89,7 +89,6 @@ def make_skill_doc(
     _id="skill-123",
     profile_id="profile-123",
     name="Python",
-    category="backend",
     level="expert",
     order_index=0,
 ):
@@ -98,7 +97,6 @@ def make_skill_doc(
         "_id": _id,
         "profile_id": profile_id,
         "name": name,
-        "category": category,
         "order_index": order_index,
         "created_at": datetime(2025, 1, 1),
         "updated_at": datetime(2025, 1, 1),
