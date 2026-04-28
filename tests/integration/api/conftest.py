@@ -666,14 +666,10 @@ def _mock_edit_uc(items, id_field, return_item):
 
 
 def _mock_skill_list_uc():
-    """Skill list UC that respects category filter."""
     uc = AsyncMock()
 
     async def execute(request):
-        skills = MOCK_SKILLS
-        if request.category:
-            skills = [s for s in skills if s.category == request.category]
-        return SkillListResponse(skills=skills, total=len(skills))
+        return SkillListResponse(skills=MOCK_SKILLS, total=len(MOCK_SKILLS))
 
     uc.execute = AsyncMock(side_effect=execute)
     return uc
