@@ -43,11 +43,23 @@ class TestWorkExperienceCreation:
             order_index=1,
             description="Led backend team",
             end_date=datetime(2023, 6, 1),
+            location="Barcelona, Spain",
             responsibilities=["Code review", "Architecture"],
         )
         assert we.description == "Led backend team"
         assert we.end_date == datetime(2023, 6, 1)
+        assert we.location == "Barcelona, Spain"
         assert len(we.responsibilities) == 2
+
+    def test_create_without_location_defaults_to_none(self, profile_id):
+        we = WorkExperience.create(
+            profile_id=profile_id,
+            role="Dev",
+            company="Acme",
+            start_date=datetime(2023, 1, 1),
+            order_index=0,
+        )
+        assert we.location is None
 
     def test_create_generates_uuid(self, profile_id):
         we = WorkExperience.create(
@@ -149,6 +161,28 @@ class TestWorkExperienceValidation:
         )
         assert we.description is None
 
+    def test_location_too_long_raises_error(self, profile_id):
+        with pytest.raises(InvalidLengthError):
+            WorkExperience.create(
+                profile_id=profile_id,
+                role="Dev",
+                company="Acme",
+                start_date=datetime(2023, 1, 1),
+                order_index=0,
+                location="x" * 101,
+            )
+
+    def test_location_exactly_max_length_is_valid(self, profile_id):
+        we = WorkExperience.create(
+            profile_id=profile_id,
+            role="Dev",
+            company="Acme",
+            start_date=datetime(2023, 1, 1),
+            order_index=0,
+            location="x" * 100,
+        )
+        assert len(we.location) == 100
+
     def test_too_many_responsibilities_raises_error(self, profile_id):
         with pytest.raises(InvalidLengthError):
             WorkExperience.create(
@@ -211,6 +245,16 @@ class TestWorkExperienceUpdate:
         we.update_info(role="Senior Dev", company="New Corp")
         assert we.role == "Senior Dev"
         assert we.company == "New Corp"
+
+    def test_update_info_location(self, profile_id):
+        we = self._make(profile_id)
+        we.update_info(location="Madrid, Spain")
+        assert we.location == "Madrid, Spain"
+
+    def test_update_info_location_too_long_raises(self, profile_id):
+        we = self._make(profile_id)
+        with pytest.raises(InvalidLengthError):
+            we.update_info(location="x" * 101)
 
     def test_update_info_invalid_role_raises(self, profile_id):
         we = self._make(profile_id)
