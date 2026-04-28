@@ -44,12 +44,11 @@ PROFILE_ID = "default_profile"
     description="Obtiene todas las habilidades técnicas del perfil",
 )
 async def get_skills(
-    category: str | None = None,
     level: SkillLevel | None = None,
     use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
 ):
     result = await use_case.execute(
-        ListSkillsRequest(profile_id=PROFILE_ID, category=category)
+        ListSkillsRequest(profile_id=PROFILE_ID)
     )
     skills = result.skills
     if level:
@@ -88,7 +87,6 @@ async def create_skill(
         AddSkillRequest(
             profile_id=PROFILE_ID,
             name=skill_data.name,
-            category=skill_data.category,
             order_index=skill_data.order_index,
             level=skill_data.level,
         )
@@ -111,7 +109,6 @@ async def update_skill(
         EditSkillRequest(
             skill_id=skill_id,
             name=skill_data.name,
-            category=skill_data.category,
             level=skill_data.level,
         )
     )
@@ -146,22 +143,6 @@ async def reorder_skills(_skill_orders: list[dict]):
 
 
 @router.get(
-    "/grouped/by-category",
-    response_model=dict,
-    summary="Agrupar habilidades por categoría",
-    description="Obtiene habilidades agrupadas por categoría",
-)
-async def get_skills_grouped_by_category(
-    use_case: ListSkillsUseCase = Depends(get_list_skills_use_case),
-):
-    result = await use_case.execute(ListSkillsRequest(profile_id=PROFILE_ID))
-    grouped: dict[str, list] = {}
-    for skill in result.skills:
-        grouped.setdefault(skill.category, []).append(skill)
-    return grouped
-
-
-@router.get(
     "/grouped/by-level",
     response_model=dict,
     summary="Agrupar habilidades por nivel",
@@ -191,12 +172,8 @@ async def get_skills_stats(
     stats: dict[str, Any] = {
         "total": result.total,
         "by_level": {},
-        "by_category": {},
     }
     for skill in result.skills:
         level = skill.level if skill.level is not None else "none"
         stats["by_level"][level] = stats["by_level"].get(level, 0) + 1
-        stats["by_category"][skill.category] = (
-            stats["by_category"].get(skill.category, 0) + 1
-        )
     return stats

@@ -11,7 +11,7 @@ SkillLevel = Literal["basic", "intermediate", "advanced", "expert", "none"]
 class SkillBase(BaseModel):
     """
     Habilidad técnica del usuario.
-    Representa una tecnología con su nivel de dominio y categoría.
+    Representa una tecnología con su nivel de dominio.
     """
 
     name: str = Field(
@@ -19,12 +19,6 @@ class SkillBase(BaseModel):
         min_length=1,
         max_length=50,
         description="Nombre de la tecnología (no puede estar vacío)",
-    )
-    category: str = Field(
-        ...,
-        min_length=1,
-        max_length=50,
-        description="Categoría (backend, frontend, devops, etc.)",
     )
     order_index: int = Field(
         ...,
@@ -42,7 +36,6 @@ class SkillCreate(SkillBase):
 
     Invariantes:
     - name no puede estar vacío
-    - category no puede estar vacía
     - orderIndex debe ser único dentro del perfil
     """
 
@@ -57,7 +50,6 @@ class SkillUpdate(BaseModel):
     """
 
     name: str | None = Field(None, min_length=1, max_length=50)
-    category: str | None = Field(None, min_length=1, max_length=50)
     level: SkillLevel | None = None
     order_index: int | None = Field(None, ge=0)
 

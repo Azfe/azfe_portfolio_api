@@ -25,7 +25,6 @@ from app.domain.entities.skill import Skill
 from app.domain.entities.work_experience import WorkExperience
 from app.domain.exceptions import (
     EmptyFieldError,
-    InvalidCategoryError,
     InvalidCompanyError,
     InvalidDateRangeError,
     InvalidEmailError,
@@ -198,43 +197,34 @@ class TestSkillBusinessRules:
         """RB-S01: Skill name is required."""
         with pytest.raises((EmptyFieldError, InvalidNameError)):
             Skill.create(
-                profile_id=profile_id, name="", category="backend", order_index=0
+                profile_id=profile_id, name="", order_index=0
             )
 
     def test_rb_s01_name_not_whitespace_only(self, profile_id):
         """RB-S01: Skill name cannot be whitespace only."""
         with pytest.raises((EmptyFieldError, InvalidNameError)):
             Skill.create(
-                profile_id=profile_id, name="   ", category="backend", order_index=0
+                profile_id=profile_id, name="   ", order_index=0
             )
 
-    def test_rb_s02_category_is_required(self, profile_id):
-        """RB-S02: Skill category is required."""
-        with pytest.raises((EmptyFieldError, InvalidCategoryError)):
-            Skill.create(
-                profile_id=profile_id, name="Python", category="", order_index=0
-            )
-
-    def test_rb_s04_level_must_be_valid(self, profile_id):
-        """RB-S04: Skill level must be one of: basic, intermediate, advanced, expert."""
+    def test_rb_s03_level_must_be_valid(self, profile_id):
+        """RB-S03: Skill level must be one of: basic, intermediate, advanced, expert."""
         with pytest.raises(InvalidSkillLevelError):
             Skill.create(
                 profile_id=profile_id,
                 name="Python",
-                category="backend",
                 level="invalid_level",
                 order_index=0,
             )
 
-    def test_rb_s04_valid_levels_accepted(self, profile_id):
-        """RB-S04: All valid skill levels are accepted."""
+    def test_rb_s03_valid_levels_accepted(self, profile_id):
+        """RB-S03: All valid skill levels are accepted."""
         valid_levels = ["basic", "intermediate", "advanced", "expert"]
 
         for level in valid_levels:
             skill = Skill.create(
                 profile_id=profile_id,
                 name=f"Python-{level}",
-                category="backend",
                 level=level,
                 order_index=0,
             )
@@ -580,7 +570,7 @@ class TestCrossCuttingBusinessRules:
         """Order index must be non-negative for Skill."""
         with pytest.raises(InvalidOrderIndexError):
             Skill.create(
-                profile_id=profile_id, name="Python", category="backend", order_index=-1
+                profile_id=profile_id, name="Python", order_index=-1
             )
 
     def test_order_index_cannot_be_negative_education(self, profile_id, today):
@@ -609,7 +599,7 @@ class TestCrossCuttingBusinessRules:
     def test_order_index_zero_is_valid(self, profile_id):
         """Order index of 0 should be valid (first position)."""
         skill = Skill.create(
-            profile_id=profile_id, name="Python", category="backend", order_index=0
+            profile_id=profile_id, name="Python", order_index=0
         )
 
         assert skill.order_index == 0

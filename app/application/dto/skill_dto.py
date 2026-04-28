@@ -13,7 +13,6 @@ class AddSkillRequest:
 
     profile_id: str
     name: str
-    category: str
     order_index: int
     level: str | None = None
 
@@ -24,7 +23,6 @@ class EditSkillRequest:
 
     skill_id: str
     name: str | None = None
-    category: str | None = None
     level: str | None = None
 
 
@@ -40,7 +38,6 @@ class ListSkillsRequest:
     """Request to list skills."""
 
     profile_id: str
-    category: str | None = None  # Filter by category
     ascending: bool = False  # Default: newest first
 
 
@@ -51,7 +48,6 @@ class SkillResponse:
     id: str
     profile_id: str
     name: str
-    category: str
     order_index: int
     level: str | None
     created_at: str
@@ -64,7 +60,6 @@ class SkillResponse:
             id=entity.id,
             profile_id=entity.profile_id,
             name=entity.name,
-            category=entity.category,
             order_index=entity.order_index,
             level=entity.level,
             created_at=entity.created_at.isoformat(),

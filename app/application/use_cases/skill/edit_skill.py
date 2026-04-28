@@ -69,7 +69,6 @@ class EditSkillUseCase(ICommandUseCase[EditSkillRequest, SkillResponse]):
         # Update info (entity validates)
         skill.update_info(
             name=request.name,
-            category=request.category,
             level=request.level,
         )
 

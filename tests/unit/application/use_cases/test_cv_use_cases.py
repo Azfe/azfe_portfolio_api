@@ -25,7 +25,6 @@ def _make_skill(profile_id):
     return Skill.create(
         profile_id=profile_id,
         name="Python",
-        category="backend",
         order_index=0,
     )
 

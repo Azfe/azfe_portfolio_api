@@ -126,7 +126,6 @@ def make_skill(
     id: str = "skill-1",
     profile_id: str = PROFILE_ID,
     name: str = "Python",
-    category: str = "Backend",
     order_index: int = 0,
     **overrides,
 ) -> Skill:
@@ -134,7 +133,6 @@ def make_skill(
         "id": id,
         "profile_id": profile_id,
         "name": name,
-        "category": category,
         "order_index": order_index,
         "created_at": DT_NOW,
         "updated_at": DT_NOW,

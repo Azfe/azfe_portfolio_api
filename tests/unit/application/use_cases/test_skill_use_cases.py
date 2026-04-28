@@ -26,7 +26,6 @@ def _make_skill(**overrides):
     defaults = {
         "profile_id": PROFILE_ID,
         "name": "Python",
-        "category": "backend",
         "order_index": 0,
         "level": "expert",
     }
@@ -45,14 +44,12 @@ class TestAddSkillUseCase:
         request = AddSkillRequest(
             profile_id=PROFILE_ID,
             name="Python",
-            category="backend",
             order_index=0,
             level="expert",
         )
         result = await uc.execute(request)
 
         assert result.name == "Python"
-        assert result.category == "backend"
         repo.exists_by_name.assert_awaited_once_with(PROFILE_ID, "Python")
         repo.add.assert_awaited_once()
 
@@ -64,7 +61,6 @@ class TestAddSkillUseCase:
         request = AddSkillRequest(
             profile_id=PROFILE_ID,
             name="Python",
-            category="backend",
             order_index=0,
         )
         with pytest.raises(DuplicateException):
@@ -102,7 +98,7 @@ class TestEditSkillUseCase:
         repo.update.return_value = skill
 
         uc = EditSkillUseCase(repo)
-        request = EditSkillRequest(skill_id="skill-001", name="Go", category="backend")
+        request = EditSkillRequest(skill_id="skill-001", name="Go")
         result = await uc.execute(request)
 
         assert result.name == "Go"
@@ -155,17 +151,6 @@ class TestListSkillsUseCase:
         assert result.total == 2
         assert len(result.skills) == 2
         repo.find_by.assert_awaited_once_with(profile_id=PROFILE_ID)
-
-    async def test_list_skills_filter_by_category(self):
-        repo = AsyncMock()
-        repo.find_by.return_value = [_make_skill()]
-
-        uc = ListSkillsUseCase(repo)
-        request = ListSkillsRequest(profile_id=PROFILE_ID, category="backend")
-        result = await uc.execute(request)
-
-        assert result.total == 1
-        repo.find_by.assert_awaited_once_with(profile_id=PROFILE_ID, category="backend")
 
     async def test_list_skills_empty(self):
         repo = AsyncMock()
