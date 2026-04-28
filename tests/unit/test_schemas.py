@@ -54,21 +54,18 @@ class TestSkillSchema:
         data = {
             "name": "Python",
             "level": "expert",
-            "category": "backend",
             "order_index": 0,
         }
         skill = SkillCreate(**data)
 
         assert skill.name == "Python"
         assert skill.level == "expert"
-        assert skill.category == "backend"
 
     def test_skill_create_invalid_level(self):
         """Test: SkillCreate falla con nivel inválido"""
         data = {
             "name": "Python",
             "level": "master",  # No es un nivel válido
-            "category": "backend",
             "order_index": 0,
         }
 
@@ -77,24 +74,12 @@ class TestSkillSchema:
 
         assert "level" in str(exc_info.value)
 
-    def test_skill_create_free_category(self):
-        """Test: SkillCreate acepta cualquier string como categoría"""
-        data = {
-            "name": "Python",
-            "level": "expert",
-            "category": "programming",
-            "order_index": 0,
-        }
-        skill = SkillCreate(**data)
-        assert skill.category == "programming"
-
     @pytest.mark.parametrize("level", ["basic", "intermediate", "advanced", "expert"])
     def test_skill_all_valid_levels(self, level):
         """Test: SkillCreate acepta todos los niveles válidos"""
         data = {
             "name": "Python",
             "level": level,
-            "category": "backend",
             "order_index": 0,
         }
         skill = SkillCreate(**data)
