@@ -83,6 +83,7 @@ async def create_work_experience(
             order_index=experience_data.order_index,
             description=experience_data.description,
             end_date=experience_data.end_date,
+            location=experience_data.location,
             responsibilities=experience_data.responsibilities or [],
         )
     )
@@ -106,6 +107,7 @@ async def update_work_experience(
             role=experience_data.role,
             company=experience_data.company,
             description=experience_data.description,
+            location=experience_data.location,
             start_date=experience_data.start_date,
             end_date=experience_data.end_date,
             responsibilities=experience_data.responsibilities,
