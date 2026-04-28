@@ -22,7 +22,6 @@ class AddSkillUseCase(ICommandUseCase[AddSkillRequest, SkillResponse]):
     Business Rules:
     - Name must be unique per profile
     - orderIndex must be unique per profile
-    - Category is required
     - Level is optional
 
     Dependencies:
@@ -60,7 +59,6 @@ class AddSkillUseCase(ICommandUseCase[AddSkillRequest, SkillResponse]):
         skill = Skill.create(
             profile_id=request.profile_id,
             name=request.name,
-            category=request.category,
             order_index=request.order_index,
             level=request.level,
         )

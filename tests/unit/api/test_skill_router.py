@@ -16,12 +16,6 @@ class TestListSkills:
         assert isinstance(data, list)
         assert len(data) > 0
 
-    async def test_list_skills_filter_by_category(self, client: AsyncClient):
-        response = await client.get(PREFIX, params={"category": "backend"})
-        assert response.status_code == 200
-        data = response.json()
-        assert all(s["category"] == "backend" for s in data)
-
     async def test_list_skills_filter_by_level(self, client: AsyncClient):
         response = await client.get(PREFIX, params={"level": "expert"})
         assert response.status_code == 200
@@ -52,7 +46,6 @@ class TestCreateSkill:
     async def test_create_skill_returns_201(self, client: AsyncClient):
         payload = {
             "name": "Go",
-            "category": "backend",
             "order_index": 99,
             "level": "basic",
         }
@@ -64,12 +57,12 @@ class TestCreateSkill:
         assert response.status_code == 422
 
     async def test_create_skill_validation_empty_name(self, client: AsyncClient):
-        payload = {"name": "", "category": "backend", "order_index": 0}
+        payload = {"name": "", "order_index": 0}
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
     async def test_create_skill_validation_negative_order(self, client: AsyncClient):
-        payload = {"name": "Go", "category": "backend", "order_index": -1}
+        payload = {"name": "Go", "order_index": -1}
         response = await client.post(PREFIX, json=payload)
         assert response.status_code == 422
 
@@ -95,22 +88,6 @@ class TestDeleteSkill:
 
 
 class TestSkillGroupedEndpoints:
-    async def test_grouped_by_category(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}/grouped/by-category")
-        assert response.status_code == 200
-        data = response.json()
-        assert isinstance(data, dict)
-        assert "backend" in data
-        assert "frontend" in data
-        assert "database" in data
-
-    async def test_grouped_by_category_skills_sorted(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}/grouped/by-category")
-        data = response.json()
-        for category, skills in data.items():
-            indices = [s["order_index"] for s in skills]
-            assert indices == sorted(indices), f"{category} not sorted"
-
     async def test_grouped_by_level(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/grouped/by-level")
         assert response.status_code == 200
@@ -126,16 +103,6 @@ class TestSkillGroupedEndpoints:
         for level, skills in data.items():
             indices = [s["order_index"] for s in skills]
             assert indices == sorted(indices), f"{level} not sorted"
-
-
-class TestSkillCombinedFilters:
-    async def test_filter_by_category_and_level(self, client: AsyncClient):
-        response = await client.get(
-            PREFIX, params={"category": "backend", "level": "expert"}
-        )
-        assert response.status_code == 200
-        data = response.json()
-        assert all(s["category"] == "backend" and s["level"] == "expert" for s in data)
 
 
 class TestReorderSkills:
@@ -154,7 +121,6 @@ class TestSkillStats:
         data = response.json()
         assert "total" in data
         assert "by_level" in data
-        assert "by_category" in data
         assert data["total"] > 0
 
     async def test_stats_total_matches_list(self, client: AsyncClient):
@@ -169,9 +135,3 @@ class TestSkillStats:
         data = response.json()
         level_sum = sum(data["by_level"].values())
         assert level_sum == data["total"]
-
-    async def test_stats_by_category_sums_to_total(self, client: AsyncClient):
-        response = await client.get(f"{PREFIX}/stats/summary")
-        data = response.json()
-        category_sum = sum(data["by_category"].values())
-        assert category_sum == data["total"]

@@ -34,14 +34,12 @@ PROFILE_DATA = {"name": "Alex Zapata", "headline": "Full Stack Developer"}
 
 SKILL_PYTHON = {
     "name": "Python",
-    "category": "backend",
     "order_index": 0,
     "level": "expert",
 }
 
 SKILL_REACT = {
     "name": "React",
-    "category": "frontend",
     "order_index": 1,
     "level": "advanced",
 }
@@ -275,7 +273,7 @@ class TestResourceCRUDFlow:
         skill = resp.json()
         skill_id = skill["id"]
         assert skill["name"] == "Python"
-        assert skill["category"] == "backend"
+        assert "order_index" in skill
         assert "created_at" in skill
 
         # READ (list)
@@ -293,7 +291,7 @@ class TestResourceCRUDFlow:
         # UPDATE
         resp = await client.put(
             f"{PREFIX}/skills/{skill_id}",
-            json={"name": "Python 3.13", "category": "backend"},
+            json={"name": "Python 3.13"},
         )
         assert resp.status_code == 200
 
@@ -320,7 +318,7 @@ class TestBusinessRuleValidation:
         """Negative order_index should return 422."""
         resp = await client.post(
             f"{PREFIX}/skills",
-            json={"name": "Test", "category": "backend", "order_index": -1},
+            json={"name": "Test", "order_index": -1},
         )
         assert resp.status_code == 422
 
@@ -328,7 +326,7 @@ class TestBusinessRuleValidation:
         """Empty name should return 422."""
         resp = await client.post(
             f"{PREFIX}/skills",
-            json={"name": "", "category": "backend", "order_index": 0},
+            json={"name": "", "order_index": 0},
         )
         assert resp.status_code == 422
 
@@ -382,9 +380,9 @@ class TestDataConsistency:
         """Creating multiple resources should all appear in their respective lists."""
         # Create 3 skills
         for skill in [
-            {"name": "Python", "category": "backend", "order_index": 0},
-            {"name": "React", "category": "frontend", "order_index": 1},
-            {"name": "PostgreSQL", "category": "database", "order_index": 2},
+            {"name": "Python", "order_index": 0},
+            {"name": "React", "order_index": 1},
+            {"name": "PostgreSQL", "order_index": 2},
         ]:
             resp = await client.post(f"{PREFIX}/skills", json=skill)
             assert resp.status_code == 201

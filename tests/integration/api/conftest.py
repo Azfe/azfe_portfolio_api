@@ -143,7 +143,6 @@ MOCK_SKILLS = [
         id="skill_001",
         profile_id=PROFILE_ID,
         name="Python",
-        category="backend",
         order_index=0,
         level="expert",
         created_at=NOW.isoformat(),
@@ -153,7 +152,6 @@ MOCK_SKILLS = [
         id="skill_002",
         profile_id=PROFILE_ID,
         name="React",
-        category="frontend",
         order_index=1,
         level="advanced",
         created_at=NOW.isoformat(),
@@ -163,7 +161,6 @@ MOCK_SKILLS = [
         id="skill_003",
         profile_id=PROFILE_ID,
         name="PostgreSQL",
-        category="database",
         order_index=2,
         level="intermediate",
         created_at=NOW.isoformat(),
@@ -173,7 +170,6 @@ MOCK_SKILLS = [
         id="skill_004",
         profile_id=PROFILE_ID,
         name="FastAPI",
-        category="backend",
         order_index=3,
         level="expert",
         created_at=NOW.isoformat(),
@@ -670,14 +666,10 @@ def _mock_edit_uc(items, id_field, return_item):
 
 
 def _mock_skill_list_uc():
-    """Skill list UC that respects category filter."""
     uc = AsyncMock()
 
     async def execute(request):
-        skills = MOCK_SKILLS
-        if request.category:
-            skills = [s for s in skills if s.category == request.category]
-        return SkillListResponse(skills=skills, total=len(skills))
+        return SkillListResponse(skills=MOCK_SKILLS, total=len(MOCK_SKILLS))
 
     uc.execute = AsyncMock(side_effect=execute)
     return uc
