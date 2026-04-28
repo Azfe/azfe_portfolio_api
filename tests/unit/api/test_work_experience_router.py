@@ -110,6 +110,64 @@ class TestCurrentActive:
         assert "exp_001" in ids
 
 
+class TestLocationField:
+    async def test_list_experiences_exposes_location_field(self, client: AsyncClient):
+        response = await client.get(PREFIX)
+        assert response.status_code == 200
+        data = response.json()
+        first = data[0]
+        assert "location" in first
+
+    async def test_location_is_null_when_not_set(self, client: AsyncClient):
+        response = await client.get(PREFIX)
+        data = response.json()
+        # Both mock experiences have location=None
+        for exp in data:
+            assert exp["location"] is None
+
+    async def test_create_experience_with_location(self, client: AsyncClient):
+        payload = {
+            "role": "Developer",
+            "company": "ACME",
+            "start_date": "2023-01-01T00:00:00",
+            "order_index": 0,
+            "location": "Madrid, Spain",
+        }
+        response = await client.post(PREFIX, json=payload)
+        assert response.status_code == 201
+
+    async def test_create_experience_without_location(self, client: AsyncClient):
+        payload = {
+            "role": "Developer",
+            "company": "ACME",
+            "start_date": "2023-01-01T00:00:00",
+            "order_index": 0,
+        }
+        response = await client.post(PREFIX, json=payload)
+        assert response.status_code == 201
+
+    async def test_create_experience_location_too_long(self, client: AsyncClient):
+        payload = {
+            "role": "Developer",
+            "company": "ACME",
+            "start_date": "2023-01-01T00:00:00",
+            "order_index": 0,
+            "location": "A" * 101,
+        }
+        response = await client.post(PREFIX, json=payload)
+        assert response.status_code == 422
+
+    async def test_update_experience_with_location(self, client: AsyncClient):
+        payload = {"location": "Barcelona, Spain"}
+        response = await client.put(f"{PREFIX}/exp_001", json=payload)
+        assert response.status_code == 200
+
+    async def test_update_experience_location_too_long(self, client: AsyncClient):
+        payload = {"location": "B" * 101}
+        response = await client.put(f"{PREFIX}/exp_001", json=payload)
+        assert response.status_code == 422
+
+
 class TestFilterByCompany:
     async def test_by_company_returns_list(self, client: AsyncClient):
         response = await client.get(f"{PREFIX}/by-company/Tech")
