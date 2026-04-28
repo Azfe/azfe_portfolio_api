@@ -19,6 +19,7 @@ class AddExperienceRequest:
     order_index: int
     description: str | None = None
     end_date: datetime | None = None
+    location: str | None = None
     responsibilities: list[str] = field(default_factory=list)
 
 
@@ -30,6 +31,7 @@ class EditExperienceRequest:
     role: str | None = None
     company: str | None = None
     description: str | None = None
+    location: str | None = None
     start_date: datetime | None = None
     end_date: datetime | None = None
     responsibilities: list[str] | None = None
@@ -61,6 +63,7 @@ class WorkExperienceResponse:
     start_date: datetime
     end_date: datetime | None
     description: str | None
+    location: str | None
     responsibilities: list[str]
     order_index: int
     created_at: datetime
@@ -83,6 +86,7 @@ class WorkExperienceResponse:
             start_date=entity.start_date,
             end_date=entity.end_date,
             description=entity.description,
+            location=entity.location,
             responsibilities=entity.responsibilities.copy(),
             order_index=entity.order_index,
             created_at=entity.created_at,
