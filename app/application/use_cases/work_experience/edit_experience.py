@@ -63,6 +63,7 @@ class EditExperienceUseCase(
             role=request.role,
             company=request.company,
             description=request.description,
+            location=request.location,
             start_date=request.start_date,
             end_date=request.end_date,
         )

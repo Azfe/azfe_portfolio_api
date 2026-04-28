@@ -72,6 +72,7 @@ class AddExperienceUseCase(
             order_index=request.order_index,
             description=request.description,
             end_date=request.end_date,
+            location=request.location,
             responsibilities=request.responsibilities,
         )
 
