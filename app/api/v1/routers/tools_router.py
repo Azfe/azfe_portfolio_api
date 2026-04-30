@@ -60,6 +60,8 @@ async def get_tools_grouped_by_category(
     result = await use_case.execute(ListToolsRequest(profile_id=PROFILE_ID))
     grouped: dict[str, list] = {}
     for tool in result.tools:
+        if tool.category is None:
+            continue
         if tool.category not in grouped:
             grouped[tool.category] = []
         grouped[tool.category].append(tool)
