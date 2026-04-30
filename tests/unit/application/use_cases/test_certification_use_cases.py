@@ -159,9 +159,7 @@ class TestDeleteCertificationUseCase:
 
         uc = DeleteCertificationUseCase(repo)
         with pytest.raises(NotFoundException):
-            await uc.execute(
-                DeleteCertificationRequest(certification_id="nonexistent")
-            )
+            await uc.execute(DeleteCertificationRequest(certification_id="nonexistent"))
 
 
 class TestEditCertificationUseCase:
@@ -266,9 +264,7 @@ class TestListCertificationsUseCase:
         repo.find_by.return_value = []
 
         uc = ListCertificationsUseCase(repo)
-        result = await uc.execute(
-            ListCertificationsRequest(profile_id=PROFILE_ID)
-        )
+        result = await uc.execute(ListCertificationsRequest(profile_id=PROFILE_ID))
 
         assert result.certifications == []
         assert result.total == 0
@@ -285,9 +281,7 @@ class TestListCertificationsUseCase:
         repo.find_by.return_value = certifications
 
         uc = ListCertificationsUseCase(repo)
-        result = await uc.execute(
-            ListCertificationsRequest(profile_id=PROFILE_ID)
-        )
+        result = await uc.execute(ListCertificationsRequest(profile_id=PROFILE_ID))
 
         assert result.total == 3
         assert len(result.certifications) == 3
@@ -347,9 +341,7 @@ class TestListCertificationsUseCase:
         repo.find_by.return_value = [cert_expired, cert_no_expiry]
 
         uc = ListCertificationsUseCase(repo)
-        result = await uc.execute(
-            ListCertificationsRequest(profile_id=PROFILE_ID)
-        )
+        result = await uc.execute(ListCertificationsRequest(profile_id=PROFILE_ID))
 
         assert result.certifications[0].is_expired is True
         assert result.certifications[1].is_expired is False

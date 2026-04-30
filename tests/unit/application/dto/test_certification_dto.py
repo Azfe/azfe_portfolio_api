@@ -12,9 +12,9 @@ from .conftest import DT, DT2, DT_END, DT_START, make_entity
 # Fixed dates that are deterministic regardless of when the tests run.
 # PAST_DATE is definitively in the past; FUTURE_DATE is definitively in the future.
 PAST_DATE = DT_START  # 2024-01-01 — already passed
-FUTURE_DATE = DT_END   # 2024-12-31 — still in the future relative to issue_date,
-                       # but we drive is_expired via the mock return value, not
-                       # by re-implementing the logic here.
+FUTURE_DATE = DT_END  # 2024-12-31 — still in the future relative to issue_date,
+# but we drive is_expired via the mock return value, not
+# by re-implementing the logic here.
 
 
 def _make_certification_entity(**overrides):

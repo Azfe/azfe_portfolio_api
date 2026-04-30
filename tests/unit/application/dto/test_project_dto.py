@@ -2,18 +2,15 @@
 
 import pytest
 
-from app.application.dto.project_dto import (
-    ProjectListResponse,
-    ProjectResponse,
-)
+from app.application.dto.project_dto import ProjectListResponse, ProjectResponse
 
 from .conftest import DT, DT2, DT_END, DT_START, make_entity
 
 # Fixed dates — deterministic regardless of when tests run.
 # The calculated field is_ongoing is driven by the mock return value,
 # not by re-implementing the domain logic here.
-DATE_START = DT_START   # 2024-01-01
-DATE_END = DT_END       # 2024-12-31
+DATE_START = DT_START  # 2024-01-01
+DATE_END = DT_END  # 2024-12-31
 
 LONG_DESCRIPTION = (
     "A comprehensive web application built with FastAPI and MongoDB "
@@ -258,8 +255,7 @@ class TestProjectListResponseFromEntities:
     @pytest.mark.unit
     def test_total_matches_entity_count(self):
         entities = [
-            _make_project_entity(id=f"proj-{i}", title=f"Project {i}")
-            for i in range(4)
+            _make_project_entity(id=f"proj-{i}", title=f"Project {i}") for i in range(4)
         ]
         resp = ProjectListResponse.from_entities(entities)
 

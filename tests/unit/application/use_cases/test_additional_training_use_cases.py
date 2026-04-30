@@ -158,9 +158,7 @@ class TestDeleteAdditionalTrainingUseCase:
 
         uc = DeleteAdditionalTrainingUseCase(repo)
         with pytest.raises(NotFoundException):
-            await uc.execute(
-                DeleteAdditionalTrainingRequest(training_id="nonexistent")
-            )
+            await uc.execute(DeleteAdditionalTrainingRequest(training_id="nonexistent"))
 
 
 class TestEditAdditionalTrainingUseCase:
@@ -247,9 +245,7 @@ class TestListAdditionalTrainingsUseCase:
         repo.find_by.return_value = []
 
         uc = ListAdditionalTrainingsUseCase(repo)
-        result = await uc.execute(
-            ListAdditionalTrainingsRequest(profile_id=PROFILE_ID)
-        )
+        result = await uc.execute(ListAdditionalTrainingsRequest(profile_id=PROFILE_ID))
 
         assert result.trainings == []
         assert result.total == 0
@@ -266,9 +262,7 @@ class TestListAdditionalTrainingsUseCase:
         repo.find_by.return_value = trainings
 
         uc = ListAdditionalTrainingsUseCase(repo)
-        result = await uc.execute(
-            ListAdditionalTrainingsRequest(profile_id=PROFILE_ID)
-        )
+        result = await uc.execute(ListAdditionalTrainingsRequest(profile_id=PROFILE_ID))
 
         assert result.total == 3
         assert len(result.trainings) == 3

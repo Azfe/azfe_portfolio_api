@@ -261,9 +261,9 @@ class TestExceptionHierarchy:
             BusinessRuleViolationException("rule"),
         ]
         for exc in exceptions:
-            assert isinstance(exc, ApplicationException), (
-                f"{type(exc).__name__} does not inherit from ApplicationException"
-            )
+            assert isinstance(
+                exc, ApplicationException
+            ), f"{type(exc).__name__} does not inherit from ApplicationException"
 
     @pytest.mark.unit
     def test_all_exceptions_are_python_exceptions(self):
@@ -277,9 +277,9 @@ class TestExceptionHierarchy:
             BusinessRuleViolationException("rule"),
         ]
         for exc in exceptions:
-            assert isinstance(exc, Exception), (
-                f"{type(exc).__name__} does not inherit from Exception"
-            )
+            assert isinstance(
+                exc, Exception
+            ), f"{type(exc).__name__} does not inherit from Exception"
 
     @pytest.mark.unit
     def test_all_exceptions_can_be_raised_and_caught(self):

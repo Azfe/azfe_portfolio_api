@@ -1,14 +1,15 @@
 """Tests for ContactMessage DTOs."""
 
-import pytest
 from datetime import datetime
+
+import pytest
 
 from app.application.dto.contact_message_dto import (
     ContactMessageListResponse,
     ContactMessageResponse,
 )
 
-from .conftest import DT, DT2, make_entity
+from .conftest import DT, make_entity
 
 
 def _make_contact_message_entity(**overrides):
