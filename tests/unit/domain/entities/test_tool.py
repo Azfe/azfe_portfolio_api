@@ -28,6 +28,14 @@ class TestToolCreation:
         assert t.category == "Container"
         assert t.icon_url is None
 
+    def test_create_without_category(self, profile_id):
+        t = Tool.create(
+            profile_id=profile_id,
+            name="Docker",
+            order_index=0,
+        )
+        assert t.category is None
+
     def test_create_with_icon_url(self, profile_id):
         t = Tool.create(
             profile_id=profile_id,

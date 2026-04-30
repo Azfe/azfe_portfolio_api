@@ -6,7 +6,7 @@ Represents a tool, technology, or software used in the portfolio.
 Business Rules Applied:
 - RB-T01: name is required (1-50 chars)
 - RB-T02: name must be unique per profile
-- RB-T03: category is required (1-50 chars, e.g., "Framework", "Database")
+- RB-T03: category is optional (1-50 chars if provided, e.g., "Framework", "Database")
 - RB-T04: iconUrl is optional, must be valid URL if provided
 - RB-T05: orderIndex is required for display ordering
 """
@@ -37,8 +37,8 @@ class Tool:
     id: str
     profile_id: str
     name: str
-    category: str
     order_index: int
+    category: str | None = None
     icon_url: str | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
@@ -68,8 +68,8 @@ class Tool:
     def create(
         profile_id: str,
         name: str,
-        category: str,
         order_index: int,
+        category: str | None = None,
         icon_url: str | None = None,
     ) -> "Tool":
         """
@@ -78,8 +78,8 @@ class Tool:
         Args:
             profile_id: Reference to the Profile
             name: Tool name (e.g., "Docker", "PostgreSQL")
-            category: Tool category (e.g., "Container", "Database")
             order_index: Position in the ordered list
+            category: Tool category (e.g., "Container", "Database") (optional)
             icon_url: URL to tool icon/logo (optional)
 
         Returns:
@@ -89,8 +89,8 @@ class Tool:
             id=str(uuid.uuid4()),
             profile_id=profile_id,
             name=name,
-            category=category,
             order_index=order_index,
+            category=category,
             icon_url=icon_url,
         )
 
@@ -153,7 +153,10 @@ class Tool:
 
     def _validate_category(self) -> None:
         """Validate category field according to business rules."""
-        if not self.category or not self.category.strip():
+        if self.category is None:
+            return
+
+        if not self.category.strip():
             raise InvalidCategoryError("Category cannot be empty")
 
         if len(self.category) > self.MAX_CATEGORY_LENGTH:
