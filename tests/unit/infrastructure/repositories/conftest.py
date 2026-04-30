@@ -238,6 +238,53 @@ def make_language_doc(
     return doc
 
 
+def make_tool_doc(
+    _id="tool-123",
+    profile_id="profile-123",
+    name="Docker",
+    order_index=0,
+    category=None,
+    icon_url=None,
+):
+    """Helper to create a tool MongoDB document."""
+    doc = {
+        "_id": _id,
+        "profile_id": profile_id,
+        "name": name,
+        "order_index": order_index,
+        "created_at": datetime(2025, 1, 1),
+        "updated_at": datetime(2025, 1, 1),
+    }
+    if category is not None:
+        doc["category"] = category
+    if icon_url is not None:
+        doc["icon_url"] = icon_url
+    return doc
+
+
+def make_social_network_doc(
+    _id="sn-123",
+    profile_id="profile-123",
+    platform="LinkedIn",
+    url="https://linkedin.com/in/azfe",
+    order_index=0,
+    username=None,
+):
+    """Helper to create a social network MongoDB document."""
+    doc = {
+        "_id": _id,
+        "profile_id": profile_id,
+        "platform": platform,
+        "url": url,
+        "order_index": order_index,
+        "created_at": datetime(2025, 1, 1),
+        "updated_at": datetime(2025, 1, 1),
+    }
+    if username is not None:
+        doc["username"] = username
+    return doc
+
+
 def make_project_doc(
     _id="proj-123",
     profile_id="profile-123",
