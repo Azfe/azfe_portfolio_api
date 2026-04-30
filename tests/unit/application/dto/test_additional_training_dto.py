@@ -107,7 +107,9 @@ class TestAdditionalTrainingListResponseFromEntities:
     @pytest.mark.unit
     def test_maps_list(self):
         entities = [
-            _make_additional_training_entity(id="at-1", title="Python for Data Science"),
+            _make_additional_training_entity(
+                id="at-1", title="Python for Data Science"
+            ),
             _make_additional_training_entity(id="at-2", title="Machine Learning A-Z"),
         ]
         resp = AdditionalTrainingListResponse.from_entities(entities)
@@ -118,7 +120,9 @@ class TestAdditionalTrainingListResponseFromEntities:
     @pytest.mark.unit
     def test_items_are_correctly_mapped(self):
         entities = [
-            _make_additional_training_entity(id="at-1", title="Python for Data Science"),
+            _make_additional_training_entity(
+                id="at-1", title="Python for Data Science"
+            ),
             _make_additional_training_entity(id="at-2", title="Machine Learning A-Z"),
         ]
         resp = AdditionalTrainingListResponse.from_entities(entities)

@@ -1,7 +1,8 @@
 """Tests for ContactInformation DTOs."""
 
-import pytest
 from datetime import datetime
+
+import pytest
 
 from app.application.dto.contact_information_dto import ContactInformationResponse
 

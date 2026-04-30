@@ -158,9 +158,7 @@ class TestToolListResponseFromEntities:
 
     @pytest.mark.unit
     def test_total_matches_list_length(self):
-        entities = [
-            _make_tool_entity(id=f"t-{i}", name=f"Tool {i}") for i in range(5)
-        ]
+        entities = [_make_tool_entity(id=f"t-{i}", name=f"Tool {i}") for i in range(5)]
         resp = ToolListResponse.from_entities(entities)
 
         assert resp.total == len(resp.tools) == 5

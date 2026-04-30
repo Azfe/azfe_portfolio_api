@@ -223,7 +223,9 @@ class TestListProgrammingLanguagesUseCase:
         repo.get_all_ordered.return_value = pls
 
         uc = ListProgrammingLanguagesUseCase(repo)
-        request = ListProgrammingLanguagesRequest(profile_id=PROFILE_ID, ascending=False)
+        request = ListProgrammingLanguagesRequest(
+            profile_id=PROFILE_ID, ascending=False
+        )
         result = await uc.execute(request)
 
         assert result.total == 2

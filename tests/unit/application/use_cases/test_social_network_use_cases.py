@@ -91,7 +91,9 @@ class TestDeleteSocialNetworkUseCase:
         repo.delete.return_value = True
 
         uc = DeleteSocialNetworkUseCase(repo)
-        result = await uc.execute(DeleteSocialNetworkRequest(social_network_id="sn-001"))
+        result = await uc.execute(
+            DeleteSocialNetworkRequest(social_network_id="sn-001")
+        )
 
         assert result.success is True
         repo.delete.assert_awaited_once_with("sn-001")
@@ -103,7 +105,9 @@ class TestDeleteSocialNetworkUseCase:
 
         uc = DeleteSocialNetworkUseCase(repo)
         with pytest.raises(NotFoundException):
-            await uc.execute(DeleteSocialNetworkRequest(social_network_id="nonexistent"))
+            await uc.execute(
+                DeleteSocialNetworkRequest(social_network_id="nonexistent")
+            )
 
 
 class TestEditSocialNetworkUseCase:
@@ -183,7 +187,9 @@ class TestListSocialNetworksUseCase:
         repo = AsyncMock()
         social_networks = [
             _make_social_network(order_index=0),
-            _make_social_network(platform="GitHub", url="https://github.com/azfe", order_index=1),
+            _make_social_network(
+                platform="GitHub", url="https://github.com/azfe", order_index=1
+            ),
         ]
         repo.find_by.return_value = social_networks
 
@@ -211,14 +217,20 @@ class TestListSocialNetworksUseCase:
     async def test_list_social_networks_ascending_order(self):
         repo = AsyncMock()
         social_networks = [
-            _make_social_network(platform="Twitter", url="https://twitter.com/azfe", order_index=2),
-            _make_social_network(platform="GitHub", url="https://github.com/azfe", order_index=0),
+            _make_social_network(
+                platform="Twitter", url="https://twitter.com/azfe", order_index=2
+            ),
+            _make_social_network(
+                platform="GitHub", url="https://github.com/azfe", order_index=0
+            ),
             _make_social_network(order_index=1),
         ]
         repo.find_by.return_value = social_networks
 
         uc = ListSocialNetworksUseCase(repo)
-        result = await uc.execute(ListSocialNetworksRequest(profile_id=PROFILE_ID, ascending=True))
+        result = await uc.execute(
+            ListSocialNetworksRequest(profile_id=PROFILE_ID, ascending=True)
+        )
 
         order_indexes = [sn.order_index for sn in result.social_networks]
         assert order_indexes == sorted(order_indexes)
@@ -227,14 +239,20 @@ class TestListSocialNetworksUseCase:
     async def test_list_social_networks_descending_order(self):
         repo = AsyncMock()
         social_networks = [
-            _make_social_network(platform="Twitter", url="https://twitter.com/azfe", order_index=0),
-            _make_social_network(platform="GitHub", url="https://github.com/azfe", order_index=2),
+            _make_social_network(
+                platform="Twitter", url="https://twitter.com/azfe", order_index=0
+            ),
+            _make_social_network(
+                platform="GitHub", url="https://github.com/azfe", order_index=2
+            ),
             _make_social_network(order_index=1),
         ]
         repo.find_by.return_value = social_networks
 
         uc = ListSocialNetworksUseCase(repo)
-        result = await uc.execute(ListSocialNetworksRequest(profile_id=PROFILE_ID, ascending=False))
+        result = await uc.execute(
+            ListSocialNetworksRequest(profile_id=PROFILE_ID, ascending=False)
+        )
 
         order_indexes = [sn.order_index for sn in result.social_networks]
         assert order_indexes == sorted(order_indexes, reverse=True)
