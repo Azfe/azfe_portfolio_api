@@ -11,7 +11,7 @@ class ToolMapper(IMapper[Tool, dict[str, Any]]):
             id=str(persistence_model["_id"]),
             profile_id=persistence_model["profile_id"],
             name=persistence_model["name"],
-            category=persistence_model["category"],
+            category=persistence_model.get("category"),
             order_index=persistence_model["order_index"],
             icon_url=persistence_model.get("icon_url"),
             created_at=persistence_model["created_at"],
@@ -23,11 +23,12 @@ class ToolMapper(IMapper[Tool, dict[str, Any]]):
             "_id": domain_entity.id,
             "profile_id": domain_entity.profile_id,
             "name": domain_entity.name,
-            "category": domain_entity.category,
             "order_index": domain_entity.order_index,
             "created_at": domain_entity.created_at,
             "updated_at": domain_entity.updated_at,
         }
+        if domain_entity.category is not None:
+            doc["category"] = domain_entity.category
         if domain_entity.icon_url is not None:
             doc["icon_url"] = domain_entity.icon_url
         return doc
