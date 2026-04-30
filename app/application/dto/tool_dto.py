@@ -14,8 +14,8 @@ class AddToolRequest:
 
     profile_id: str
     name: str
-    category: str
     order_index: int
+    category: str | None = None
     icon_url: str | None = None
 
 
@@ -52,7 +52,7 @@ class ToolResponse:
     id: str
     profile_id: str
     name: str
-    category: str
+    category: str | None
     order_index: int
     icon_url: str | None
     created_at: datetime
