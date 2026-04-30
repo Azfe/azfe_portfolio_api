@@ -49,6 +49,114 @@ class TestSkillLevelComparison:
 
         assert basic < intermediate < advanced < expert
 
+    # --- __lt__ ---
+
+    @pytest.mark.unit
+    def test_lt_lower_level_is_less_than_higher(self):
+        """Lower level should be less than a higher level."""
+        assert SkillLevel.basic() < SkillLevel.intermediate()
+        assert SkillLevel.intermediate() < SkillLevel.advanced()
+        assert SkillLevel.advanced() < SkillLevel.expert()
+
+    @pytest.mark.unit
+    def test_lt_equal_levels_are_not_less_than(self):
+        """Equal levels should not satisfy __lt__."""
+        assert not (SkillLevel.basic() < SkillLevel.basic())
+        assert not (SkillLevel.expert() < SkillLevel.expert())
+
+    @pytest.mark.unit
+    def test_lt_higher_level_is_not_less_than_lower(self):
+        """Higher level should not be less than a lower level."""
+        assert not (SkillLevel.expert() < SkillLevel.basic())
+        assert not (SkillLevel.advanced() < SkillLevel.intermediate())
+
+    @pytest.mark.unit
+    def test_lt_transitive(self):
+        """__lt__ should be transitive: A < B and B < C implies A < C."""
+        basic = SkillLevel.basic()
+        intermediate = SkillLevel.intermediate()
+        expert = SkillLevel.expert()
+
+        assert basic < intermediate
+        assert intermediate < expert
+        assert basic < expert
+
+    # --- __le__ ---
+
+    @pytest.mark.unit
+    def test_le_lower_level_is_less_than_or_equal_to_higher(self):
+        """Lower level should satisfy __le__ against a higher level."""
+        assert SkillLevel.basic() <= SkillLevel.intermediate()
+        assert SkillLevel.intermediate() <= SkillLevel.advanced()
+        assert SkillLevel.advanced() <= SkillLevel.expert()
+
+    @pytest.mark.unit
+    def test_le_equal_levels_satisfy_le(self):
+        """Equal levels should satisfy __le__."""
+        assert SkillLevel.basic() <= SkillLevel.basic()
+        assert SkillLevel.intermediate() <= SkillLevel.intermediate()
+        assert SkillLevel.expert() <= SkillLevel.expert()
+
+    @pytest.mark.unit
+    def test_le_higher_level_does_not_satisfy_le_against_lower(self):
+        """Higher level should not satisfy __le__ against a lower level."""
+        assert not (SkillLevel.expert() <= SkillLevel.basic())
+        assert not (SkillLevel.advanced() <= SkillLevel.intermediate())
+
+    # --- __gt__ ---
+
+    @pytest.mark.unit
+    def test_gt_higher_level_is_greater_than_lower(self):
+        """Higher level should be greater than a lower level."""
+        assert SkillLevel.intermediate() > SkillLevel.basic()
+        assert SkillLevel.advanced() > SkillLevel.intermediate()
+        assert SkillLevel.expert() > SkillLevel.advanced()
+
+    @pytest.mark.unit
+    def test_gt_equal_levels_are_not_greater_than(self):
+        """Equal levels should not satisfy __gt__."""
+        assert not (SkillLevel.basic() > SkillLevel.basic())
+        assert not (SkillLevel.expert() > SkillLevel.expert())
+
+    @pytest.mark.unit
+    def test_gt_lower_level_is_not_greater_than_higher(self):
+        """Lower level should not be greater than a higher level."""
+        assert not (SkillLevel.basic() > SkillLevel.expert())
+        assert not (SkillLevel.intermediate() > SkillLevel.advanced())
+
+    @pytest.mark.unit
+    def test_gt_transitive(self):
+        """__gt__ should be transitive: A > B and B > C implies A > C."""
+        expert = SkillLevel.expert()
+        intermediate = SkillLevel.intermediate()
+        basic = SkillLevel.basic()
+
+        assert expert > intermediate
+        assert intermediate > basic
+        assert expert > basic
+
+    # --- __ge__ ---
+
+    @pytest.mark.unit
+    def test_ge_higher_level_is_greater_than_or_equal_to_lower(self):
+        """Higher level should satisfy __ge__ against a lower level."""
+        assert SkillLevel.intermediate() >= SkillLevel.basic()
+        assert SkillLevel.advanced() >= SkillLevel.intermediate()
+        assert SkillLevel.expert() >= SkillLevel.advanced()
+
+    @pytest.mark.unit
+    def test_ge_equal_levels_satisfy_ge(self):
+        """Equal levels should satisfy __ge__."""
+        assert SkillLevel.basic() >= SkillLevel.basic()
+        assert SkillLevel.intermediate() >= SkillLevel.intermediate()
+        assert SkillLevel.expert() >= SkillLevel.expert()
+
+    @pytest.mark.unit
+    def test_ge_lower_level_does_not_satisfy_ge_against_higher(self):
+        """Lower level should not satisfy __ge__ against a higher level."""
+        assert not (SkillLevel.basic() >= SkillLevel.expert())
+        assert not (SkillLevel.intermediate() >= SkillLevel.advanced())
+
 
 @pytest.mark.value_object
 class TestSkillLevelEquality:
