@@ -1,7 +1,7 @@
 """
 List Skills Use Case.
 
-Retrieves all skills for a profile, optionally filtered by category.
+Retrieves all skills for a profile.
 """
 
 from typing import TYPE_CHECKING
@@ -19,7 +19,6 @@ class ListSkillsUseCase(IQueryUseCase[ListSkillsRequest, SkillListResponse]):
 
     Business Rules:
     - Returns all skills for the profile
-    - Optional filter by category
     - Ordered by orderIndex (configurable direction)
 
     Dependencies:
@@ -40,18 +39,12 @@ class ListSkillsUseCase(IQueryUseCase[ListSkillsRequest, SkillListResponse]):
         Execute the use case.
 
         Args:
-            request: List skills request with profile ID and optional filters
+            request: List skills request with profile ID
 
         Returns:
             SkillListResponse with list of skills and metadata
         """
-        # Get skills (filtered by category if provided)
-        if request.category:
-            skills = await self.skill_repo.find_by(
-                profile_id=request.profile_id, category=request.category
-            )
-        else:
-            skills = await self.skill_repo.find_by(profile_id=request.profile_id)
+        skills = await self.skill_repo.find_by(profile_id=request.profile_id)
 
         # Sort by order_index
         skills.sort(key=lambda s: s.order_index, reverse=not request.ascending)

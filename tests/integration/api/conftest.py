@@ -121,6 +121,10 @@ YESTERDAY = NOW - timedelta(days=1)
 LAST_WEEK = NOW - timedelta(days=7)
 PROFILE_ID = "default_profile"
 
+_EXP_001_START = datetime(2022, 1, 1)
+_EXP_002_START = datetime(2020, 6, 1)
+_EXP_002_END = datetime(2021, 12, 31)
+
 # -- Profile --
 MOCK_PROFILE = ProfileDTO(
     id="profile_001",
@@ -139,7 +143,6 @@ MOCK_SKILLS = [
         id="skill_001",
         profile_id=PROFILE_ID,
         name="Python",
-        category="backend",
         order_index=0,
         level="expert",
         created_at=NOW.isoformat(),
@@ -149,7 +152,6 @@ MOCK_SKILLS = [
         id="skill_002",
         profile_id=PROFILE_ID,
         name="React",
-        category="frontend",
         order_index=1,
         level="advanced",
         created_at=NOW.isoformat(),
@@ -159,7 +161,6 @@ MOCK_SKILLS = [
         id="skill_003",
         profile_id=PROFILE_ID,
         name="PostgreSQL",
-        category="database",
         order_index=2,
         level="intermediate",
         created_at=NOW.isoformat(),
@@ -169,7 +170,6 @@ MOCK_SKILLS = [
         id="skill_004",
         profile_id=PROFILE_ID,
         name="FastAPI",
-        category="backend",
         order_index=3,
         level="expert",
         created_at=NOW.isoformat(),
@@ -216,28 +216,34 @@ MOCK_EXPERIENCES = [
         profile_id=PROFILE_ID,
         role="Senior Developer",
         company="Tech Corp",
-        start_date=datetime(2022, 1, 1),
+        start_date=_EXP_001_START,
         end_date=None,
         description="Leading backend development",
+        location=None,
         responsibilities=["Architecture", "Code review"],
         order_index=0,
         created_at=NOW,
         updated_at=NOW,
         is_current=True,
+        duration_months=(NOW.year - _EXP_001_START.year) * 12
+        + (NOW.month - _EXP_001_START.month),
     ),
     WorkExperienceDTO(
         id="exp_002",
         profile_id=PROFILE_ID,
         role="Junior Developer",
         company="StartUp Inc",
-        start_date=datetime(2020, 6, 1),
-        end_date=datetime(2021, 12, 31),
+        start_date=_EXP_002_START,
+        end_date=_EXP_002_END,
         description="Full stack development",
+        location=None,
         responsibilities=["Frontend", "Backend"],
         order_index=1,
         created_at=NOW,
         updated_at=NOW,
         is_current=False,
+        duration_months=(_EXP_002_END.year - _EXP_002_START.year) * 12
+        + (_EXP_002_END.month - _EXP_002_START.month),
     ),
 ]
 
@@ -660,14 +666,10 @@ def _mock_edit_uc(items, id_field, return_item):
 
 
 def _mock_skill_list_uc():
-    """Skill list UC that respects category filter."""
     uc = AsyncMock()
 
     async def execute(request):
-        skills = MOCK_SKILLS
-        if request.category:
-            skills = [s for s in skills if s.category == request.category]
-        return SkillListResponse(skills=skills, total=len(skills))
+        return SkillListResponse(skills=MOCK_SKILLS, total=len(MOCK_SKILLS))
 
     uc.execute = AsyncMock(side_effect=execute)
     return uc

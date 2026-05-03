@@ -15,8 +15,8 @@ class ToolBase(BaseModel):
         max_length=50,
         description="Nombre de la herramienta (no puede estar vacío)",
     )
-    category: str = Field(
-        ...,
+    category: str | None = Field(
+        None,
         min_length=1,
         max_length=50,
         description="Tipo de herramienta (IDE, cloud, CI/CD, etc.)",

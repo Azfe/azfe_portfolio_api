@@ -10,7 +10,6 @@ def _make_skill_entity(**overrides):
         "id": "s-1",
         "profile_id": "p-1",
         "name": "Python",
-        "category": "backend",
         "order_index": 0,
         "level": "expert",
     }
@@ -26,7 +25,6 @@ class TestSkillResponseFromEntity:
         assert resp.id == "s-1"
         assert resp.profile_id == "p-1"
         assert resp.name == "Python"
-        assert resp.category == "backend"
         assert resp.order_index == 0
         assert resp.level == "expert"
 

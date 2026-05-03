@@ -63,7 +63,7 @@ class TestGetCompleteCV:
         skill = skills[0]
         assert "id" in skill
         assert "name" in skill
-        assert "category" in skill
+        assert "order_index" in skill
 
 
 class TestDownloadCVPDF:

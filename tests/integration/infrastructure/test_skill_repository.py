@@ -13,7 +13,6 @@ class TestSkillRepositoryCRUD:
         fetched = await skill_repo.get_by_id(skill.id)
         assert fetched is not None
         assert fetched.name == "Python"
-        assert fetched.category == "Backend"
         assert fetched.profile_id == PROFILE_ID
 
     async def test_add_with_optional_fields(self, skill_repo: SkillRepository):
@@ -28,13 +27,12 @@ class TestSkillRepositoryCRUD:
         skill = make_skill()
         await skill_repo.add(skill)
 
-        updated = make_skill(name="JavaScript", category="Frontend")
+        updated = make_skill(name="JavaScript")
         await skill_repo.update(updated)
 
         fetched = await skill_repo.get_by_id(skill.id)
         assert fetched is not None
         assert fetched.name == "JavaScript"
-        assert fetched.category == "Frontend"
 
     async def test_delete_existing(self, skill_repo: SkillRepository):
         skill = make_skill()
@@ -66,16 +64,11 @@ class TestSkillRepositoryCRUD:
         assert await skill_repo.exists("nonexistent") is False
 
     async def test_find_by(self, skill_repo: SkillRepository):
-        await skill_repo.add(
-            make_skill(id="s1", name="Python", category="Backend", order_index=0)
-        )
-        await skill_repo.add(
-            make_skill(id="s2", name="React", category="Frontend", order_index=1)
-        )
+        await skill_repo.add(make_skill(id="s1", name="Python", order_index=0))
+        await skill_repo.add(make_skill(id="s2", name="React", order_index=1))
 
-        result = await skill_repo.find_by(category="Frontend")
-        assert len(result) == 1
-        assert result[0].name == "React"
+        result = await skill_repo.find_by(profile_id=PROFILE_ID)
+        assert len(result) == 2
 
 
 class TestSkillRepositoryUniqueName:

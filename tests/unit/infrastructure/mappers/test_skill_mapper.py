@@ -15,7 +15,6 @@ class TestSkillMapperToDomain:
             "_id": "s-1",
             "profile_id": "p-1",
             "name": "Python",
-            "category": "backend",
             "order_index": 0,
             "created_at": DT_CREATED,
             "updated_at": DT_UPDATED,
@@ -25,7 +24,6 @@ class TestSkillMapperToDomain:
         assert entity.id == "s-1"
         assert entity.profile_id == "p-1"
         assert entity.name == "Python"
-        assert entity.category == "backend"
         assert entity.order_index == 0
         assert entity.level is None
 
@@ -34,7 +32,6 @@ class TestSkillMapperToDomain:
             "_id": "s-1",
             "profile_id": "p-1",
             "name": "Python",
-            "category": "backend",
             "order_index": 0,
             "level": "expert",
             "created_at": DT_CREATED,
@@ -53,7 +50,6 @@ class TestSkillMapperToPersistence:
             id="s-1",
             profile_id="p-1",
             name="Python",
-            category="backend",
             order_index=0,
             created_at=DT_CREATED,
             updated_at=DT_UPDATED,
@@ -69,7 +65,6 @@ class TestSkillMapperToPersistence:
             id="s-1",
             profile_id="p-1",
             name="Python",
-            category="backend",
             order_index=0,
             level="expert",
             created_at=DT_CREATED,
@@ -83,7 +78,6 @@ class TestSkillMapperToPersistence:
             "_id": "s-1",
             "profile_id": "p-1",
             "name": "Python",
-            "category": "backend",
             "order_index": 0,
             "level": "expert",
             "created_at": DT_CREATED,

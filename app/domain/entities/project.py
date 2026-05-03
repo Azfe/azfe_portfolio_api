@@ -58,7 +58,7 @@ class Project:
     MAX_DESCRIPTION_LENGTH = 2000
     MIN_DESCRIPTION_WITHOUT_URLS = 100
     MAX_TECHNOLOGIES = 20
-    MAX_TECHNOLOGY_LENGTH = 50
+    MAX_TECHNOLOGY_LENGTH = 150
     URL_PATTERN = re.compile(
         r"^https?://"
         r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"

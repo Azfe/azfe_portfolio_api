@@ -19,6 +19,7 @@ class AddExperienceRequest:
     order_index: int
     description: str | None = None
     end_date: datetime | None = None
+    location: str | None = None
     responsibilities: list[str] = field(default_factory=list)
 
 
@@ -30,6 +31,7 @@ class EditExperienceRequest:
     role: str | None = None
     company: str | None = None
     description: str | None = None
+    location: str | None = None
     start_date: datetime | None = None
     end_date: datetime | None = None
     responsibilities: list[str] | None = None
@@ -61,15 +63,21 @@ class WorkExperienceResponse:
     start_date: datetime
     end_date: datetime | None
     description: str | None
+    location: str | None
     responsibilities: list[str]
     order_index: int
     created_at: datetime
     updated_at: datetime
     is_current: bool
+    duration_months: int
 
     @classmethod
     def from_entity(cls, entity) -> "WorkExperienceResponse":
         """Create DTO from domain entity."""
+        start = entity.start_date
+        end = entity.end_date if entity.end_date is not None else datetime.utcnow()
+        duration_months = (end.year - start.year) * 12 + (end.month - start.month)
+
         return cls(
             id=entity.id,
             profile_id=entity.profile_id,
@@ -78,11 +86,13 @@ class WorkExperienceResponse:
             start_date=entity.start_date,
             end_date=entity.end_date,
             description=entity.description,
+            location=entity.location,
             responsibilities=entity.responsibilities.copy(),
             order_index=entity.order_index,
             created_at=entity.created_at,
             updated_at=entity.updated_at,
             is_current=entity.is_current_position(),
+            duration_months=duration_months,
         )
 
 
