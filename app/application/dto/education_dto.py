@@ -4,8 +4,7 @@ Education DTOs.
 Data Transfer Objects for Education use cases.
 """
 
-from dataclasses import dataclass
-from dataclasses import field as dc_field
+from dataclasses import dataclass, field as dc_field
 from datetime import datetime
 
 
