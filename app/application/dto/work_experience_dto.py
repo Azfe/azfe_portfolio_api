@@ -21,6 +21,7 @@ class AddExperienceRequest:
     end_date: datetime | None = None
     location: str | None = None
     responsibilities: list[str] = field(default_factory=list)
+    technologies: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -35,6 +36,7 @@ class EditExperienceRequest:
     start_date: datetime | None = None
     end_date: datetime | None = None
     responsibilities: list[str] | None = None
+    technologies: list[str] | None = None
 
 
 @dataclass
@@ -65,6 +67,7 @@ class WorkExperienceResponse:
     description: str | None
     location: str | None
     responsibilities: list[str]
+    technologies: list[str]
     order_index: int
     created_at: datetime
     updated_at: datetime
@@ -88,6 +91,7 @@ class WorkExperienceResponse:
             description=entity.description,
             location=entity.location,
             responsibilities=entity.responsibilities.copy(),
+            technologies=entity.technologies.copy(),
             order_index=entity.order_index,
             created_at=entity.created_at,
             updated_at=entity.updated_at,

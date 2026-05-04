@@ -312,6 +312,43 @@ class TestWorkExperienceUpdate:
 
 
 @pytest.mark.entity
+@pytest.mark.business_rule
+class TestWorkExperienceTechnologies:
+    """Test WorkExperience technologies field."""
+
+    def _make(self, profile_id, **kwargs):
+        return WorkExperience.create(
+            profile_id=profile_id,
+            role="Dev",
+            company="Acme",
+            start_date=datetime(2023, 1, 1),
+            order_index=0,
+            **kwargs,
+        )
+
+    def test_default_technologies_is_empty_list(self, profile_id):
+        we = self._make(profile_id)
+        assert we.technologies == []
+
+    def test_create_with_technologies(self, profile_id):
+        we = self._make(profile_id, technologies=["Python", "FastAPI"])
+        assert we.technologies == ["Python", "FastAPI"]
+
+    def test_technologies_max_20_items_raises(self, profile_id):
+        with pytest.raises(InvalidLengthError):
+            self._make(profile_id, technologies=["tech"] * 21)
+
+    def test_technology_item_too_long_raises(self, profile_id):
+        with pytest.raises(InvalidLengthError):
+            self._make(profile_id, technologies=["x" * 151])
+
+    def test_update_technologies(self, profile_id):
+        we = self._make(profile_id)
+        we.update_technologies(["Go", "Docker"])
+        assert we.technologies == ["Go", "Docker"]
+
+
+@pytest.mark.entity
 class TestWorkExperienceBusinessMethods:
     """Test WorkExperience business methods."""
 

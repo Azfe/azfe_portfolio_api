@@ -29,7 +29,24 @@ class TestEducationMapperToDomain:
         assert entity.degree == "BSc"
         assert entity.field == "CS"
         assert entity.description is None
+        assert entity.technologies == []
         assert entity.end_date is None
+
+    def test_to_domain_with_technologies(self):
+        doc = {
+            "_id": "e-1",
+            "profile_id": "p-1",
+            "institution": "MIT",
+            "degree": "BSc",
+            "field": "CS",
+            "start_date": DT_START,
+            "order_index": 0,
+            "technologies": ["Python"],
+            "created_at": DT_CREATED,
+            "updated_at": DT_UPDATED,
+        }
+        entity = self.mapper.to_domain(doc)
+        assert entity.technologies == ["Python"]
 
     def test_all_fields(self):
         doc = {
@@ -71,6 +88,7 @@ class TestEducationMapperToPersistence:
 
         assert "description" not in doc
         assert "end_date" not in doc
+        assert doc["technologies"] == []
 
     def test_includes_optionals_when_set(self):
         entity = Education(
@@ -100,6 +118,7 @@ class TestEducationMapperToPersistence:
             "field": "CS",
             "start_date": DT_START,
             "order_index": 0,
+            "technologies": ["Python"],
             "description": "Great program",
             "end_date": DT_END,
             "created_at": DT_CREATED,

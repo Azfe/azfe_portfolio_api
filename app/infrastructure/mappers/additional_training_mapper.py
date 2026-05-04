@@ -17,6 +17,7 @@ class AdditionalTrainingMapper(IMapper[AdditionalTraining, dict[str, Any]]):
             duration=persistence_model.get("duration"),
             certificate_url=persistence_model.get("certificate_url"),
             description=persistence_model.get("description"),
+            technologies=persistence_model.get("technologies", []),
             created_at=persistence_model["created_at"],
             updated_at=persistence_model["updated_at"],
         )
@@ -29,6 +30,7 @@ class AdditionalTrainingMapper(IMapper[AdditionalTraining, dict[str, Any]]):
             "provider": domain_entity.provider,
             "completion_date": domain_entity.completion_date,
             "order_index": domain_entity.order_index,
+            "technologies": domain_entity.technologies,
             "created_at": domain_entity.created_at,
             "updated_at": domain_entity.updated_at,
         }

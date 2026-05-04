@@ -31,6 +31,22 @@ class TestAdditionalTrainingMapperToDomain:
         assert entity.duration is None
         assert entity.certificate_url is None
         assert entity.description is None
+        assert entity.technologies == []
+
+    def test_to_domain_with_technologies(self):
+        doc = {
+            "_id": "t-1",
+            "profile_id": "p-1",
+            "title": "Clean Arch",
+            "provider": "Udemy",
+            "completion_date": DT_COMPLETION,
+            "order_index": 0,
+            "technologies": ["Python"],
+            "created_at": DT_CREATED,
+            "updated_at": DT_UPDATED,
+        }
+        entity = self.mapper.to_domain(doc)
+        assert entity.technologies == ["Python"]
 
     def test_all_fields(self):
         doc = {
@@ -73,6 +89,7 @@ class TestAdditionalTrainingMapperToPersistence:
         assert "duration" not in doc
         assert "certificate_url" not in doc
         assert "description" not in doc
+        assert doc["technologies"] == []
 
     def test_includes_optionals_when_set(self):
         entity = AdditionalTraining(
@@ -105,6 +122,7 @@ class TestAdditionalTrainingMapperToPersistence:
             "duration": "40h",
             "certificate_url": "https://udemy.com/cert/123",
             "description": "Architecture course",
+            "technologies": ["Python"],
             "created_at": DT_CREATED,
             "updated_at": DT_UPDATED,
         }

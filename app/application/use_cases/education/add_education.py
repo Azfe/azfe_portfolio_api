@@ -71,6 +71,7 @@ class AddEducationUseCase(ICommandUseCase[AddEducationRequest, EducationResponse
             order_index=request.order_index,
             description=request.description,
             end_date=request.end_date,
+            technologies=request.technologies,
         )
 
         # Persist the education

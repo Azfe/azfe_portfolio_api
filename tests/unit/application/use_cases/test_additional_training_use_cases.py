@@ -201,6 +201,59 @@ class TestEditAdditionalTrainingUseCase:
         assert result.duration == "20 hours"
 
     @pytest.mark.unit
+    async def test_add_with_technologies(self):
+        repo = AsyncMock()
+        training = _make_training(technologies=["Python"])
+        repo.get_by_order_index.return_value = None
+        repo.add.return_value = training
+
+        uc = AddAdditionalTrainingUseCase(repo)
+        request = AddAdditionalTrainingRequest(
+            profile_id=PROFILE_ID,
+            title="Python Advanced Course",
+            provider="Udemy",
+            completion_date=COMPLETION_DATE,
+            order_index=0,
+            technologies=["Python"],
+        )
+        result = await uc.execute(request)
+
+        assert result.technologies == ["Python"]
+
+    @pytest.mark.unit
+    async def test_edit_technologies(self):
+        repo = AsyncMock()
+        training = _make_training()
+        repo.get_by_id.return_value = training
+        repo.update.return_value = training
+
+        uc = EditAdditionalTrainingUseCase(repo)
+        request = EditAdditionalTrainingRequest(
+            training_id="training-001",
+            technologies=["Go"],
+        )
+        await uc.execute(request)
+
+        assert training.technologies == ["Go"]
+        repo.update.assert_awaited_once()
+
+    @pytest.mark.unit
+    async def test_edit_technologies_none_preserves_existing(self):
+        repo = AsyncMock()
+        training = _make_training(technologies=["Python"])
+        repo.get_by_id.return_value = training
+        repo.update.return_value = training
+
+        uc = EditAdditionalTrainingUseCase(repo)
+        request = EditAdditionalTrainingRequest(
+            training_id="training-001",
+            technologies=None,
+        )
+        await uc.execute(request)
+
+        assert training.technologies == ["Python"]
+
+    @pytest.mark.unit
     async def test_edit_training_not_found_raises(self):
         repo = AsyncMock()
         repo.get_by_id.return_value = None

@@ -11,6 +11,7 @@ Business Rules Applied:
 - RB-AT05: certificateUrl is optional, must be valid URL if provided
 - RB-AT06: description is optional (max 500 chars)
 - RB-AT07: orderIndex is required and must be unique per profile
+- RB-AT08: technologies is optional array (max 20 items, each max 150 chars)
 """
 
 from dataclasses import dataclass, field
@@ -45,6 +46,7 @@ class AdditionalTraining:
     duration: str | None = None
     certificate_url: str | None = None
     description: str | None = None
+    technologies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -53,6 +55,8 @@ class AdditionalTraining:
     MAX_PROVIDER_LENGTH = 100
     MAX_DURATION_LENGTH = 50
     MAX_DESCRIPTION_LENGTH = 500
+    MAX_TECHNOLOGIES = 20
+    MAX_TECHNOLOGY_LENGTH = 150
     URL_PATTERN = re.compile(
         r"^https?://"
         r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|"
@@ -71,6 +75,7 @@ class AdditionalTraining:
         self._validate_duration()
         self._validate_certificate_url()
         self._validate_description()
+        self._validate_technologies()
         self._validate_order_index()
 
     @staticmethod
@@ -83,6 +88,7 @@ class AdditionalTraining:
         duration: str | None = None,
         certificate_url: str | None = None,
         description: str | None = None,
+        technologies: list[str] | None = None,
     ) -> "AdditionalTraining":
         """
         Factory method to create a new AdditionalTraining.
@@ -110,6 +116,7 @@ class AdditionalTraining:
             duration=duration,
             certificate_url=certificate_url,
             description=description,
+            technologies=technologies or [],
         )
 
     def update_info(
@@ -155,6 +162,17 @@ class AdditionalTraining:
             self.description = description
             self._validate_description()
 
+        self._mark_as_updated()
+
+    def update_technologies(self, technologies: list[str]) -> None:
+        """
+        Update technologies list.
+
+        Args:
+            technologies: New list of technologies
+        """
+        self.technologies = technologies
+        self._validate_technologies()
         self._mark_as_updated()
 
     def update_order(self, new_order_index: int) -> None:
@@ -215,6 +233,19 @@ class AdditionalTraining:
             elif len(self.description) > self.MAX_DESCRIPTION_LENGTH:
                 raise InvalidLengthError(
                     "description", max_length=self.MAX_DESCRIPTION_LENGTH
+                )
+
+    def _validate_technologies(self) -> None:
+        """Validate technologies list."""
+        if len(self.technologies) > self.MAX_TECHNOLOGIES:
+            raise InvalidLengthError("technologies", max_length=self.MAX_TECHNOLOGIES)
+
+        for tech in self.technologies:
+            if not tech or not tech.strip():
+                raise EmptyFieldError("technology item")
+            if len(tech) > self.MAX_TECHNOLOGY_LENGTH:
+                raise InvalidLengthError(
+                    "technology item", max_length=self.MAX_TECHNOLOGY_LENGTH
                 )
 
     def _validate_order_index(self) -> None:
