@@ -11,6 +11,7 @@ Business Rules Applied:
 - RB-E05: endDate is optional (must be after startDate if provided)
 - RB-E06: description is optional (max 1000 chars)
 - RB-E07: orderIndex is required and must be unique per profile
+- RB-E08: technologies is optional array (max 20 items, each max 150 chars)
 """
 
 from dataclasses import dataclass, field as dataclass_field
@@ -42,6 +43,7 @@ class Education:
     start_date: datetime
     order_index: int
     description: str | None = None
+    technologies: list[str] = dataclass_field(default_factory=list)
     end_date: datetime | None = None
     created_at: datetime = dataclass_field(default_factory=datetime.utcnow)
     updated_at: datetime = dataclass_field(default_factory=datetime.utcnow)
@@ -51,6 +53,8 @@ class Education:
     MAX_DEGREE_LENGTH = 100
     MAX_FIELD_LENGTH = 100
     MAX_DESCRIPTION_LENGTH = 1000
+    MAX_TECHNOLOGIES = 20
+    MAX_TECHNOLOGY_LENGTH = 150
 
     def __post_init__(self):
         """Validate entity invariants after initialization."""
@@ -59,6 +63,7 @@ class Education:
         self._validate_degree()
         self._validate_field()
         self._validate_description()
+        self._validate_technologies()
         self._validate_dates()
         self._validate_order_index()
 
@@ -72,6 +77,7 @@ class Education:
         order_index: int,
         description: str | None = None,
         end_date: datetime | None = None,
+        technologies: list[str] | None = None,
     ) -> "Education":
         """
         Factory method to create a new Education entry.
@@ -99,6 +105,7 @@ class Education:
             order_index=order_index,
             description=description,
             end_date=end_date,
+            technologies=technologies or [],
         )
 
     def update_info(
@@ -144,6 +151,17 @@ class Education:
             self.end_date = end_date
 
         self._validate_dates()
+        self._mark_as_updated()
+
+    def update_technologies(self, technologies: list[str]) -> None:
+        """
+        Update technologies list.
+
+        Args:
+            technologies: New list of technologies
+        """
+        self.technologies = technologies
+        self._validate_technologies()
         self._mark_as_updated()
 
     def update_order(self, new_order_index: int) -> None:
@@ -200,6 +218,19 @@ class Education:
             elif len(self.description) > self.MAX_DESCRIPTION_LENGTH:
                 raise InvalidLengthError(
                     "description", max_length=self.MAX_DESCRIPTION_LENGTH
+                )
+
+    def _validate_technologies(self) -> None:
+        """Validate technologies list."""
+        if len(self.technologies) > self.MAX_TECHNOLOGIES:
+            raise InvalidLengthError("technologies", max_length=self.MAX_TECHNOLOGIES)
+
+        for tech in self.technologies:
+            if not tech or not tech.strip():
+                raise EmptyFieldError("technology item")
+            if len(tech) > self.MAX_TECHNOLOGY_LENGTH:
+                raise InvalidLengthError(
+                    "technology item", max_length=self.MAX_TECHNOLOGY_LENGTH
                 )
 
     def _validate_dates(self) -> None:

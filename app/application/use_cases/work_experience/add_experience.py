@@ -74,6 +74,7 @@ class AddExperienceUseCase(
             end_date=request.end_date,
             location=request.location,
             responsibilities=request.responsibilities,
+            technologies=request.technologies,
         )
 
         # Persist the experience

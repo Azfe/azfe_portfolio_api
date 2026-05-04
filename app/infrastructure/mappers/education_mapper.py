@@ -16,6 +16,7 @@ class EducationMapper(IMapper[Education, dict[str, Any]]):
             start_date=persistence_model["start_date"],
             order_index=persistence_model["order_index"],
             description=persistence_model.get("description"),
+            technologies=persistence_model.get("technologies", []),
             end_date=persistence_model.get("end_date"),
             created_at=persistence_model["created_at"],
             updated_at=persistence_model["updated_at"],
@@ -30,6 +31,7 @@ class EducationMapper(IMapper[Education, dict[str, Any]]):
             "field": domain_entity.field,
             "start_date": domain_entity.start_date,
             "order_index": domain_entity.order_index,
+            "technologies": domain_entity.technologies,
             "created_at": domain_entity.created_at,
             "updated_at": domain_entity.updated_at,
         }

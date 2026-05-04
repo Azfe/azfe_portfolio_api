@@ -77,6 +77,7 @@ class AddAdditionalTrainingUseCase(
             duration=request.duration,
             certificate_url=request.certificate_url,
             description=request.description,
+            technologies=request.technologies,
         )
 
         # Persist the training

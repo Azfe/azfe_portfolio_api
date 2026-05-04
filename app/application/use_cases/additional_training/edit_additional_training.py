@@ -76,6 +76,9 @@ class EditAdditionalTrainingUseCase(
             description=request.description,
         )
 
+        if request.technologies is not None:
+            training.update_technologies(request.technologies)
+
         # Persist changes
         updated_training = await self.training_repo.update(training)
 

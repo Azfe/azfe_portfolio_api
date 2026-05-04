@@ -66,6 +66,9 @@ class EditEducationUseCase(ICommandUseCase[EditEducationRequest, EducationRespon
             end_date=request.end_date,
         )
 
+        if request.technologies is not None:
+            education.update_technologies(request.technologies)
+
         # Persist changes
         updated_education = await self.education_repo.update(education)
 
