@@ -4,7 +4,8 @@ Education DTOs.
 Data Transfer Objects for Education use cases.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field as dc_field
 from datetime import datetime
 
 
@@ -20,7 +21,7 @@ class AddEducationRequest:
     order_index: int
     description: str | None = None
     end_date: datetime | None = None
-    technologies: list[str] = field(default_factory=list)
+    technologies: list[str] = dc_field(default_factory=list)
 
 
 @dataclass
