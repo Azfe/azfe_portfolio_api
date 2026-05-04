@@ -70,6 +70,40 @@ class TestUpdateEducation:
         response = await client.put(f"{PREFIX}/nonexistent", json=payload)
         assert response.status_code == 404
 
+    async def test_update_passes_technologies_to_use_case(self, client: AsyncClient):
+        """Regression: technologies must be forwarded to EditEducationRequest."""
+        from unittest.mock import AsyncMock
+
+        from app.api.dependencies import get_edit_education_use_case
+        from app.main import app as fastapi_app
+        from tests.unit.api.conftest import MOCK_EDUCATION
+
+        captured_request = {}
+
+        async def capture_execute(request):
+            captured_request["req"] = request
+            return MOCK_EDUCATION[0]
+
+        mock_uc = AsyncMock()
+        mock_uc.execute = AsyncMock(side_effect=capture_execute)
+        fastapi_app.dependency_overrides[get_edit_education_use_case] = (
+            lambda: mock_uc
+        )
+
+        try:
+            payload = {"technologies": ["Python", "FastAPI"]}
+            response = await client.put(f"{PREFIX}/edu_001", json=payload)
+
+            assert response.status_code == 200
+            assert captured_request["req"].technologies == ["Python", "FastAPI"]
+        finally:
+            # Restore autouse override so other tests are not affected
+            from tests.unit.api.conftest import MOCK_EDUCATION, _mock_edit_uc
+
+            fastapi_app.dependency_overrides[get_edit_education_use_case] = (
+                lambda: _mock_edit_uc(MOCK_EDUCATION, "education_id", MOCK_EDUCATION[0])
+            )
+
 
 class TestDeleteEducation:
     async def test_delete_returns_success(self, client: AsyncClient):

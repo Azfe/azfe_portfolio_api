@@ -82,6 +82,7 @@ async def create_education(
             order_index=education_data.order_index,
             description=education_data.description,
             end_date=education_data.end_date,
+            technologies=education_data.technologies,
         )
     )
     return result
@@ -107,6 +108,7 @@ async def update_education(
             description=education_data.description,
             start_date=education_data.start_date,
             end_date=education_data.end_date,
+            technologies=education_data.technologies,
         )
     )
     return result
