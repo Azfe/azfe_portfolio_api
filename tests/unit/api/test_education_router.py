@@ -86,9 +86,7 @@ class TestUpdateEducation:
 
         mock_uc = AsyncMock()
         mock_uc.execute = AsyncMock(side_effect=capture_execute)
-        fastapi_app.dependency_overrides[get_edit_education_use_case] = (
-            lambda: mock_uc
-        )
+        fastapi_app.dependency_overrides[get_edit_education_use_case] = lambda: mock_uc
 
         try:
             payload = {"technologies": ["Python", "FastAPI"]}
