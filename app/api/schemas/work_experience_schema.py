@@ -45,6 +45,9 @@ class WorkExperienceBase(BaseModel):
     responsibilities: list[str] = Field(
         default_factory=list, description="Lista de responsabilidades"
     )
+    technologies: list[str] = Field(
+        default_factory=list, description="Lista de tecnologías utilizadas"
+    )
 
     @field_validator("end_date")
     @classmethod
@@ -91,6 +94,7 @@ class WorkExperienceUpdate(BaseModel):
     end_date: datetime | None = None
     description: str | None = Field(None, max_length=2000)
     responsibilities: list[str] | None = None
+    technologies: list[str] | None = None
     order_index: int | None = Field(None, ge=0)
 
     @field_validator("end_date")

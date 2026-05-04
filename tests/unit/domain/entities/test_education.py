@@ -691,6 +691,47 @@ class TestEducationQueryMethods:
 
 
 # ==========================================
+# TECHNOLOGIES TESTS
+# ==========================================
+
+
+class TestEducationTechnologies:
+    """Tests for Education technologies field."""
+
+    def _make(self, profile_id, today, **kwargs):
+        return Education.create(
+            profile_id=profile_id,
+            institution="MIT",
+            degree="BSc",
+            field="CS",
+            start_date=today,
+            order_index=0,
+            **kwargs,
+        )
+
+    def test_default_technologies_is_empty_list(self, profile_id, today):
+        education = self._make(profile_id, today)
+        assert education.technologies == []
+
+    def test_create_with_technologies(self, profile_id, today):
+        education = self._make(profile_id, today, technologies=["Python", "FastAPI"])
+        assert education.technologies == ["Python", "FastAPI"]
+
+    def test_technologies_max_20_items_raises(self, profile_id, today):
+        with pytest.raises(InvalidLengthError):
+            self._make(profile_id, today, technologies=["tech"] * 21)
+
+    def test_technology_item_too_long_raises(self, profile_id, today):
+        with pytest.raises(InvalidLengthError):
+            self._make(profile_id, today, technologies=["x" * 151])
+
+    def test_update_technologies(self, profile_id, today):
+        education = self._make(profile_id, today)
+        education.update_technologies(["Go", "Docker"])
+        assert education.technologies == ["Go", "Docker"]
+
+
+# ==========================================
 # ENTITY REPRESENTATION TESTS
 # ==========================================
 

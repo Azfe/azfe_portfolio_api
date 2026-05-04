@@ -4,7 +4,7 @@ AdditionalTraining DTOs.
 Data Transfer Objects for AdditionalTraining use cases.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 
@@ -20,6 +20,7 @@ class AddAdditionalTrainingRequest:
     duration: str | None = None
     certificate_url: str | None = None
     description: str | None = None
+    technologies: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -33,6 +34,7 @@ class EditAdditionalTrainingRequest:
     duration: str | None = None
     certificate_url: str | None = None
     description: str | None = None
+    technologies: list[str] | None = None
 
 
 @dataclass
@@ -63,6 +65,7 @@ class AdditionalTrainingResponse:
     duration: str | None
     certificate_url: str | None
     description: str | None
+    technologies: list[str]
     created_at: datetime
     updated_at: datetime
 
@@ -79,6 +82,7 @@ class AdditionalTrainingResponse:
             duration=entity.duration,
             certificate_url=entity.certificate_url,
             description=entity.description,
+            technologies=entity.technologies.copy(),
             created_at=entity.created_at,
             updated_at=entity.updated_at,
         )

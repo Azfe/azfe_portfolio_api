@@ -171,6 +171,43 @@ class TestAdditionalTrainingValidation:
 
 
 @pytest.mark.entity
+@pytest.mark.business_rule
+class TestAdditionalTrainingTechnologies:
+    """Test AdditionalTraining technologies field."""
+
+    def _make(self, profile_id, **kwargs):
+        return AdditionalTraining.create(
+            profile_id=profile_id,
+            title="Docker Mastery",
+            provider="Udemy",
+            completion_date=datetime(2023, 6, 1),
+            order_index=0,
+            **kwargs,
+        )
+
+    def test_default_technologies_is_empty_list(self, profile_id):
+        at = self._make(profile_id)
+        assert at.technologies == []
+
+    def test_create_with_technologies(self, profile_id):
+        at = self._make(profile_id, technologies=["Python", "FastAPI"])
+        assert at.technologies == ["Python", "FastAPI"]
+
+    def test_technologies_max_20_items_raises(self, profile_id):
+        with pytest.raises(InvalidLengthError):
+            self._make(profile_id, technologies=["tech"] * 21)
+
+    def test_technology_item_too_long_raises(self, profile_id):
+        with pytest.raises(InvalidLengthError):
+            self._make(profile_id, technologies=["x" * 151])
+
+    def test_update_technologies(self, profile_id):
+        at = self._make(profile_id)
+        at.update_technologies(["Go", "Docker"])
+        assert at.technologies == ["Go", "Docker"]
+
+
+@pytest.mark.entity
 class TestAdditionalTrainingUpdate:
     """Test AdditionalTraining updates."""
 

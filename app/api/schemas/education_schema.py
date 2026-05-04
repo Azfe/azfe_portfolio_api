@@ -41,6 +41,9 @@ class EducationBase(BaseModel):
     end_date: datetime | None = Field(
         None, description="Fecha de fin (opcional, None = en curso)"
     )
+    technologies: list[str] = Field(
+        default_factory=list, description="Lista de tecnologías utilizadas"
+    )
 
     @field_validator("end_date")
     @classmethod
@@ -86,6 +89,7 @@ class EducationUpdate(BaseModel):
     start_date: datetime | None = None
     end_date: datetime | None = None
     description: str | None = Field(None, max_length=1000)
+    technologies: list[str] | None = None
     order_index: int | None = Field(None, ge=0)
 
     @field_validator("end_date")
