@@ -112,6 +112,51 @@ class TestEditEducationUseCase:
         assert result.institution == "Stanford"
         repo.update.assert_awaited_once()
 
+    async def test_add_with_technologies(self):
+        repo = AsyncMock()
+        education = _make_education(technologies=["Python"])
+        repo.get_by_order_index.return_value = None
+        repo.add.return_value = education
+
+        uc = AddEducationUseCase(repo)
+        request = AddEducationRequest(
+            profile_id=PROFILE_ID,
+            institution="MIT",
+            degree="BSc",
+            field="Computer Science",
+            start_date=datetime(2018, 9, 1),
+            order_index=0,
+            technologies=["Python"],
+        )
+        result = await uc.execute(request)
+
+        assert result.technologies == ["Python"]
+
+    async def test_edit_technologies(self):
+        repo = AsyncMock()
+        education = _make_education()
+        repo.get_by_id.return_value = education
+        repo.update.return_value = education
+
+        uc = EditEducationUseCase(repo)
+        request = EditEducationRequest(education_id="edu-001", technologies=["Go"])
+        await uc.execute(request)
+
+        assert education.technologies == ["Go"]
+        repo.update.assert_awaited_once()
+
+    async def test_edit_technologies_none_preserves_existing(self):
+        repo = AsyncMock()
+        education = _make_education(technologies=["Python"])
+        repo.get_by_id.return_value = education
+        repo.update.return_value = education
+
+        uc = EditEducationUseCase(repo)
+        request = EditEducationRequest(education_id="edu-001", technologies=None)
+        await uc.execute(request)
+
+        assert education.technologies == ["Python"]
+
     async def test_edit_education_not_found_raises(self):
         repo = AsyncMock()
         repo.get_by_id.return_value = None

@@ -18,6 +18,7 @@ class WorkExperienceMapper(IMapper[WorkExperience, dict[str, Any]]):
             end_date=persistence_model.get("end_date"),
             location=persistence_model.get("location"),
             responsibilities=persistence_model.get("responsibilities", []),
+            technologies=persistence_model.get("technologies", []),
             created_at=persistence_model["created_at"],
             updated_at=persistence_model["updated_at"],
         )
@@ -31,6 +32,7 @@ class WorkExperienceMapper(IMapper[WorkExperience, dict[str, Any]]):
             "start_date": domain_entity.start_date,
             "order_index": domain_entity.order_index,
             "responsibilities": domain_entity.responsibilities,
+            "technologies": domain_entity.technologies,
             "created_at": domain_entity.created_at,
             "updated_at": domain_entity.updated_at,
         }

@@ -72,6 +72,9 @@ class EditExperienceUseCase(
         if request.responsibilities is not None:
             experience.update_responsibilities(request.responsibilities)
 
+        if request.technologies is not None:
+            experience.update_technologies(request.technologies)
+
         # Persist changes
         updated_experience = await self.experience_repo.update(experience)
 

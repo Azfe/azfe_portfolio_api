@@ -42,6 +42,9 @@ class AdditionalTrainingBase(BaseModel):
         max_length=1000,
         description="Detalles adicionales (temario, logros, etc.)",
     )
+    technologies: list[str] = Field(
+        default_factory=list, description="Lista de tecnologías utilizadas"
+    )
 
 
 class AdditionalTrainingCreate(AdditionalTrainingBase):
@@ -71,6 +74,7 @@ class AdditionalTrainingUpdate(BaseModel):
     duration: str | None = Field(None, max_length=50)
     certificate_url: str | None = None
     description: str | None = Field(None, max_length=1000)
+    technologies: list[str] | None = None
     order_index: int | None = Field(None, ge=0)
 
 
