@@ -109,7 +109,6 @@ class TestProfileUpdateAvatar:
 
     def test_update_avatar_updates_timestamp(self):
         """update_avatar() should update the updated_at timestamp."""
-        from datetime import datetime
 
         profile = Profile.create(name="John", headline="Engineer")
         before = profile.updated_at

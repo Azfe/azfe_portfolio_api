@@ -7,7 +7,6 @@ is_from_domain(), and __repr__/__hash__.
 
 import pytest
 
-from app.domain.exceptions import EmptyFieldError, InvalidEmailError
 from app.domain.value_objects.email import Email
 
 

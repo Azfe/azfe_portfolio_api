@@ -268,7 +268,6 @@ class TestDateRangeValidationEdgeCases:
 
     def test_none_start_date_raises_empty_field_error(self):
         """None start_date should raise EmptyFieldError."""
-        from app.domain.exceptions import EmptyFieldError
 
         with pytest.raises(EmptyFieldError):
             DateRange(start_date=None)  # type: ignore[arg-type]

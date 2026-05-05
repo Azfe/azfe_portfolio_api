@@ -10,7 +10,6 @@ import pytest
 from app.domain.entities.skill import Skill
 from app.domain.exceptions import (
     EmptyFieldError,
-    InvalidLengthError,
     InvalidNameError,
     InvalidOrderIndexError,
     InvalidSkillLevelError,
@@ -23,19 +22,25 @@ class TestSkillLevelNormalization:
 
     def test_whitespace_level_normalized_to_none(self, profile_id):
         """Level with only whitespace should be stored as None."""
-        skill = Skill.create(profile_id=profile_id, name="Python", order_index=0, level="   ")
+        skill = Skill.create(
+            profile_id=profile_id, name="Python", order_index=0, level="   "
+        )
 
         assert skill.level is None
 
     def test_level_normalized_to_lowercase(self, profile_id):
         """Level string should be normalized to lowercase."""
-        skill = Skill.create(profile_id=profile_id, name="Python", order_index=0, level="ADVANCED")
+        skill = Skill.create(
+            profile_id=profile_id, name="Python", order_index=0, level="ADVANCED"
+        )
 
         assert skill.level == "advanced"
 
     def test_none_level_stays_none(self, profile_id):
         """None level should remain None."""
-        skill = Skill.create(profile_id=profile_id, name="Python", order_index=0, level=None)
+        skill = Skill.create(
+            profile_id=profile_id, name="Python", order_index=0, level=None
+        )
 
         assert skill.level is None
 
