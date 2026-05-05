@@ -91,6 +91,25 @@ class TestProfileRepositoryUpdate:
         assert call_args[0][0] == {"_id": "p-1"}
         assert result is entity
 
+    @pytest.mark.asyncio
+    async def test_update_excludes_id_from_replacement_doc(self, repo, collection):
+        """_id must not appear in the replacement document to avoid BSONError
+        when the stored _id type (e.g. ObjectId) differs from the filter string."""
+        entity = MagicMock()
+        entity.id = "p-1"
+
+        with patch.object(
+            repo._mapper,
+            "to_persistence",
+            return_value={"_id": "p-1", "name": "John", "headline": "Dev"},
+        ):
+            await repo.update(entity)
+
+        _filter, replacement = collection.replace_one.call_args[0]
+        assert (
+            "_id" not in replacement
+        ), "replacement doc must not contain _id to prevent BSONError"
+
 
 class TestProfileRepositoryDelete:
     @pytest.mark.asyncio
