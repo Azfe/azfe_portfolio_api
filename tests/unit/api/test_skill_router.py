@@ -78,6 +78,40 @@ class TestUpdateSkill:
         response = await client.put(f"{PREFIX}/nonexistent", json=payload)
         assert response.status_code == 404
 
+    @pytest.mark.unit
+    async def test_update_skill_with_order_index_returns_200(self, client: AsyncClient):
+        """PUT with order_index in body must be accepted and return 200."""
+        payload = {"order_index": 5}
+        response = await client.put(f"{PREFIX}/skill_001", json=payload)
+        assert response.status_code == 200
+
+    @pytest.mark.unit
+    async def test_update_skill_with_all_fields_returns_200(self, client: AsyncClient):
+        """PUT with name, level and order_index together must return 200."""
+        payload = {"name": "Rust", "level": "expert", "order_index": 3}
+        response = await client.put(f"{PREFIX}/skill_001", json=payload)
+        assert response.status_code == 200
+
+    @pytest.mark.unit
+    async def test_update_skill_order_index_negative_returns_422(
+        self, client: AsyncClient
+    ):
+        """order_index < 0 must be rejected at the schema level (422)."""
+        payload = {"order_index": -1}
+        response = await client.put(f"{PREFIX}/skill_001", json=payload)
+        assert response.status_code == 422
+
+    @pytest.mark.unit
+    async def test_update_skill_response_contains_order_index(
+        self, client: AsyncClient
+    ):
+        """Response body must include the order_index field."""
+        payload = {"order_index": 0}
+        response = await client.put(f"{PREFIX}/skill_001", json=payload)
+        assert response.status_code == 200
+        data = response.json()
+        assert "order_index" in data
+
 
 class TestDeleteSkill:
     async def test_delete_skill_returns_200(self, client: AsyncClient):
