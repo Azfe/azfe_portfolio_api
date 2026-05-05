@@ -90,6 +90,7 @@ async def create_additional_training(
             duration=training_data.duration,
             certificate_url=training_data.certificate_url,
             description=training_data.description,
+            technologies=training_data.technologies,
         )
     )
     return result
@@ -117,6 +118,7 @@ async def update_additional_training(
             duration=training_data.duration,
             certificate_url=training_data.certificate_url,
             description=training_data.description,
+            technologies=training_data.technologies,
         )
     )
     return result
