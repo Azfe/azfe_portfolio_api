@@ -162,6 +162,50 @@ class TestEditExperienceUseCase:
 
         repo.update.assert_awaited_once()
 
+    async def test_add_with_technologies(self):
+        repo = AsyncMock()
+        exp = _make_experience(technologies=["Python"])
+        repo.get_by_order_index.return_value = None
+        repo.add.return_value = exp
+
+        uc = AddExperienceUseCase(repo)
+        request = AddExperienceRequest(
+            profile_id=PROFILE_ID,
+            role="Backend Dev",
+            company="Acme",
+            start_date=datetime(2022, 1, 1),
+            order_index=0,
+            technologies=["Python"],
+        )
+        result = await uc.execute(request)
+
+        assert result.technologies == ["Python"]
+
+    async def test_edit_technologies(self):
+        repo = AsyncMock()
+        exp = _make_experience()
+        repo.get_by_id.return_value = exp
+        repo.update.return_value = exp
+
+        uc = EditExperienceUseCase(repo)
+        request = EditExperienceRequest(experience_id="exp-001", technologies=["Go"])
+        await uc.execute(request)
+
+        assert exp.technologies == ["Go"]
+        repo.update.assert_awaited_once()
+
+    async def test_edit_technologies_none_preserves_existing(self):
+        repo = AsyncMock()
+        exp = _make_experience(technologies=["Python"])
+        repo.get_by_id.return_value = exp
+        repo.update.return_value = exp
+
+        uc = EditExperienceUseCase(repo)
+        request = EditExperienceRequest(experience_id="exp-001", technologies=None)
+        await uc.execute(request)
+
+        assert exp.technologies == ["Python"]
+
     async def test_edit_experience_with_location(self):
         repo = AsyncMock()
         exp = _make_experience(location="Barcelona, Spain")

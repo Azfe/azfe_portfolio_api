@@ -12,6 +12,7 @@ Business Rules Applied:
 - RB-W06: responsibilities is optional array (max 20 items, each max 500 chars)
 - RB-W07: orderIndex is required and must be unique per profile
 - RB-W08: location is optional (max 100 chars)
+- RB-W09: technologies is optional array (max 20 items, each max 150 chars)
 """
 
 from dataclasses import dataclass, field
@@ -46,6 +47,7 @@ class WorkExperience:
     end_date: datetime | None = None
     location: str | None = None
     responsibilities: list[str] = field(default_factory=list)
+    technologies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -56,6 +58,8 @@ class WorkExperience:
     MAX_LOCATION_LENGTH = 100
     MAX_RESPONSIBILITIES = 20
     MAX_RESPONSIBILITY_LENGTH = 500
+    MAX_TECHNOLOGIES = 20
+    MAX_TECHNOLOGY_LENGTH = 150
 
     def __post_init__(self):
         """Validate entity invariants after initialization."""
@@ -66,6 +70,7 @@ class WorkExperience:
         self._validate_location()
         self._validate_dates()
         self._validate_responsibilities()
+        self._validate_technologies()
         self._validate_order_index()
 
     @staticmethod
@@ -79,6 +84,7 @@ class WorkExperience:
         end_date: datetime | None = None,
         location: str | None = None,
         responsibilities: list[str] | None = None,
+        technologies: list[str] | None = None,
     ) -> "WorkExperience":
         """
         Factory method to create a new WorkExperience.
@@ -108,6 +114,7 @@ class WorkExperience:
             end_date=end_date,
             location=location,
             responsibilities=responsibilities or [],
+            technologies=technologies or [],
         )
 
     def update_info(
@@ -189,6 +196,17 @@ class WorkExperience:
         self.responsibilities.append(responsibility)
         self._mark_as_updated()
 
+    def update_technologies(self, technologies: list[str]) -> None:
+        """
+        Update technologies list.
+
+        Args:
+            technologies: New list of technologies
+        """
+        self.technologies = technologies
+        self._validate_technologies()
+        self._mark_as_updated()
+
     def update_order(self, new_order_index: int) -> None:
         """
         Update the order index.
@@ -258,6 +276,19 @@ class WorkExperience:
             if len(resp) > self.MAX_RESPONSIBILITY_LENGTH:
                 raise InvalidLengthError(
                     "responsibility item", max_length=self.MAX_RESPONSIBILITY_LENGTH
+                )
+
+    def _validate_technologies(self) -> None:
+        """Validate technologies list."""
+        if len(self.technologies) > self.MAX_TECHNOLOGIES:
+            raise InvalidLengthError("technologies", max_length=self.MAX_TECHNOLOGIES)
+
+        for tech in self.technologies:
+            if not tech or not tech.strip():
+                raise EmptyFieldError("technology item")
+            if len(tech) > self.MAX_TECHNOLOGY_LENGTH:
+                raise InvalidLengthError(
+                    "technology item", max_length=self.MAX_TECHNOLOGY_LENGTH
                 )
 
     def _validate_order_index(self) -> None:

@@ -28,9 +28,25 @@ class TestWorkExperienceMapperToDomain:
         assert entity.role == "Dev"
         assert entity.company == "Acme"
         assert entity.responsibilities == ["Code"]
+        assert entity.technologies == []
         assert entity.description is None
         assert entity.end_date is None
         assert entity.location is None
+
+    def test_to_domain_with_technologies(self):
+        doc = {
+            "_id": "w-1",
+            "profile_id": "p-1",
+            "role": "Dev",
+            "company": "Acme",
+            "start_date": DT_START,
+            "order_index": 0,
+            "technologies": ["Python"],
+            "created_at": DT_CREATED,
+            "updated_at": DT_UPDATED,
+        }
+        entity = self.mapper.to_domain(doc)
+        assert entity.technologies == ["Python"]
 
     def test_all_fields(self):
         doc = {
@@ -103,6 +119,7 @@ class TestWorkExperienceMapperToPersistence:
         assert "description" not in doc
         assert "end_date" not in doc
         assert doc["responsibilities"] == []
+        assert doc["technologies"] == []
 
     def test_includes_optionals_when_set(self):
         entity = WorkExperience(
@@ -137,6 +154,7 @@ class TestWorkExperienceMapperToPersistence:
             "description": "Full-stack",
             "end_date": DT_END,
             "responsibilities": ["Code"],
+            "technologies": ["Python"],
             "created_at": DT_CREATED,
             "updated_at": DT_UPDATED,
         }
@@ -153,6 +171,7 @@ class TestWorkExperienceMapperToPersistence:
             "start_date": DT_START,
             "order_index": 0,
             "responsibilities": [],
+            "technologies": [],
             "created_at": DT_CREATED,
             "updated_at": DT_UPDATED,
         }
