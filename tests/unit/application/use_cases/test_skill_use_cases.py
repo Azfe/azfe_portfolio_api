@@ -137,6 +137,63 @@ class TestEditSkillUseCase:
 
         repo.exists_by_name.assert_not_awaited()
 
+    @pytest.mark.unit
+    async def test_edit_skill_with_order_index_calls_update_order(self):
+        """When order_index is provided it must be propagated via update_order."""
+        repo = AsyncMock()
+        skill = _make_skill(order_index=0)
+        repo.get_by_id.return_value = skill
+        repo.exists_by_name.return_value = False
+        repo.update.return_value = skill
+
+        uc = EditSkillUseCase(repo)
+        request = EditSkillRequest(skill_id="skill-001", order_index=5)
+        await uc.execute(request)
+
+        assert skill.order_index == 5
+        repo.update.assert_awaited_once()
+
+    @pytest.mark.unit
+    async def test_edit_skill_without_order_index_does_not_change_order(self):
+        """When order_index is None, update_order must NOT be called."""
+        repo = AsyncMock()
+        skill = _make_skill(order_index=3)
+        repo.get_by_id.return_value = skill
+        repo.exists_by_name.return_value = False
+        repo.update.return_value = skill
+
+        uc = EditSkillUseCase(repo)
+        request = EditSkillRequest(skill_id="skill-001", name="Rust", order_index=None)
+        await uc.execute(request)
+
+        # order_index must remain unchanged
+        assert skill.order_index == 3
+        repo.update.assert_awaited_once()
+
+    @pytest.mark.unit
+    async def test_edit_skill_combined_name_level_order_index(self):
+        """Updating name, level and order_index together must apply all changes."""
+        repo = AsyncMock()
+        skill = _make_skill(name="Python", level="basic", order_index=0)
+        repo.get_by_id.return_value = skill
+        repo.exists_by_name.return_value = False
+        repo.update.return_value = skill
+
+        uc = EditSkillUseCase(repo)
+        request = EditSkillRequest(
+            skill_id="skill-001",
+            name="Rust",
+            level="expert",
+            order_index=10,
+        )
+        result = await uc.execute(request)
+
+        assert skill.name == "Rust"
+        assert skill.level == "expert"
+        assert skill.order_index == 10
+        repo.update.assert_awaited_once()
+        assert result.name == "Rust"
+
 
 class TestListSkillsUseCase:
     async def test_list_skills_all(self):

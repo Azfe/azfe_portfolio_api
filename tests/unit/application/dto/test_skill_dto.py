@@ -1,6 +1,12 @@
 """Tests for Skill DTOs."""
 
-from app.application.dto.skill_dto import SkillListResponse, SkillResponse
+import pytest
+
+from app.application.dto.skill_dto import (
+    EditSkillRequest,
+    SkillListResponse,
+    SkillResponse,
+)
 
 from .conftest import DT, DT2, make_entity
 
@@ -15,6 +21,42 @@ def _make_skill_entity(**overrides):
     }
     defaults.update(overrides)
     return make_entity(**defaults)
+
+
+class TestEditSkillRequest:
+    @pytest.mark.unit
+    def test_order_index_defaults_to_none(self):
+        """order_index is optional — must default to None."""
+        req = EditSkillRequest(skill_id="s-1")
+        assert req.order_index is None
+
+    @pytest.mark.unit
+    def test_accepts_order_index_when_provided(self):
+        """order_index is accepted when explicitly supplied."""
+        req = EditSkillRequest(skill_id="s-1", order_index=7)
+        assert req.order_index == 7
+
+    @pytest.mark.unit
+    def test_all_fields_optional_except_skill_id(self):
+        """Only skill_id is required; name and level also default to None."""
+        req = EditSkillRequest(skill_id="s-99")
+        assert req.name is None
+        assert req.level is None
+        assert req.order_index is None
+
+    @pytest.mark.unit
+    def test_full_construction(self):
+        """All fields provided together are stored correctly."""
+        req = EditSkillRequest(
+            skill_id="s-1",
+            name="Go",
+            level="advanced",
+            order_index=3,
+        )
+        assert req.skill_id == "s-1"
+        assert req.name == "Go"
+        assert req.level == "advanced"
+        assert req.order_index == 3
 
 
 class TestSkillResponseFromEntity:
