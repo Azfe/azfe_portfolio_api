@@ -270,4 +270,6 @@ class TestContactMessageFindBy:
 
         await repo.find_by(status="pending", name="Jane Doe")
 
-        collection.find.assert_called_once_with({"status": "pending", "name": "Jane Doe"})
+        collection.find.assert_called_once_with(
+            {"status": "pending", "name": "Jane Doe"}
+        )
