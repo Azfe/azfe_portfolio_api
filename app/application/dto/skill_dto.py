@@ -24,6 +24,7 @@ class EditSkillRequest:
     skill_id: str
     name: str | None = None
     level: str | None = None
+    order_index: int | None = None
 
 
 @dataclass

@@ -108,6 +108,7 @@ async def update_skill(
             skill_id=skill_id,
             name=skill_data.name,
             level=skill_data.level,
+            order_index=skill_data.order_index,
         )
     )
     return result
