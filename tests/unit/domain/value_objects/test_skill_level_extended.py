@@ -7,7 +7,6 @@ display_name(), is_at_least(), __repr__, __hash__, SkillLevelEnum ordering.
 
 import pytest
 
-from app.domain.exceptions import InvalidSkillLevelError
 from app.domain.value_objects.skill_level import SkillLevel, SkillLevelEnum
 
 
