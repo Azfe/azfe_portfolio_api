@@ -24,6 +24,7 @@ class SkillRepository(IUniqueNameRepository[Skill], IOrderedRepository[Skill]):
 
     async def update(self, entity: Skill) -> Skill:
         doc = self._mapper.to_persistence(entity)
+        doc.pop("_id", None)
         await self._collection.replace_one({"_id": entity.id}, doc)
         return entity
 
