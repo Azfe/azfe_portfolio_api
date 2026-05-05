@@ -111,6 +111,7 @@ async def update_work_experience(
             start_date=experience_data.start_date,
             end_date=experience_data.end_date,
             responsibilities=experience_data.responsibilities,
+            technologies=experience_data.technologies,
         )
     )
     return result

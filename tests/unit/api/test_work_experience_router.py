@@ -67,6 +67,41 @@ class TestUpdateExperience:
         response = await client.put(f"{PREFIX}/nonexistent", json=payload)
         assert response.status_code == 404
 
+    async def test_update_technologies_forwarded_to_use_case(
+        self, client: AsyncClient
+    ):
+        """Regression: technologies must be forwarded from the request body to
+        EditExperienceRequest, not silently dropped by the router."""
+        from unittest.mock import AsyncMock
+
+        from app.api.dependencies import get_edit_experience_use_case
+        from app.application.dto import EditExperienceRequest
+        from app.main import app as fastapi_app
+        from tests.unit.api.conftest import MOCK_EXPERIENCES
+
+        captured: list[EditExperienceRequest] = []
+
+        mock_uc = AsyncMock()
+
+        async def execute(request: EditExperienceRequest):
+            captured.append(request)
+            return MOCK_EXPERIENCES[0]
+
+        mock_uc.execute = AsyncMock(side_effect=execute)
+        fastapi_app.dependency_overrides[get_edit_experience_use_case] = (
+            lambda: mock_uc
+        )
+        try:
+            payload = {"technologies": ["FastAPI", "MongoDB", "Docker"]}
+            response = await client.put(f"{PREFIX}/exp_001", json=payload)
+
+            assert response.status_code == 200
+            assert len(captured) == 1
+            assert captured[0].technologies == ["FastAPI", "MongoDB", "Docker"]
+        finally:
+            # Restore the default override set by conftest autouse fixture
+            del fastapi_app.dependency_overrides[get_edit_experience_use_case]
+
 
 class TestDeleteExperience:
     async def test_delete_returns_success(self, client: AsyncClient):
