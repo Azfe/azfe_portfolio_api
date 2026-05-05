@@ -72,6 +72,9 @@ class EditSkillUseCase(ICommandUseCase[EditSkillRequest, SkillResponse]):
             level=request.level,
         )
 
+        if request.order_index is not None:
+            skill.update_order(request.order_index)
+
         # Persist changes
         updated_skill = await self.skill_repo.update(skill)
 
