@@ -106,9 +106,9 @@ class TestProfileRepositoryUpdate:
             await repo.update(entity)
 
         _filter, replacement = collection.replace_one.call_args[0]
-        assert "_id" not in replacement, (
-            "replacement doc must not contain _id to prevent BSONError"
-        )
+        assert (
+            "_id" not in replacement
+        ), "replacement doc must not contain _id to prevent BSONError"
 
 
 class TestProfileRepositoryDelete:
