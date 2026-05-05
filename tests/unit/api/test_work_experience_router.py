@@ -67,9 +67,7 @@ class TestUpdateExperience:
         response = await client.put(f"{PREFIX}/nonexistent", json=payload)
         assert response.status_code == 404
 
-    async def test_update_technologies_forwarded_to_use_case(
-        self, client: AsyncClient
-    ):
+    async def test_update_technologies_forwarded_to_use_case(self, client: AsyncClient):
         """Regression: technologies must be forwarded from the request body to
         EditExperienceRequest, not silently dropped by the router."""
         from unittest.mock import AsyncMock
@@ -88,9 +86,7 @@ class TestUpdateExperience:
             return MOCK_EXPERIENCES[0]
 
         mock_uc.execute = AsyncMock(side_effect=execute)
-        fastapi_app.dependency_overrides[get_edit_experience_use_case] = (
-            lambda: mock_uc
-        )
+        fastapi_app.dependency_overrides[get_edit_experience_use_case] = lambda: mock_uc
         try:
             payload = {"technologies": ["FastAPI", "MongoDB", "Docker"]}
             response = await client.put(f"{PREFIX}/exp_001", json=payload)
