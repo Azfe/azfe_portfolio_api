@@ -1,417 +1,652 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8" />
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8" />
+  <style>
+    /* ── Reset ─────────────────────────────────────────── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
-    color: #1a1a2e;
-    background: #fff;
-    line-height: 1.45;
-  }
+    /* ── Base ──────────────────────────────────────────── */
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 9.5pt;
+      color: #1a2747;
+      background: #ffffff;
+      line-height: 1.45;
+    }
 
-  a { color: #1e6bf7; text-decoration: none; }
+    a {
+      color: #1e6bf7;
+      text-decoration: none;
+    }
 
-  /* ── Layout ────────────────────────────────────── */
-  .page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 36px 44px 40px;
-  }
+    /* ── Root layout via table ─────────────────────────── */
+    .cv-root {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
 
-  /* ── Header ────────────────────────────────────── */
-  .header {
-    border-bottom: 2.5px solid #1e6bf7;
-    padding-bottom: 18px;
-    margin-bottom: 22px;
-  }
-  .header-name {
-    font-size: 26pt;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #0f0f23;
-    line-height: 1.1;
-  }
-  .header-headline {
-    font-size: 12pt;
-    color: #1e6bf7;
-    font-weight: 600;
-    margin-top: 3px;
-    margin-bottom: 10px;
-  }
-  .header-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 18px;
-    font-size: 9pt;
-    color: #555;
-  }
-  .header-meta span {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
+    /* ── Sidebar cell ──────────────────────────────────── */
+    .cv-sidebar-cell {
+      width: 150pt;
+      vertical-align: top;
+      background: #f5f8fd;
+      border-right: 1pt solid #e8ecf4;
+      padding: 26pt 16pt 32pt 16pt;
+    }
 
-  /* ── Sections ──────────────────────────────────── */
-  .section {
-    margin-bottom: 20px;
-  }
-  .section-title {
-    font-size: 9.5pt;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #1e6bf7;
-    border-bottom: 1px solid #e0e8ff;
-    padding-bottom: 4px;
-    margin-bottom: 12px;
-  }
+    /* ── Main cell ─────────────────────────────────────── */
+    .cv-main-cell {
+      vertical-align: top;
+      padding: 30pt 30pt 34pt 28pt;
+    }
 
-  /* ── Bio ───────────────────────────────────────── */
-  .bio {
-    font-size: 10pt;
-    color: #333;
-    line-height: 1.55;
-  }
+    /* ══════════════════════════════════════════════════════
+   SIDEBAR STYLES
+══════════════════════════════════════════════════════ */
 
-  /* ── Experience & Education ────────────────────── */
-  .entry {
-    margin-bottom: 14px;
-    page-break-inside: avoid;
-  }
-  .entry-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .entry-title {
-    font-weight: 700;
-    font-size: 10.5pt;
-    color: #0f0f23;
-  }
-  .entry-sub {
-    font-size: 9.5pt;
-    color: #444;
-    margin-top: 1px;
-  }
-  .entry-date {
-    font-size: 8.5pt;
-    color: #777;
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .entry-location {
-    font-size: 8.5pt;
-    color: #888;
-    margin-top: 1px;
-  }
-  .entry-desc {
-    font-size: 9.5pt;
-    color: #444;
-    margin-top: 5px;
-    line-height: 1.5;
-  }
-  .entry-list {
-    margin-top: 5px;
-    padding-left: 14px;
-    font-size: 9.5pt;
-    color: #444;
-  }
-  .entry-list li { margin-bottom: 2px; }
+    .sidebar-section {
+      margin-bottom: 30pt;
+    }
 
-  /* ── Tags / Badges ─────────────────────────────── */
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 6px;
-  }
-  .tag {
-    background: #eef3ff;
-    color: #1e4db7;
-    border-radius: 4px;
-    padding: 2px 7px;
-    font-size: 8.5pt;
-    font-weight: 500;
-  }
+    .sidebar-heading {
+      font-size: 7.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #1a2747;
+      border-bottom: 1pt solid #1a2747;
+      padding-bottom: 1pt;
+      margin-bottom: 6pt;
+    }
 
-  /* ── Skills grid ───────────────────────────────── */
-  .skills-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .skill-badge {
-    background: #f0f4ff;
-    border: 1px solid #c8d8ff;
-    border-radius: 20px;
-    padding: 3px 11px;
-    font-size: 9pt;
-    color: #1a3a9e;
-    font-weight: 500;
-  }
-  .skill-level {
-    font-size: 7.5pt;
-    color: #888;
-    margin-left: 3px;
-  }
+    /* Contact list */
+    .contact-item {
+      font-size: 7pt;
+      color: #4a5a7a;
+      margin-bottom: 3pt;
+      line-height: 1.4;
+    }
 
-  /* ── Two-column layout for skills/tools ──────── */
-  .two-col {
-    display: flex;
-    gap: 28px;
-  }
-  .two-col > div { flex: 1; }
+    .contact-item a {
+      color: #1e6bf7;
+      word-break: break-all;
+    }
 
-  /* ── Project ───────────────────────────────────── */
-  .project-entry {
-    margin-bottom: 12px;
-    page-break-inside: avoid;
-  }
-  .project-title {
-    font-weight: 700;
-    font-size: 10pt;
-    color: #0f0f23;
-  }
-  .project-url {
-    font-size: 8.5pt;
-    color: #1e6bf7;
-    margin-left: 6px;
-  }
+    /* Certification cards in sidebar */
+    .cert-card {
+      border: 1pt solid #e8ecf4;
+      border-radius: 5pt;
+      background: #ffffff;
+      padding: 7pt 9pt;
+      margin-bottom: 6pt;
+    }
 
-  /* ── Certifications / Training ─────────────────── */
-  .cert-entry {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 7px;
-    font-size: 9.5pt;
-  }
-  .cert-name { font-weight: 600; color: #1a1a2e; }
-  .cert-org { color: #555; font-size: 9pt; }
-  .cert-date { color: #888; font-size: 8.5pt; white-space: nowrap; flex-shrink: 0; }
+    .cert-title {
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #1a2747;
+      line-height: 1.35;
+      margin-bottom: 2pt;
+    }
 
-  /* ── Languages ─────────────────────────────────── */
-  .lang-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .lang-item {
-    font-size: 9.5pt;
-    color: #333;
-  }
-  .lang-level { color: #777; font-size: 8.5pt; margin-left: 4px; }
+    .cert-issuer {
+      font-size: 7pt;
+      color: #8592b0;
+    }
 
-  /* ── Page break hints ──────────────────────────── */
-  .no-break { page-break-inside: avoid; }
-</style>
+    .cert-date {
+      font-size: 6.5pt;
+      color: #8592b0;
+      margin-top: 3pt;
+    }
+
+    /* Skills chips */
+    .tag-row {
+      line-height: 2.0;
+    }
+
+    .skill-chip {
+      display: inline;
+      padding: 2pt 7pt;
+      border-radius: 999pt;
+      font-size: 7.5pt;
+      font-weight: 500;
+      margin-right: 2pt;
+    }
+
+    .chip-expert {
+      background: #e9efff;
+      color: #2859d8;
+    }
+
+    .chip-advanced {
+      background: #e0f6ef;
+      color: #0f8a4a;
+    }
+
+    .chip-intermediate {
+      background: #f1eaff;
+      color: #6a3acf;
+    }
+
+    .chip-basic {
+      background: #e4f3fb;
+      color: #1d6f9c;
+    }
+
+    .chip-neutral {
+      background: #f5f8fd;
+      color: #4a5a7a;
+      border: 1pt solid #e8ecf4;
+    }
+
+    /* Tools */
+    .tool-chip {
+      display: inline;
+      padding: 2pt 7pt;
+      border-radius: 999pt;
+      font-size: 7.5pt;
+      font-weight: 500;
+      background: #f5f8fd;
+      color: #1a2747;
+      border: 1pt solid #e8ecf4;
+      margin-right: 2pt;
+    }
+
+    .tools-category-label {
+      font-size: 6.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8592b0;
+      margin-bottom: 3pt;
+      margin-top: 5pt;
+      display: block;
+    }
+
+    /* Languages */
+    .lang-name {
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #1a2747;
+    }
+
+    .lang-level {
+      font-size: 7.5pt;
+      color: #8592b0;
+      display: block;
+      margin-bottom: 4pt;
+    }
+
+    /* ══════════════════════════════════════════════════════
+   MAIN STYLES
+══════════════════════════════════════════════════════ */
+
+    /* Header */
+    .cv-main-header {
+      border-bottom: 1pt solid #e8ecf4;
+      padding-bottom: 14pt;
+      margin-bottom: 20pt;
+    }
+
+    .cv-name {
+      font-size: 19pt;
+      font-weight: 800;
+      color: #1a2747;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      margin-bottom: 3pt;
+    }
+
+    .cv-headline {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #1e6bf7;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 9pt;
+    }
+
+    .cv-intro {
+      font-size: 10pt;
+      color: #4a5a7a;
+      line-height: 1.65;
+    }
+
+    /* Sections */
+    .cv-section {
+      margin-bottom: 20pt;
+      page-break-inside: avoid;
+    }
+
+    .cv-section-title {
+      font-size: 12pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #1a2747;
+      border-bottom: 1.5pt solid #e8ecf4;
+      padding-bottom: 2pt;
+      margin-top: 12pt;
+      margin-bottom: 12pt;
+    }
+
+    /* Timeline — left border simulates vertical line */
+    .xp-list {
+      padding-left: 12pt;
+      border-left: 1.5pt solid #e8ecf4;
+    }
+
+    .xp-item {
+      margin-bottom: 14pt;
+      page-break-inside: avoid;
+    }
+
+    .xp-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .xp-role {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #1a2747;
+      margin-bottom: 3pt;
+      line-height: 1.3;
+    }
+
+    .xp-company {
+      font-weight: 400;
+      font-size: 8.5pt;
+      color: #4a5a7a;
+    }
+
+    /* Meta pills row — inline-block approach for xhtml2pdf */
+    .meta-row {
+      margin-bottom: 5pt;
+      line-height: 2.1;
+    }
+
+    .pill-date {
+      display: inline;
+      padding: 2pt 8pt;
+      border-radius: 999pt;
+      background: #eaf1ff;
+      color: #1e6bf7;
+      font-size: 7pt;
+      font-weight: 600;
+      margin-right: 3pt;
+    }
+
+    .pill-location {
+      display: inline;
+      padding: 2pt 8pt;
+      border-radius: 999pt;
+      background: #fdebee;
+      color: #c23a52;
+      font-size: 7pt;
+      font-weight: 500;
+      margin-right: 3pt;
+    }
+
+    .pill-duration {
+      display: inline;
+      padding: 2pt 8pt;
+      border-radius: 999pt;
+      background: #f5f8fd;
+      color: #4a5a7a;
+      font-size: 7pt;
+      font-weight: 500;
+      border: 1pt solid #e8ecf4;
+      margin-right: 3pt;
+    }
+
+    .pill-ongoing {
+      display: inline;
+      padding: 1pt 7pt;
+      border-radius: 999pt;
+      background: #e0f6ef;
+      color: #0f8a4a;
+      font-size: 6.5pt;
+      font-weight: 600;
+      margin-left: 4pt;
+    }
+
+    .xp-desc {
+      font-size: 9pt;
+      color: #4a5a7a;
+      line-height: 1.6;
+      margin-bottom: 4pt;
+    }
+
+    /* Tech tags */
+    .tech-row {
+      line-height: 2.0;
+      margin-top: 2pt;
+    }
+
+    .tech-tag {
+      display: inline;
+      padding: 2pt 7pt;
+      border-radius: 4pt;
+      background: #eef3ff;
+      color: #1e4db7;
+      font-size: 7pt;
+      font-weight: 500;
+      margin-right: 2pt;
+    }
+
+    /* Project title link */
+    .project-title-link {
+      color: #1e6bf7;
+    }
+
+    /* Page break helpers */
+    .no-break {
+      page-break-inside: avoid;
+    }
+  </style>
 </head>
+
 <body>
-<div class="page">
 
-  <!-- ══ HEADER ═══════════════════════════════════════════════ -->
-  <div class="header">
-    <div class="header-name">{{ cv.profile.name }}</div>
-    <div class="header-headline">{{ cv.profile.headline }}</div>
-    <div class="header-meta">
-      {% if cv.profile.location %}
-      <span>{{ cv.profile.location }}</span>
-      {% endif %}
-      {% if cv.contact_info %}
-        {% if cv.contact_info.email %}
-        <span><a href="mailto:{{ cv.contact_info.email }}">{{ cv.contact_info.email }}</a></span>
-        {% endif %}
-        {% if cv.contact_info.phone %}
-        <span>{{ cv.contact_info.phone }}</span>
-        {% endif %}
-        {% if cv.contact_info.linkedin %}
-        <span><a href="{{ cv.contact_info.linkedin }}">LinkedIn</a></span>
-        {% endif %}
-        {% if cv.contact_info.github %}
-        <span><a href="{{ cv.contact_info.github }}">GitHub</a></span>
-        {% endif %}
-        {% if cv.contact_info.website %}
-        <span><a href="{{ cv.contact_info.website }}">{{ cv.contact_info.website }}</a></span>
-        {% endif %}
-      {% endif %}
-    </div>
-  </div>
+  <table class="cv-root">
+    <tr>
 
-  <!-- ══ BIO ═══════════════════════════════════════════════════ -->
-  {% if cv.profile.bio %}
-  <div class="section">
-    <div class="section-title">Perfil</div>
-    <div class="bio">{{ cv.profile.bio }}</div>
-  </div>
-  {% endif %}
+      <!-- ══════════════════════════════════════════════════════
+         SIDEBAR
+    ══════════════════════════════════════════════════════ -->
+      <td class="cv-sidebar-cell">
 
-  <!-- ══ EXPERIENCE ════════════════════════════════════════════ -->
-  {% if cv.work_experiences %}
-  <div class="section">
-    <div class="section-title">Experiencia</div>
-    {% for exp in cv.work_experiences %}
-    <div class="entry">
-      <div class="entry-header">
-        <div>
-          <div class="entry-title">{{ exp.role }}</div>
-          <div class="entry-sub">{{ exp.company }}</div>
-          {% if exp.location %}<div class="entry-location">{{ exp.location }}</div>{% endif %}
+        <!-- Contacto -->
+        <div class="sidebar-section">
+          <div class="sidebar-heading">Contacto</div>
+          {% if cv.contact_info and cv.contact_info.phone %}
+          <div class="contact-item">{{ cv.contact_info.phone }}</div>
+          {% endif %}
+          {% if cv.profile.location %}
+          <div class="contact-item">{{ cv.profile.location }}</div>
+          {% endif %}
+          {% if cv.contact_info and cv.contact_info.email %}
+          <div class="contact-item">
+            <a href="mailto:{{ cv.contact_info.email }}">{{ cv.contact_info.email }}</a>
+          </div>
+          {% endif %}
+
+
+          <div class="sidebar-section">
+            <!-- Redes -->
+            {% set has_links = cv.contact_info and (cv.contact_info.github or cv.contact_info.linkedin or
+            cv.contact_info.website) %}
+            {% if has_links or cv.social_networks %}
+            <div class="sidebar-section">
+              <div class="sidebar-heading">Redes</div>
+              {% if has_links %}
+              {% if cv.contact_info.github %}
+              <div class="contact-item"><a href="{{ cv.contact_info.github }}">GitHub</a></div>
+              {% endif %}
+              {% if cv.contact_info.linkedin %}
+              <div class="contact-item"><a href="{{ cv.contact_info.linkedin }}">LinkedIn</a></div>
+              {% endif %}
+              {% if cv.contact_info.website %}
+              <div class="contact-item"><a href="{{ cv.contact_info.website }}">azfe.dev</a></div>
+              {% endif %}
+              {% else %}
+              {% for sn in cv.social_networks %}
+              <div class="contact-item"><a href="{{ sn.url }}">{{ sn.platform }}</a></div>
+              {% endfor %}
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
         </div>
-        <div class="entry-date">
-          {{ exp.start_date.strftime('%b %Y') }} –
-          {% if exp.is_current %}Actualidad{% else %}{{ exp.end_date.strftime('%b %Y') }}{% endif %}
-        </div>
-      </div>
-      {% if exp.description %}
-      <div class="entry-desc">{{ exp.description }}</div>
-      {% endif %}
-      {% if exp.responsibilities %}
-      <ul class="entry-list">
-        {% for r in exp.responsibilities %}<li>{{ r }}</li>{% endfor %}
-      </ul>
-      {% endif %}
-      {% if exp.technologies %}
-      <div class="tags">
-        {% for t in exp.technologies %}<span class="tag">{{ t }}</span>{% endfor %}
-      </div>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
 
-  <!-- ══ EDUCATION ═════════════════════════════════════════════ -->
-  {% if cv.education %}
-  <div class="section">
-    <div class="section-title">Formación</div>
-    {% for edu in cv.education %}
-    <div class="entry">
-      <div class="entry-header">
-        <div>
-          <div class="entry-title">{{ edu.degree }} en {{ edu.field }}</div>
-          <div class="entry-sub">{{ edu.institution }}</div>
+        <!-- Certificaciones -->
+        {% if cv.certifications %}
+        <div class="sidebar-section">
+          <div class="sidebar-heading">Certificaciones</div>
+          {% for cert in cv.certifications %}
+          <div class="cert-card">
+            {% if cert.credential_url %}
+            <div class="cert-title"><a href="{{ cert.credential_url }}">{{ cert.title }}</a></div>
+            {% else %}
+            <div class="cert-title">{{ cert.title }}</div>
+            {% endif %}
+            <div class="cert-issuer">{{ cert.issuer }}</div>
+            {% if cert.issue_date %}
+            <div class="cert-date">{{ cert.issue_date.strftime('%b %Y') }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
         </div>
-        <div class="entry-date">
-          {{ edu.start_date.strftime('%Y') }} –
-          {% if edu.is_ongoing %}Actualidad{% else %}{{ edu.end_date.strftime('%Y') }}{% endif %}
-        </div>
-      </div>
-      {% if edu.description %}
-      <div class="entry-desc">{{ edu.description }}</div>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+        {% endif %}
 
-  <!-- ══ SKILLS & TOOLS ════════════════════════════════════════ -->
-  {% if cv.skills or cv.tools %}
-  <div class="section">
-    <div class="section-title">Habilidades técnicas</div>
-    <div class="two-col">
-      {% if cv.skills %}
-      <div>
-        <div style="font-size:9pt;font-weight:700;color:#555;margin-bottom:6px;">Skills</div>
-        <div class="skills-grid">
-          {% for s in cv.skills %}
-          <span class="skill-badge">
-            {{ s.name }}
-            {% if s.level %}<span class="skill-level">{{ s.level }}</span>{% endif %}
+        <!-- Skills -->
+        {% if cv.skills %}
+        <div class="sidebar-section">
+          <div class="sidebar-heading">Skills</div>
+          <div class="tag-row">
+            {% for skill in cv.skills %}
+            {% if skill.level == 'expert' %}<span class="skill-chip chip-expert">{{ skill.name }}</span>
+            {% elif skill.level == 'advanced' %}<span class="skill-chip chip-advanced">{{ skill.name }}</span>
+            {% elif skill.level == 'intermediate' %}<span class="skill-chip chip-intermediate">{{ skill.name }}</span>
+            {% elif skill.level == 'basic' %}<span class="skill-chip chip-basic">{{ skill.name }}</span>
+            {% else %}<span class="skill-chip chip-neutral">{{ skill.name }}</span>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Herramientas -->
+        {% if cv.tools %}
+        <div class="sidebar-section">
+          <div class="sidebar-heading">Herramientas</div>
+          <div class="tag-row">
+            {% set prev_cat = namespace(val='__none__') %}
+            {% for tool in cv.tools %}
+            {% if tool.category and tool.category != prev_cat.val %}
+            <span class="tools-category-label">{{ tool.category }}</span>
+            {% set prev_cat.val = tool.category %}
+            {% endif %}
+            <span class="tool-chip">{{ tool.name }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Idiomas -->
+        {% if cv.languages is defined and cv.languages %}
+        <div class="sidebar-section">
+          <div class="sidebar-heading">Idiomas</div>
+          {% for lang in cv.languages %}
+          <span class="lang-name">{{ lang.name }}</span>
+          {% if lang.proficiency %}
+          <span class="lang-level">
+            {%- if lang.proficiency == 'a1' %}A1 — Principiante
+            {%- elif lang.proficiency == 'a2' %}A2 — Básico
+            {%- elif lang.proficiency == 'b1' %}B1 — Intermedio
+            {%- elif lang.proficiency == 'b2' %}B2 — Intermedio alto
+            {%- elif lang.proficiency == 'c1' %}C1 — Avanzado
+            {%- elif lang.proficiency == 'c2' %}C2 — Nativo / Maestría
+            {%- else %}{{ lang.proficiency | upper }}
+            {%- endif %}
           </span>
+          {% endif %}
           {% endfor %}
         </div>
-      </div>
-      {% endif %}
-      {% if cv.tools %}
-      <div>
-        <div style="font-size:9pt;font-weight:700;color:#555;margin-bottom:6px;">Herramientas</div>
-        <div class="skills-grid">
-          {% for t in cv.tools %}
-          <span class="skill-badge">{{ t.name }}</span>
-          {% endfor %}
+        {% endif %}
+
+      </td>
+
+      <!-- ══════════════════════════════════════════════════════
+         MAIN CONTENT
+    ══════════════════════════════════════════════════════ -->
+      <td class="cv-main-cell">
+
+        <!-- ── Header ─────────────────────────────────────── -->
+        <div class="cv-main-header">
+          <div class="cv-name">{{ cv.profile.name | upper }}</div>
+          {% if cv.profile.headline %}
+          <div class="cv-headline">{{ cv.profile.headline | upper }}</div>
+          {% endif %}
+          {% if cv.profile.bio %}
+          <div class="cv-intro">{{ cv.profile.bio }}</div>
+          {% endif %}
         </div>
-      </div>
-      {% endif %}
-    </div>
-  </div>
-  {% endif %}
 
-  <!-- ══ PROJECTS ══════════════════════════════════════════════ -->
-  {% if cv.projects %}
-  <div class="section">
-    <div class="section-title">Proyectos</div>
-    {% for proj in cv.projects %}
-    <div class="project-entry">
-      <div>
-        <span class="project-title">{{ proj.title }}</span>
-        {% if proj.live_url %}<a class="project-url" href="{{ proj.live_url }}">{{ proj.live_url }}</a>
-        {% elif proj.repo_url %}<a class="project-url" href="{{ proj.repo_url }}">{{ proj.repo_url }}</a>{% endif %}
-      </div>
-      {% if proj.description %}
-      <div class="entry-desc">{{ proj.description }}</div>
-      {% endif %}
-      {% if proj.technologies %}
-      <div class="tags">
-        {% for t in proj.technologies %}<span class="tag">{{ t }}</span>{% endfor %}
-      </div>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+        <!-- ── Experiencia ─────────────────────────────────── -->
+        {% if cv.work_experiences %}
+        <div class="cv-section">
+          <div class="cv-section-title">Experiencia Reciente</div>
+          <div class="xp-list">
+            {% for exp in cv.work_experiences %}
+            <div class="xp-item">
+              <div class="xp-role">
+                {{ exp.role }}{% if exp.company %}<span class="xp-company"> — {{ exp.company }}</span>{% endif %}
+              </div>
+              <div class="meta-row">
+                {% if exp.location %}<span class="pill-location">{{ exp.location }}</span>{% endif %}
+                <span class="pill-date">
+                  {{- exp.start_date.strftime('%b %Y') if exp.start_date else '' -}}
+                  {%- if exp.is_current %} – Actualidad
+                  {%- elif exp.end_date %} – {{ exp.end_date.strftime('%b %Y') }}
+                  {%- endif -%}
+                </span>
+                {% if exp.duration_months and exp.duration_months > 0 %}
+                {% set tot = exp.duration_months | int %}
+                {% set yrs = tot // 12 %}
+                {% set mos = tot % 12 %}
+                <span class="pill-duration">
+                  {%- if yrs > 0 %}{{ yrs }} {{ 'año' if yrs == 1 else 'años' }}{% endif %}
+                  {%- if yrs > 0 and mos > 0 %} {% endif %}
+                  {%- if mos > 0 %}{{ mos }} {{ 'mes' if mos == 1 else 'meses' }}{% endif -%}
+                </span>
+                {% endif %}
+              </div>
+              {% if exp.description %}
+              <div class="xp-desc">{{ exp.description }}</div>
+              {% endif %}
+              {% if exp.technologies %}
+              <div class="tech-row">
+                {% for tech in exp.technologies %}<span class="tech-tag">{{ tech }}</span>{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
 
-  <!-- ══ CERTIFICATIONS ════════════════════════════════════════ -->
-  {% if cv.certifications %}
-  <div class="section">
-    <div class="section-title">Certificaciones</div>
-    {% for cert in cv.certifications %}
-    <div class="cert-entry">
-      <div>
-        <span class="cert-name">{{ cert.title }}</span>
-        <span class="cert-org"> · {{ cert.issuer }}</span>
-      </div>
-      <div class="cert-date">{{ cert.issue_date.strftime('%b %Y') }}</div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+        <!-- ── Estudios ────────────────────────────────────── -->
+        {% if cv.education %}
+        <div class="cv-section">
+          <div class="cv-section-title">Estudios</div>
+          <div class="xp-list">
+            {% for edu in cv.education %}
+            <div class="xp-item">
+              <div class="xp-role">
+                {{ edu.degree }}{% if edu.field %} en {{ edu.field }}{% endif %}<span class="xp-company"> — {{
+                  edu.institution }}</span>
+              </div>
+              <div class="meta-row">
+                <span class="pill-date">
+                  {{- edu.start_date.strftime('%Y') if edu.start_date else '' -}}
+                  {%- if edu.is_ongoing %} – Actualidad
+                  {%- elif edu.end_date %} – {{ edu.end_date.strftime('%Y') }}
+                  {%- endif -%}
+                </span>
+              </div>
+              {% if edu.description %}
+              <div class="xp-desc">{{ edu.description }}</div>
+              {% endif %}
+              {% if edu.technologies %}
+              <div class="tech-row">
+                {% for tech in edu.technologies %}<span class="tech-tag">{{ tech }}</span>{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
 
-  <!-- ══ ADDITIONAL TRAINING ═══════════════════════════════════ -->
-  {% if cv.additional_training %}
-  <div class="section">
-    <div class="section-title">Formación complementaria</div>
-    {% for tr in cv.additional_training %}
-    <div class="cert-entry">
-      <div>
-        <span class="cert-name">{{ tr.title }}</span>
-        <span class="cert-org"> · {{ tr.provider }}</span>
-      </div>
-      <div class="cert-date">{{ tr.completion_date.strftime('%Y') }}</div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+        <!-- ── Formación adicional ─────────────────────────── -->
+        {% if cv.additional_training %}
+        <div class="cv-section">
+          <div class="cv-section-title">Formación adicional</div>
+          <div class="xp-list">
+            {% for item in cv.additional_training %}
+            <div class="xp-item">
+              <div class="xp-role">
+                {% if item.certificate_url %}
+                <a class="project-title-link" href="{{ item.certificate_url }}">{{ item.title }}</a>
+                {% else %}{{ item.title }}{% endif %}
+                <span class="xp-company"> — {{ item.provider }}</span>
+              </div>
+              <div class="meta-row">
+                {% if item.completion_date %}
+                <span class="pill-date">{{ item.completion_date.strftime('%b %Y') }}</span>
+                {% endif %}
+                {% if item.duration %}
+                <span class="pill-duration">{{ item.duration }}</span>
+                {% endif %}
+              </div>
+              {% if item.description %}
+              <div class="xp-desc">{{ item.description }}</div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
 
-  <!-- ══ LANGUAGES ═════════════════════════════════════════════ -->
-  {% if cv.social_networks %}
-  <div class="section">
-    <div class="section-title">Redes</div>
-    <div class="lang-row">
-      {% for sn in cv.social_networks %}
-      <span class="lang-item">
-        <a href="{{ sn.url }}">{{ sn.platform }}</a>
-      </span>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
+        <!-- ── Proyectos ───────────────────────────────────── -->
+        {% if cv.projects %}
+        <div class="cv-section">
+          <div class="cv-section-title">Proyectos</div>
+          <div class="xp-list">
+            {% for proj in cv.projects %}
+            <div class="xp-item">
+              <div class="xp-role">
+                {% if proj.live_url or proj.repo_url %}
+                <a class="project-title-link" href="{{ proj.live_url if proj.live_url else proj.repo_url }}">{{
+                  proj.title }}</a>
+                {% else %}{{ proj.title }}{% endif %}
+                {% if proj.is_ongoing %}<span class="pill-ongoing">En curso</span>{% endif %}
+              </div>
+              <div class="meta-row">
+                <span class="pill-date">
+                  {{- proj.start_date.strftime('%b %Y') if proj.start_date else '' -}}
+                  {%- if proj.is_ongoing %} – Actualidad
+                  {%- elif proj.end_date %} – {{ proj.end_date.strftime('%b %Y') }}
+                  {%- endif -%}
+                </span>
+              </div>
+              {% if proj.description %}
+              <div class="xp-desc">{{ proj.description }}</div>
+              {% endif %}
+              {% if proj.technologies %}
+              <div class="tech-row">
+                {% for tech in proj.technologies %}<span class="tech-tag">{{ tech }}</span>{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
 
-</div>
+      </td>
+    </tr>
+  </table>
+
 </body>
+
 </html>
