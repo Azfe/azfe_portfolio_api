@@ -238,6 +238,73 @@ class TestProjectUpdateURLs:
 
 
 @pytest.mark.entity
+class TestProjectImageURL:
+    """Tests for image_url field — RB-PR10."""
+
+    def test_create_with_valid_image_url(self, profile_id):
+        """Valid image_url is accepted at creation."""
+        project = _make_project(
+            profile_id,
+            image_url="https://res.cloudinary.com/demo/image/upload/sample.jpg",
+        )
+
+        assert project.image_url == "https://res.cloudinary.com/demo/image/upload/sample.jpg"
+
+    def test_create_with_invalid_image_url_raises(self, profile_id):
+        """Invalid image_url at creation should raise InvalidURLError."""
+        with pytest.raises(InvalidURLError):
+            _make_project(profile_id, image_url="not-a-url")
+
+    def test_create_with_empty_image_url_normalized_to_none(self, profile_id):
+        """Empty image_url string at creation should be normalized to None."""
+        project = _make_project(profile_id, image_url="")
+
+        assert project.image_url is None
+
+    def test_create_with_whitespace_image_url_normalized_to_none(self, profile_id):
+        """Whitespace image_url at creation should be normalized to None."""
+        project = _make_project(profile_id, image_url="   ")
+
+        assert project.image_url is None
+
+    def test_update_urls_with_valid_image_url(self, profile_id):
+        """update_urls() with a valid image_url should update the field."""
+        project = _make_project(profile_id)
+
+        project.update_urls(image_url="https://example.com/screenshot.png")
+
+        assert project.image_url == "https://example.com/screenshot.png"
+
+    def test_update_urls_image_url_only(self, profile_id):
+        """update_urls() with only image_url (no live_url or repo_url) should update correctly."""
+        project = _make_project(profile_id)
+
+        project.update_urls(image_url="https://cdn.example.com/project.jpg")
+
+        assert project.image_url == "https://cdn.example.com/project.jpg"
+        assert project.live_url is None
+        assert project.repo_url is None
+
+    def test_update_urls_invalid_image_url_raises(self, profile_id):
+        """Invalid image_url in update_urls() should raise InvalidURLError."""
+        project = _make_project(profile_id)
+
+        with pytest.raises(InvalidURLError):
+            project.update_urls(image_url="ftp://invalid-scheme")
+
+    def test_update_urls_empty_image_url_normalized_to_none(self, profile_id):
+        """Passing empty string as image_url in update_urls() should normalize to None."""
+        project = _make_project(
+            profile_id,
+            image_url="https://example.com/screenshot.png",
+        )
+
+        project.update_urls(image_url="")
+
+        assert project.image_url is None
+
+
+@pytest.mark.entity
 class TestProjectRepr:
     """Test __repr__ method."""
 
