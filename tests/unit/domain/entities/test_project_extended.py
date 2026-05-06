@@ -248,7 +248,10 @@ class TestProjectImageURL:
             image_url="https://res.cloudinary.com/demo/image/upload/sample.jpg",
         )
 
-        assert project.image_url == "https://res.cloudinary.com/demo/image/upload/sample.jpg"
+        assert (
+            project.image_url
+            == "https://res.cloudinary.com/demo/image/upload/sample.jpg"
+        )
 
     def test_create_with_invalid_image_url_raises(self, profile_id):
         """Invalid image_url at creation should raise InvalidURLError."""
