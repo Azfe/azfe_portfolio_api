@@ -11,7 +11,9 @@ _TEMPLATES_DIR = Path(__file__).parent / "templates"
 _jinja_env = Environment(loader=FileSystemLoader(str(_TEMPLATES_DIR)), autoescape=True)
 
 
-class WeasyPrintPDFService(IPDFService):  # nombre mantenido para no alterar imports externos
+class WeasyPrintPDFService(
+    IPDFService
+):  # nombre mantenido para no alterar imports externos
     def generate_cv_pdf(self, cv_data: CompleteCVResponse) -> bytes:
         template = _jinja_env.get_template("cv_template.html")
         html_str = template.render(cv=cv_data)

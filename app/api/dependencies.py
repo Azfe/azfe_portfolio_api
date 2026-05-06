@@ -602,4 +602,6 @@ async def get_get_complete_cv_use_case(
 async def get_generate_cv_pdf_use_case(
     get_cv_uc: GetCompleteCVUseCase = Depends(get_get_complete_cv_use_case),
 ) -> GenerateCVPDFUseCase:
-    return GenerateCVPDFUseCase(get_cv_use_case=get_cv_uc, pdf_service=WeasyPrintPDFService())
+    return GenerateCVPDFUseCase(
+        get_cv_use_case=get_cv_uc, pdf_service=WeasyPrintPDFService()
+    )
