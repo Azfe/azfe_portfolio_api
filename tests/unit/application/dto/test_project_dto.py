@@ -30,6 +30,7 @@ def _make_project_entity(**overrides):
         "end_date": DATE_END,
         "live_url": "https://azfe.dev",
         "repo_url": "https://github.com/azfe/portfolio",
+        "image_url": None,
         "technologies": ["Python", "FastAPI", "MongoDB"],
     }
     # Separate the special _is_ongoing control key before passing to make_entity
