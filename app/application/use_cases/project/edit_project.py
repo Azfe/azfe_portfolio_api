@@ -65,10 +65,11 @@ class EditProjectUseCase(ICommandUseCase[EditProjectRequest, ProjectResponse]):
         )
 
         # Update URLs if provided
-        if request.live_url is not None or request.repo_url is not None:
+        if request.live_url is not None or request.repo_url is not None or request.image_url is not None:
             project.update_urls(
                 live_url=request.live_url,
                 repo_url=request.repo_url,
+                image_url=request.image_url,
             )
 
         # Update technologies if provided

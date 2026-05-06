@@ -38,6 +38,9 @@ class ProjectBase(BaseModel):
     repo_url: str | None = Field(
         None, description="Enlace al repositorio (GitHub, GitLab, etc.)"
     )
+    image_url: str | None = Field(
+        None, description="URL de imagen o screenshot del proyecto (opcional)"
+    )
     technologies: list[str] = Field(
         default_factory=list, description="Lista de tecnologías utilizadas"
     )
@@ -81,6 +84,7 @@ class ProjectUpdate(BaseModel):
     technologies: list[str] | None = None
     live_url: str | None = None
     repo_url: str | None = None
+    image_url: str | None = None
     order_index: int | None = Field(None, ge=0)
 
     @field_validator("end_date")
