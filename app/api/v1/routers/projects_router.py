@@ -84,6 +84,7 @@ async def create_project(
             end_date=project_data.end_date,
             live_url=project_data.live_url,
             repo_url=project_data.repo_url,
+            image_url=project_data.image_url,
             technologies=project_data.technologies,
         )
     )
@@ -110,6 +111,7 @@ async def update_project(
             end_date=project_data.end_date,
             live_url=project_data.live_url,
             repo_url=project_data.repo_url,
+            image_url=project_data.image_url,
             technologies=project_data.technologies,
         )
     )
