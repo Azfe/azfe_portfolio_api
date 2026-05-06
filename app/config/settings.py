@@ -40,10 +40,14 @@ class Settings(BaseSettings):
 
     @property
     def cors_methods_list(self) -> list[str]:
+        if self.CORS_METHODS.strip() == "*":
+            return ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD", "TRACE", "CONNECT"]
         return [method.strip() for method in self.CORS_METHODS.split(",")]
 
     @property
     def cors_headers_list(self) -> list[str]:
+        if self.CORS_HEADERS.strip() == "*":
+            return ["*"]
         return [header.strip() for header in self.CORS_HEADERS.split(",")]
 
     # API
