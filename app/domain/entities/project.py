@@ -13,6 +13,7 @@ Business Rules Applied:
 - RB-PR07: technologies is optional array (max 20 items, each max 50 chars)
 - RB-PR08: orderIndex is required and must be unique per profile
 - RB-PR09: If no URLs, description must be sufficiently detailed (min 100 chars)
+- RB-PR10: imageUrl is optional, must be a valid URL if provided
 """
 
 from dataclasses import dataclass, field
@@ -48,6 +49,7 @@ class Project:
     end_date: datetime | None = None
     live_url: str | None = None
     repo_url: str | None = None
+    image_url: str | None = None
     technologies: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
@@ -90,6 +92,7 @@ class Project:
         end_date: datetime | None = None,
         live_url: str | None = None,
         repo_url: str | None = None,
+        image_url: str | None = None,
         technologies: list[str] | None = None,
     ) -> "Project":
         """
@@ -104,6 +107,7 @@ class Project:
             end_date: When the project ended (None if ongoing)
             live_url: URL to live project
             repo_url: URL to repository
+            image_url: URL to project screenshot/image
             technologies: List of technologies used
 
         Returns:
@@ -119,6 +123,7 @@ class Project:
             end_date=end_date,
             live_url=live_url,
             repo_url=repo_url,
+            image_url=image_url,
             technologies=technologies or [],
         )
 
@@ -160,6 +165,7 @@ class Project:
         self,
         live_url: str | None = None,
         repo_url: str | None = None,
+        image_url: str | None = None,
     ) -> None:
         """
         Update project URLs.
@@ -167,12 +173,16 @@ class Project:
         Args:
             live_url: New live URL (optional)
             repo_url: New repository URL (optional)
+            image_url: New image/screenshot URL (optional)
         """
         if live_url is not None:
             self.live_url = live_url
 
         if repo_url is not None:
             self.repo_url = repo_url
+
+        if image_url is not None:
+            self.image_url = image_url
 
         self._validate_urls()
         self._validate_description_sufficiency()
@@ -289,6 +299,12 @@ class Project:
                 self.repo_url = None
             elif not self.URL_PATTERN.match(self.repo_url):
                 raise InvalidURLError(self.repo_url)
+
+        if self.image_url is not None:
+            if self.image_url.strip() == "":
+                self.image_url = None
+            elif not self.URL_PATTERN.match(self.image_url):
+                raise InvalidURLError(self.image_url)
 
     def _validate_technologies(self) -> None:
         """Validate technologies list."""

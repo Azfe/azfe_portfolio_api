@@ -20,6 +20,7 @@ class AddProjectRequest:
     end_date: datetime | None = None
     live_url: str | None = None
     repo_url: str | None = None
+    image_url: str | None = None
     technologies: list[str] | None = None
 
 
@@ -34,6 +35,7 @@ class EditProjectRequest:
     end_date: datetime | None = None
     live_url: str | None = None
     repo_url: str | None = None
+    image_url: str | None = None
     technologies: list[str] | None = None
 
 
@@ -65,6 +67,7 @@ class ProjectResponse:
     end_date: datetime | None
     live_url: str | None
     repo_url: str | None
+    image_url: str | None
     technologies: list[str]
     created_at: datetime
     updated_at: datetime
@@ -83,6 +86,7 @@ class ProjectResponse:
             end_date=entity.end_date,
             live_url=entity.live_url,
             repo_url=entity.repo_url,
+            image_url=entity.image_url,
             technologies=entity.technologies,
             created_at=entity.created_at,
             updated_at=entity.updated_at,

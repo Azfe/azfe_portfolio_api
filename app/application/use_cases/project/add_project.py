@@ -71,6 +71,7 @@ class AddProjectUseCase(ICommandUseCase[AddProjectRequest, ProjectResponse]):
             end_date=request.end_date,
             live_url=request.live_url,
             repo_url=request.repo_url,
+            image_url=request.image_url,
             technologies=request.technologies,
         )
 

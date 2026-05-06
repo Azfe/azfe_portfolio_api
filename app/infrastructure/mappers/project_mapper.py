@@ -17,6 +17,7 @@ class ProjectMapper(IMapper[Project, dict[str, Any]]):
             end_date=persistence_model.get("end_date"),
             live_url=persistence_model.get("live_url"),
             repo_url=persistence_model.get("repo_url"),
+            image_url=persistence_model.get("image_url"),
             technologies=persistence_model.get("technologies", []),
             created_at=persistence_model["created_at"],
             updated_at=persistence_model["updated_at"],
@@ -40,4 +41,6 @@ class ProjectMapper(IMapper[Project, dict[str, Any]]):
             doc["live_url"] = domain_entity.live_url
         if domain_entity.repo_url is not None:
             doc["repo_url"] = domain_entity.repo_url
+        if domain_entity.image_url is not None:
+            doc["image_url"] = domain_entity.image_url
         return doc
