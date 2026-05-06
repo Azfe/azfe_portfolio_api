@@ -1,5 +1,7 @@
+from io import BytesIO
+
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse
 
 from app.api.dependencies import (
     get_generate_cv_pdf_use_case,
@@ -29,7 +31,7 @@ async def get_complete_cv(
     "/download",
     summary="Descargar CV en PDF",
     description="Genera y descarga el CV en formato PDF profesional",
-    response_class=FileResponse,
+    response_class=StreamingResponse,
 )
 async def download_cv_pdf(
     use_case: GenerateCVPDFUseCase = Depends(get_generate_cv_pdf_use_case),
@@ -37,7 +39,8 @@ async def download_cv_pdf(
     result = await use_case.execute(GenerateCVPDFRequest())
     if not result.success:
         raise HTTPException(status_code=500, detail=result.message)
-    raise HTTPException(
-        status_code=501,
-        detail=result.message,
+    return StreamingResponse(
+        BytesIO(result.pdf_bytes),
+        media_type="application/pdf",
+        headers={"Content-Disposition": 'attachment; filename="Alex_Zapata_CV.pdf"'},
     )

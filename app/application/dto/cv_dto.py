@@ -95,5 +95,5 @@ class GenerateCVPDFResponse:
     """Response containing PDF generation result."""
 
     success: bool
-    file_path: str
+    pdf_bytes: bytes
     message: str = "PDF generated successfully"

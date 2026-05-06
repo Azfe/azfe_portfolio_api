@@ -104,6 +104,7 @@ from app.infrastructure.repositories import (
 )
 from app.infrastructure.services.null_email_service import NullEmailService
 from app.infrastructure.services.resend_email_service import ResendEmailService
+from app.infrastructure.services.weasyprint_pdf_service import WeasyPrintPDFService
 from app.shared.interfaces.email_service import IEmailService
 
 # =====================================================================
@@ -601,4 +602,4 @@ async def get_get_complete_cv_use_case(
 async def get_generate_cv_pdf_use_case(
     get_cv_uc: GetCompleteCVUseCase = Depends(get_get_complete_cv_use_case),
 ) -> GenerateCVPDFUseCase:
-    return GenerateCVPDFUseCase(get_cv_use_case=get_cv_uc)
+    return GenerateCVPDFUseCase(get_cv_use_case=get_cv_uc, pdf_service=WeasyPrintPDFService())
