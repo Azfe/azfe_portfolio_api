@@ -7,10 +7,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    libglib2.0-0 \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 \
+    libglib2.0-0t64 \
+    libpango-1.0-0t64 \
+    libpangocairo-1.0-0t64 \
+    libgdk-pixbuf2.0-0t64 \
     libffi-dev \
     shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
