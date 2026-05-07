@@ -26,13 +26,16 @@ def test_settings_environment():
 
 def test_cors_origins_list_property():
     """Test: cors_origins_list convierte string a lista correctamente"""
-    settings = Settings(CORS_ORIGINS="http://localhost:3000,http://localhost:4321")
+    settings = Settings(
+        CORS_ORIGINS="http://localhost:3000,http://localhost:4321,http://localhost:3001"
+    )
     origins = settings.cors_origins_list
 
     assert isinstance(origins, list)
-    assert len(origins) == 2
+    assert len(origins) == 3
     assert "http://localhost:3000" in origins
     assert "http://localhost:4321" in origins
+    assert "http://localhost:3001" in origins
 
 
 @pytest.mark.parametrize(

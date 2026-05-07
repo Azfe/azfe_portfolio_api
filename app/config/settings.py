@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     MONGODB_DB_NAME: str = Field(default="portfolio_db", alias="DATABASE_NAME")
 
     # CORS
-    CORS_ORIGINS: str = "http://localhost:4321,http://localhost:3000"
+    CORS_ORIGINS: str = "http://localhost:4321,http://localhost:3000,http://localhost:3001"
     CORS_CREDENTIALS: bool = True
     CORS_METHODS: str = "*"
     CORS_HEADERS: str = "*"
